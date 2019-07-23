@@ -65,6 +65,7 @@ class zcu111(YellowBlock):
     def gen_constraints(self):
         cons = []
         cons.append(PortConstraint('clk_100_p', 'clk_100_p'))
+        cons.append(PortConstraint('clk_100_n', 'clk_100_n'))
         cons.append(ClockConstraint('clk_100_p','clk_100_p', period=10.0, port_en=True, virtual_en=False, waveform_min=0.0, waveform_max=5.0))
         cons.append(ClockGroupConstraint('clk_pl_0', 'clk_100_p', 'asynchronous'))
         cons.append(ClockGroupConstraint('clk_100_p', 'clk_pl_0', 'asynchronous'))
