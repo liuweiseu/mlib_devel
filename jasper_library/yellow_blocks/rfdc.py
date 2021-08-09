@@ -352,7 +352,8 @@ class rfdc(YellowBlock):
 
     # place the rfdc
     rfdc_bd_name = 'usp_rf_data_converter_0'#rfdc'
-    tcl_cmds['pre_synth'] += ['create_bd_cell -type ip -vlnv xilinx.com:ip:usp_rf_data_converter:2.4 {:s}'.format(rfdc_bd_name)]
+    # TODO: versioning? 2.1 in 2019.1, 2.4 in 2020.1
+    tcl_cmds['pre_synth'] += ['create_bd_cell -type ip -vlnv xilinx.com:ip:usp_rf_data_converter:2.1 {:s}'.format(rfdc_bd_name)]
 
     # get a reference to the rfdc in the block design, currently assume that only one rfdc is in the design (decent assumption)
     tcl_cmds['pre_synth'] += ['set rfdc [get_bd_cells -filter { NAME =~ *usp_rf_data_converter*}]']
@@ -385,7 +386,7 @@ class rfdc(YellowBlock):
     tcl_cmds['pre_synth'] += ['connect_bd_intf_net [get_bd_intf_pins $rfdc/s_axi] [get_bd_intf_ports {:s}]'.format(s_axi_ifport)]
 
     # add bd ports and connect for s axi clk/rst
-    tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s_axi_aclk', port_dir='in', port_type='clk', clk_freq_hz=99990001))
+    tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s_axi_aclk', port_dir='in', port_type='clk'))# 2019.1 not supported, clk_freq_hz=99990001))
     tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('s_axi_aresetn', port_dir='in', port_type='rst'))
 
     # probably the better way to assign the address
@@ -427,13 +428,13 @@ class rfdc(YellowBlock):
       # information from simulink, but the platform would need to support it (current gen3 xilinx eval boards don't for example)
       if (self.rfdc_conf['tile{:d}'.format(tidx+224)]['adc_clk_src'] == tidx):
         # create port for input sample clock
-        tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('adc{:d}_clk_n'.format(tidx), port_dir='in', port_type='clk', clk_freq_hz=t.ref_clk*1e6))
-        tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('adc{:d}_clk_p'.format(tidx), port_dir='in', port_type='clk', clk_freq_hz=t.ref_clk*1e6))
+        tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('adc{:d}_clk_n'.format(tidx), port_dir='in', port_type='clk'))#2019.1 not supported, clk_freq_hz=t.ref_clk*1e6))
+        tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('adc{:d}_clk_p'.format(tidx), port_dir='in', port_type='clk'))#2019.1 not supported, clk_freq_hz=t.ref_clk*1e6))
 
       # create board design output ports for the enabled tile clocks
       tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('clk_adc{:d}'.format(tidx), port_dir='out', port_type='clk'))
       # create port for m_axis_aclk for each tile enabled
-      tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('m{:d}_axis_aclk'.format(tidx), port_dir='in', port_type='clk', clk_freq_hz=t.clk_out*1e6)) # clk out is mhz
+      tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('m{:d}_axis_aclk'.format(tidx), port_dir='in', port_type='clk'))#2019.1 not supported, clk_freq_hz=t.clk_out*1e6)) # clk out is mhz
       # create port for m_axis_aresetn for each tile enabled
       tcl_cmds['pre_synth'].append(self.add_tcl_bd_port('m{:d}_axis_aresetn'.format(tidx), port_dir='in', port_type='rst'))
       # create port vin and m_axis ports for each tile enable
@@ -499,10 +500,10 @@ class rfdc(YellowBlock):
 
     if port_type:
       opt_str = opt_str + ' -type {:s}'.format(port_type)
-      if port_type=='clk' and port_dir=='in':
-        if clk_freq_hz is None:
-          self.throw_error('ERROR: Board design inputs ports defined as a type "clk" must specify a clock frequency')
-        opt_str = opt_str + ' -freq_hz {:d}'.format(int(clk_freq_hz))
+      #if port_type=='clk' and port_dir=='in':
+        #if clk_freq_hz is None: 2019.1 not supported
+        #  self.throw_error('ERROR: Board design inputs ports defined as a type "clk" must specify a clock frequency')
+        #opt_str = opt_str + ' -freq_hz {:d}'.format(int(clk_freq_hz))
 
     if width:
       opt_str = opt_str + ' -from {:d} -to {:d}'.format(width-1, 0)
@@ -634,7 +635,8 @@ class rfdc(YellowBlock):
     dt = {}
 
     # static properties from the rfdc device tree binding
-    dt['compatible'] = '"xlnx,usp-rf-data-converter-2.4";'
+    dt['compatible'] = '"xlnx,usp-rf-data-converter-2.1";'
+    #dt['compatible'] = '"xlnx,usp-rf-data-converter-2.4";'
     dt['num-insts'] = '<0x1>;'
 
     # baseaddr and size of rfdc address space to be used to complete the node unit-address
@@ -756,16 +758,13 @@ class rfdc(YellowBlock):
 
     return dt
 
-
-# These keys are not guaranteed to the same between `xrfdc` driver versions (or petalinux/vitis versions), these were from
-# device-tree-xlnx for 2020.2
 rfdc_dt_conf_keys = [
   "DEVICE_ID", "C_BASEADDR", "C_High_Speed_ADC", "C_Sysref_Master", "C_Sysref_Master", "C_Sysref_Source", "C_Sysref_Source", "C_IP_Type",
-  "C_Silicon_Revision", "C_DAC0_Enable", "C_DAC0_PLL_Enable", "C_DAC0_Sampling_Rate", "C_DAC0_Refclk_Freq", "C_DAC0_Fabric_Freq",
-  "C_DAC0_FBDIV", "C_DAC0_OutDiv", "C_DAC0_Refclk_Div", "C_DAC0_Band", "C_DAC0_Fs_Max", "C_DAC0_Slices", "C_DAC_Slice00_Enable",
-  "C_DAC_Invsinc_Ctrl00", "C_DAC_Mixer_Mode00", "C_DAC_Decoder_Mode00", "C_DAC_Slice01_Enable", "C_DAC_Invsinc_Ctrl01", "C_DAC_Mixer_Mode01",
-  "C_DAC_Decoder_Mode01", "C_DAC_Slice02_Enable", "C_DAC_Invsinc_Ctrl02", "C_DAC_Mixer_Mode02", "C_DAC_Decoder_Mode02",
-  "C_DAC_Slice03_Enable", "C_DAC_Invsinc_Ctrl03", "C_DAC_Mixer_Mode03", "C_DAC_Decoder_Mode03", "C_DAC_Data_Type00", "C_DAC_Data_Width00",
+  "C_DAC0_Enable", "C_DAC0_PLL_Enable", "C_DAC0_Sampling_Rate", "C_DAC0_Refclk_Freq", "C_DAC0_Fabric_Freq", "C_DAC0_FBDIV", "C_DAC0_OutDiv",
+  "C_DAC0_Refclk_Div", "C_DAC0_Band", "C_DAC0_Fs_Max", "C_DAC0_Slices", "C_DAC_Slice00_Enable", "C_DAC_Invsinc_Ctrl00", "C_DAC_Mixer_Mode00",
+  "C_DAC_Decoder_Mode00", "C_DAC_Slice01_Enable", "C_DAC_Invsinc_Ctrl01", "C_DAC_Mixer_Mode01", "C_DAC_Decoder_Mode01",
+  "C_DAC_Slice02_Enable", "C_DAC_Invsinc_Ctrl02", "C_DAC_Mixer_Mode02", "C_DAC_Decoder_Mode02", "C_DAC_Slice03_Enable",
+  "C_DAC_Invsinc_Ctrl03", "C_DAC_Mixer_Mode03", "C_DAC_Decoder_Mode03", "C_DAC_Data_Type00", "C_DAC_Data_Width00",
   "C_DAC_Interpolation_Mode00", "C_DAC_Fifo00_Enable", "C_DAC_Adder00_Enable", "C_DAC_Mixer_Type00", "C_DAC_Data_Type01",
   "C_DAC_Data_Width01", "C_DAC_Interpolation_Mode01", "C_DAC_Fifo01_Enable", "C_DAC_Adder01_Enable", "C_DAC_Mixer_Type01",
   "C_DAC_Data_Type02", "C_DAC_Data_Width02", "C_DAC_Interpolation_Mode02", "C_DAC_Fifo02_Enable", "C_DAC_Adder02_Enable",
@@ -825,3 +824,72 @@ rfdc_dt_conf_keys = [
   "C_ADC_Decimation_Mode32", "C_ADC_Fifo32_Enable", "C_ADC_Mixer_Type32", "C_ADC_Data_Type33", "C_ADC_Data_Width33",
   "C_ADC_Decimation_Mode33", "C_ADC_Fifo33_Enable", "C_ADC_Mixer_Type33"
 ]
+
+# # These keys are not guaranteed to the same between `xrfdc` driver versions (or petalinux/vitis versions), these were from
+# # device-tree-xlnx for 2020.2
+# rfdc_dt_conf_keys = [
+#   "DEVICE_ID", "C_BASEADDR", "C_High_Speed_ADC", "C_Sysref_Master", "C_Sysref_Master", "C_Sysref_Source", "C_Sysref_Source", "C_IP_Type",
+#   "C_Silicon_Revision", "C_DAC0_Enable", "C_DAC0_PLL_Enable", "C_DAC0_Sampling_Rate", "C_DAC0_Refclk_Freq", "C_DAC0_Fabric_Freq",
+#   "C_DAC0_FBDIV", "C_DAC0_OutDiv", "C_DAC0_Refclk_Div", "C_DAC0_Band", "C_DAC0_Fs_Max", "C_DAC0_Slices", "C_DAC_Slice00_Enable",
+#   "C_DAC_Invsinc_Ctrl00", "C_DAC_Mixer_Mode00", "C_DAC_Decoder_Mode00", "C_DAC_Slice01_Enable", "C_DAC_Invsinc_Ctrl01", "C_DAC_Mixer_Mode01",
+#   "C_DAC_Decoder_Mode01", "C_DAC_Slice02_Enable", "C_DAC_Invsinc_Ctrl02", "C_DAC_Mixer_Mode02", "C_DAC_Decoder_Mode02",
+#   "C_DAC_Slice03_Enable", "C_DAC_Invsinc_Ctrl03", "C_DAC_Mixer_Mode03", "C_DAC_Decoder_Mode03", "C_DAC_Data_Type00", "C_DAC_Data_Width00",
+#   "C_DAC_Interpolation_Mode00", "C_DAC_Fifo00_Enable", "C_DAC_Adder00_Enable", "C_DAC_Mixer_Type00", "C_DAC_Data_Type01",
+#   "C_DAC_Data_Width01", "C_DAC_Interpolation_Mode01", "C_DAC_Fifo01_Enable", "C_DAC_Adder01_Enable", "C_DAC_Mixer_Type01",
+#   "C_DAC_Data_Type02", "C_DAC_Data_Width02", "C_DAC_Interpolation_Mode02", "C_DAC_Fifo02_Enable", "C_DAC_Adder02_Enable",
+#   "C_DAC_Mixer_Type02", "C_DAC_Data_Type03", "C_DAC_Data_Width03", "C_DAC_Interpolation_Mode03", "C_DAC_Fifo03_Enable",
+#   "C_DAC_Adder03_Enable", "C_DAC_Mixer_Type03", "C_DAC1_Enable", "C_DAC1_PLL_Enable", "C_DAC1_Sampling_Rate", "C_DAC1_Refclk_Freq",
+#   "C_DAC1_Fabric_Freq", "C_DAC1_FBDIV", "C_DAC1_OutDiv", "C_DAC1_Refclk_Div", "C_DAC1_Band", "C_DAC1_Fs_Max", "C_DAC1_Slices",
+#   "C_DAC_Slice10_Enable", "C_DAC_Invsinc_Ctrl10", "C_DAC_Mixer_Mode10", "C_DAC_Decoder_Mode10", "C_DAC_Slice11_Enable",
+#   "C_DAC_Invsinc_Ctrl11", "C_DAC_Mixer_Mode11", "C_DAC_Decoder_Mode11", "C_DAC_Slice12_Enable", "C_DAC_Invsinc_Ctrl12", "C_DAC_Mixer_Mode12",
+#   "C_DAC_Decoder_Mode12", "C_DAC_Slice13_Enable", "C_DAC_Invsinc_Ctrl13", "C_DAC_Mixer_Mode13", "C_DAC_Decoder_Mode13", "C_DAC_Data_Type10",
+#   "C_DAC_Data_Width10", "C_DAC_Interpolation_Mode10", "C_DAC_Fifo10_Enable", "C_DAC_Adder10_Enable", "C_DAC_Mixer_Type10",
+#   "C_DAC_Data_Type11", "C_DAC_Data_Width11", "C_DAC_Interpolation_Mode11", "C_DAC_Fifo11_Enable", "C_DAC_Adder11_Enable",
+#   "C_DAC_Mixer_Type11", "C_DAC_Data_Type12", "C_DAC_Data_Width12", "C_DAC_Interpolation_Mode12", "C_DAC_Fifo12_Enable",
+#   "C_DAC_Adder12_Enable", "C_DAC_Mixer_Type12", "C_DAC_Data_Type13", "C_DAC_Data_Width13", "C_DAC_Interpolation_Mode13",
+#   "C_DAC_Fifo13_Enable", "C_DAC_Adder13_Enable", "C_DAC_Mixer_Type13", "C_DAC2_Enable", "C_DAC2_PLL_Enable", "C_DAC2_Sampling_Rate",
+#   "C_DAC2_Refclk_Freq", "C_DAC2_Fabric_Freq", "C_DAC2_FBDIV", "C_DAC2_OutDiv", "C_DAC2_Refclk_Div", "C_DAC2_Band", "C_DAC2_Fs_Max",
+#   "C_DAC2_Slices", "C_DAC_Slice20_Enable", "C_DAC_Invsinc_Ctrl20", "C_DAC_Mixer_Mode20", "C_DAC_Decoder_Mode20", "C_DAC_Slice21_Enable",
+#   "C_DAC_Invsinc_Ctrl21", "C_DAC_Mixer_Mode21", "C_DAC_Decoder_Mode21", "C_DAC_Slice22_Enable", "C_DAC_Invsinc_Ctrl22", "C_DAC_Mixer_Mode22",
+#   "C_DAC_Decoder_Mode22", "C_DAC_Slice23_Enable", "C_DAC_Invsinc_Ctrl23", "C_DAC_Mixer_Mode23", "C_DAC_Decoder_Mode23", "C_DAC_Data_Type20",
+#   "C_DAC_Data_Width20", "C_DAC_Interpolation_Mode20", "C_DAC_Fifo20_Enable", "C_DAC_Adder20_Enable", "C_DAC_Mixer_Type20",
+#   "C_DAC_Data_Type21", "C_DAC_Data_Width21", "C_DAC_Interpolation_Mode21", "C_DAC_Fifo21_Enable", "C_DAC_Adder21_Enable",
+#   "C_DAC_Mixer_Type21", "C_DAC_Data_Type22", "C_DAC_Data_Width22", "C_DAC_Interpolation_Mode22", "C_DAC_Fifo22_Enable",
+#   "C_DAC_Adder22_Enable", "C_DAC_Mixer_Type22", "C_DAC_Data_Type23", "C_DAC_Data_Width23", "C_DAC_Interpolation_Mode23",
+#   "C_DAC_Fifo23_Enable", "C_DAC_Adder23_Enable", "C_DAC_Mixer_Type23", "C_DAC3_Enable", "C_DAC3_PLL_Enable", "C_DAC3_Sampling_Rate",
+#   "C_DAC3_Refclk_Freq", "C_DAC3_Fabric_Freq", "C_DAC3_FBDIV", "C_DAC3_OutDiv", "C_DAC3_Refclk_Div", "C_DAC3_Band", "C_DAC3_Fs_Max",
+#   "C_DAC3_Slices", "C_DAC_Slice30_Enable", "C_DAC_Invsinc_Ctrl30", "C_DAC_Mixer_Mode30", "C_DAC_Decoder_Mode30", "C_DAC_Slice31_Enable",
+#   "C_DAC_Invsinc_Ctrl31", "C_DAC_Mixer_Mode31", "C_DAC_Decoder_Mode31", "C_DAC_Slice32_Enable", "C_DAC_Invsinc_Ctrl32", "C_DAC_Mixer_Mode32",
+#   "C_DAC_Decoder_Mode32", "C_DAC_Slice33_Enable", "C_DAC_Invsinc_Ctrl33", "C_DAC_Mixer_Mode33", "C_DAC_Decoder_Mode33", "C_DAC_Data_Type30",
+#   "C_DAC_Data_Width30", "C_DAC_Interpolation_Mode30", "C_DAC_Fifo30_Enable", "C_DAC_Adder30_Enable", "C_DAC_Mixer_Type30",
+#   "C_DAC_Data_Type31", "C_DAC_Data_Width31", "C_DAC_Interpolation_Mode31", "C_DAC_Fifo31_Enable", "C_DAC_Adder31_Enable",
+#   "C_DAC_Mixer_Type31", "C_DAC_Data_Type32", "C_DAC_Data_Width32", "C_DAC_Interpolation_Mode32", "C_DAC_Fifo32_Enable",
+#   "C_DAC_Adder32_Enable", "C_DAC_Mixer_Type32", "C_DAC_Data_Type33", "C_DAC_Data_Width33", "C_DAC_Interpolation_Mode33",
+#   "C_DAC_Fifo33_Enable", "C_DAC_Adder33_Enable", "C_DAC_Mixer_Type33", "C_ADC0_Enable", "C_ADC0_PLL_Enable", "C_ADC0_Sampling_Rate",
+#   "C_ADC0_Refclk_Freq", "C_ADC0_Fabric_Freq", "C_ADC0_FBDIV", "C_ADC0_OutDiv", "C_ADC0_Refclk_Div", "C_ADC0_Band", "C_ADC0_Fs_Max",
+#   "C_ADC0_Slices", "C_ADC_Slice00_Enable", "C_ADC_Mixer_Mode00", "C_ADC_Slice01_Enable", "C_ADC_Mixer_Mode01", "C_ADC_Slice02_Enable",
+#   "C_ADC_Mixer_Mode02", "C_ADC_Slice03_Enable", "C_ADC_Mixer_Mode03", "C_ADC_Data_Type00", "C_ADC_Data_Width00", "C_ADC_Decimation_Mode00",
+#   "C_ADC_Fifo00_Enable", "C_ADC_Mixer_Type00", "C_ADC_Data_Type01", "C_ADC_Data_Width01", "C_ADC_Decimation_Mode01", "C_ADC_Fifo01_Enable",
+#   "C_ADC_Mixer_Type01", "C_ADC_Data_Type02", "C_ADC_Data_Width02", "C_ADC_Decimation_Mode02", "C_ADC_Fifo02_Enable", "C_ADC_Mixer_Type02",
+#   "C_ADC_Data_Type03", "C_ADC_Data_Width03", "C_ADC_Decimation_Mode03", "C_ADC_Fifo03_Enable", "C_ADC_Mixer_Type03", "C_ADC1_Enable",
+#   "C_ADC1_PLL_Enable", "C_ADC1_Sampling_Rate", "C_ADC1_Refclk_Freq", "C_ADC1_Fabric_Freq", "C_ADC1_FBDIV", "C_ADC1_OutDiv",
+#   "C_ADC1_Refclk_Div", "C_ADC1_Band", "C_ADC1_Fs_Max", "C_ADC1_Slices", "C_ADC_Slice10_Enable", "C_ADC_Mixer_Mode10", "C_ADC_Slice11_Enable",
+#   "C_ADC_Mixer_Mode11", "C_ADC_Slice12_Enable", "C_ADC_Mixer_Mode12", "C_ADC_Slice13_Enable", "C_ADC_Mixer_Mode13", "C_ADC_Data_Type10",
+#   "C_ADC_Data_Width10", "C_ADC_Decimation_Mode10", "C_ADC_Fifo10_Enable", "C_ADC_Mixer_Type10", "C_ADC_Data_Type11", "C_ADC_Data_Width11",
+#   "C_ADC_Decimation_Mode11", "C_ADC_Fifo11_Enable", "C_ADC_Mixer_Type11", "C_ADC_Data_Type12", "C_ADC_Data_Width12",
+#   "C_ADC_Decimation_Mode12", "C_ADC_Fifo12_Enable", "C_ADC_Mixer_Type12", "C_ADC_Data_Type13", "C_ADC_Data_Width13",
+#   "C_ADC_Decimation_Mode13", "C_ADC_Fifo13_Enable", "C_ADC_Mixer_Type13", "C_ADC2_Enable", "C_ADC2_PLL_Enable", "C_ADC2_Sampling_Rate",
+#   "C_ADC2_Refclk_Freq", "C_ADC2_Fabric_Freq", "C_ADC2_FBDIV", "C_ADC2_OutDiv", "C_ADC2_Refclk_Div", "C_ADC2_Band", "C_ADC2_Fs_Max",
+#   "C_ADC2_Slices", "C_ADC_Slice20_Enable", "C_ADC_Mixer_Mode20", "C_ADC_Slice21_Enable", "C_ADC_Mixer_Mode21", "C_ADC_Slice22_Enable",
+#   "C_ADC_Mixer_Mode22", "C_ADC_Slice23_Enable", "C_ADC_Mixer_Mode23", "C_ADC_Data_Type20", "C_ADC_Data_Width20", "C_ADC_Decimation_Mode20",
+#   "C_ADC_Fifo20_Enable", "C_ADC_Mixer_Type20", "C_ADC_Data_Type21", "C_ADC_Data_Width21", "C_ADC_Decimation_Mode21", "C_ADC_Fifo21_Enable",
+#   "C_ADC_Mixer_Type21", "C_ADC_Data_Type22", "C_ADC_Data_Width22", "C_ADC_Decimation_Mode22", "C_ADC_Fifo22_Enable", "C_ADC_Mixer_Type22",
+#   "C_ADC_Data_Type23", "C_ADC_Data_Width23", "C_ADC_Decimation_Mode23", "C_ADC_Fifo23_Enable", "C_ADC_Mixer_Type23", "C_ADC3_Enable",
+#   "C_ADC3_PLL_Enable", "C_ADC3_Sampling_Rate", "C_ADC3_Refclk_Freq", "C_ADC3_Fabric_Freq", "C_ADC3_FBDIV", "C_ADC3_OutDiv",
+#   "C_ADC3_Refclk_Div", "C_ADC3_Band", "C_ADC3_Fs_Max", "C_ADC3_Slices", "C_ADC_Slice30_Enable", "C_ADC_Mixer_Mode30", "C_ADC_Slice31_Enable",
+#   "C_ADC_Mixer_Mode31", "C_ADC_Slice32_Enable", "C_ADC_Mixer_Mode32", "C_ADC_Slice33_Enable", "C_ADC_Mixer_Mode33", "C_ADC_Data_Type30",
+#   "C_ADC_Data_Width30", "C_ADC_Decimation_Mode30", "C_ADC_Fifo30_Enable", "C_ADC_Mixer_Type30", "C_ADC_Data_Type31", "C_ADC_Data_Width31",
+#   "C_ADC_Decimation_Mode31", "C_ADC_Fifo31_Enable", "C_ADC_Mixer_Type31", "C_ADC_Data_Type32", "C_ADC_Data_Width32",
+#   "C_ADC_Decimation_Mode32", "C_ADC_Fifo32_Enable", "C_ADC_Mixer_Type32", "C_ADC_Data_Type33", "C_ADC_Data_Width33",
+#   "C_ADC_Decimation_Mode33", "C_ADC_Fifo33_Enable", "C_ADC_Mixer_Type33"
+# ]

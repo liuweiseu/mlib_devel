@@ -144,7 +144,7 @@ class zcu111(YellowBlock):
 
         # export hardware design xsa for software
         tcl_cmds['post_bitgen'] = []
-        tcl_cmds['post_bitgen'] += ['write_hw_platform -fixed -include_bit -force -file [get_property directory [current_project]]/top.xsa']
+        tcl_cmds['post_bitgen'] += ['write_hwdef -force [get_property directory [current_project]]/top.hdf']
 
         return tcl_cmds
 

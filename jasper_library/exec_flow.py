@@ -34,8 +34,8 @@ if __name__ == '__main__':
                     default=False, help="Run software compilation")
     parser.add_argument("--vitis", dest="vitis", action='store_true',
                     default=False, help="[EXPERIMENTAL] Run xsct (Vitis) to generate dtbo")
-    parser.add_argument("--xsa", dest="xsa", type=str, default='',
-                    help="location of xsa file, uses backend generated if ran with backend option")
+    parser.add_argument("--hdf", dest="hdf", type=str, default='',
+                    help="location of hdf file, uses backend generated if ran with backend option")
     parser.add_argument("--be", dest="be", type=str, default='vivado',
                     help="Backend to use. Default: vivado")
     parser.add_argument("--sysgen", dest="sysgen", type=str, default='',
@@ -327,14 +327,14 @@ if __name__ == '__main__':
 
     if opts.vitis:
         if opts.backend:
-            xsa_loc = backend.xsa_loc
+            hdf_loc = backend.hdf_loc
         else:
-            if opts.xsa != '':
-                xsa_loc = opts.xsa
+            if opts.hdf != '':
+                hdf_loc = opts.hdf
             else:
-                raise RuntimeError('--xsa option must be provided when not running with the backend option')
+                raise RuntimeError('--hdf option must be provided when not running with the backend option')
 
-        vitis = toolflow.VitisBackend(xsa=xsa_loc, plat=None, compile_dir=tf.compile_dir, periph_objs=tf.periph_objs)
+        vitis = toolflow.VitisBackend(hdf=hdf_loc, plat=None, compile_dir=tf.compile_dir, periph_objs=tf.periph_objs)
         vitis.compile()
 
         # running this seperate of `--backend` will require work of the user. The rfdc in casperfpga is currently

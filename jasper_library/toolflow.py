@@ -1373,10 +1373,10 @@ class VitisBackend(ToolflowBackend):
     """
     Incantations of a Vitis flow
 
-    Uses the hardware platform (.xsa) exported from Vivado to generate a software platform. Here
+    Uses the hardware platform (.hdf) exported from Vivado to generate a software platform. Here
     we start by building the device tree
     """
-    def __init__(self, xsa, plat=None, compile_dir='/tmp', periph_objs=None):
+    def __init__(self, hdf, plat=None, compile_dir='/tmp', periph_objs=None):
         """
         """
         self.logger = logging.getLogger('jasper.toolflow.backend')
@@ -1387,11 +1387,11 @@ class VitisBackend(ToolflowBackend):
         self.dtsi_loc = os.path.join(self.jdtspath, self.dtsiname)
         self.periph_objs = periph_objs
 
-        self.xsa_loc = xsa
+        self.hdf_loc = hdf
         try:
-            os.path.getsize(self.xsa_loc)
+            os.path.getsize(self.hdf_loc)
         except OSError as e:
-            self.logger.error('.xsa file does not exist or was not specified')
+            self.logger.error('.hdf file does not exist or was not specified')
             raise e
 
         # device tree gen requires this new env requirement when generating xilinx device tree products
@@ -1412,7 +1412,7 @@ class VitisBackend(ToolflowBackend):
         This will break plain ole fpga's (non xlnx zynq soc's). This is a temporary implementation
         placeholder. Will be moving to seperate back end class.
 
-        The general idea here is to run Vitis (xsct) with the platform hardware (.xsa) to generate
+        The general idea here is to run Vitis (xsct) with the platform hardware (.hdf) to generate
         supporting software products to create a device tree overlay. The following:
           1. makes a `jdts` dir in the `compile_dir` to hold the build products
           2. create an empty `xsct_gogogo.tcl` (similar to the Vivado jasper flow) so that:
@@ -1422,7 +1422,7 @@ class VitisBackend(ToolflowBackend):
                added to the MPSoC and there is no mmap path managed by Vivado. This excludes
                the rfdc from being auto-magically included as part of the exported drivers
                from the xlnx device tree driver information. However, the IP and its
-               configuration is still present within the `.xsa` hardware project and we can
+               configuration is still present within the `.hdf` hardware project and we can
                instead manually build the device tree to match what xrfdc driver expects.
           3. run `xsct` against the generated `xsct_gogogo.tcl` file
           4. take all of the products generated and build one complete `jasper.dtsi` device
@@ -1436,7 +1436,7 @@ class VitisBackend(ToolflowBackend):
         # add directory to create dt build directory
         xsct_cmds.append('set jdts_dir {:s}'.format(os.path.join(self.jdtspath, 'xil')))
         xsct_cmds.append('file mkdir $jdts_dir')
-        xsct_cmds.append('hsi::open_hw_design {:s}'.format(self.xsa_loc))
+        xsct_cmds.append('hsi::open_hw_design {:s}'.format(self.hdf_loc))
         #tclpath = os.path.join(os.getenv('MLIB_DEVEL_PATH'), os.path.join('jasper_library', 'hsi_plnx'))
         #xsct_cmds.append('set tclpath "{:s}"'format(tclpath))
 
@@ -1444,7 +1444,7 @@ class VitisBackend(ToolflowBackend):
         # board design. Until the device tree overlay is more fully accepted in the toolflow we do not
         # even need to generate the xilinx products
         xsct_cmds.append('')
-        xsct_cmds.append('# generate xilinx device tree products from xsa/block design')
+        xsct_cmds.append('# generate xilinx device tree products from hdf/block design')
         xsct_cmds.append('hsi::set_repo_path {:s}'.format(self.xlnx_dt_path))
         xsct_cmds.append('set processor [hsi::get_cells * -filter {IP_TYPE==PROCESSOR}]')
         xsct_cmds.append('set processor [lindex $processor 0]')
@@ -1568,7 +1568,7 @@ class VivadoBackend(ToolflowBackend):
                 self.compile_dir, self.project_name, self.project_name)
             self.prm_loc = '%s/%s/%s.runs/impl_1/top.prm' % (
                 self.compile_dir, self.project_name, self.project_name)
-            self.xsa_loc = '%s/%s/top.xsa' % (self.compile_dir,
+            self.hdf_loc = '%s/%s/top.hdf' % (self.compile_dir,
                 self.project_name)
 
         # if non-project mode is enabled
@@ -1581,7 +1581,7 @@ class VivadoBackend(ToolflowBackend):
                 self.compile_dir, self.project_name)
             self.prm_loc = '%s/%s/top.prm' % (
                 self.compile_dir, self.project_name)
-            self.xsa_loc = '%s/%s/top.xsa' % (
+            self.hdf_loc = '%s/%s/top.hdf' % (
                 self.compile_dir, self.project_name)
 
         self.name = 'vivado'
