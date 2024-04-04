@@ -1,0 +1,66 @@
+name: zcu102
+manufacturer: Xilinx
+fpga: xczu9eg-ffvb1156-2-e
+family: ultrascaleplus
+config_voltage: 1.8
+cfgbvs: GND
+backend_target: vivado
+mmbus_architecture: AXI4-Lite
+mmbus_base_address: 0xA0000000
+# How to address each 32-bit (i.e. 4 indicates byte-addressable)
+mmbus_address_alignment: 4
+sources: []
+constraints: []
+
+pins:
+  clk_125_p:
+    iostd: LVDS_25
+    loc: G21
+  clk_125_n:
+    iostd: LVDS_25
+    loc: F21
+  clk_300_p:
+    iostd: DIFF_STTL12
+    loc: AL8
+  clk_300_n:
+    iostd: DIFF_STILL12
+    loc: AL7
+
+  qsfp_mgt_ref_clk_p:
+    loc:
+      - [L27, C8]
+  qsfp_mgt_ref_clk_n:
+    loc:
+      - [L28, C7]
+  # SFP connected to MGT bank 128
+  qsfp_mgt_tx_p:
+    loc: [RT18, RL18, LT18, LL18]
+  qsfp_mgt_tx_n:
+    loc: [RT19, RL19, LT19, LL19]
+  qsfp_mgt_rx_p:
+    loc: [RT13, RL13, LT13, LL13]
+  qsfp_mgt_rx_n:
+    loc: [RT12, RL12, LT12, LL12]
+
+  led:
+      iostd: LVCMOS33
+      loc: [AG14, AF13, AE13, AJ14, AJ15, AH13, AH14, AL12]
+
+  gpio:
+    iostd: LVCMOS33
+    loc:
+      # switches
+      - AN14 # SW0
+      - AP14 # SW1
+      - AM14 # SW2
+      - AN13 # SW3
+      - AN12 # SW4
+      - AP12 # SW5
+      - AL13 # SW6
+      - AK13 # SW7
+      # buttons
+      - AG15 # SW_N
+      - AE14 # SW_E
+      - AF15 # SW_W
+      - AE15 # SW_S
+      - AG13 # SW_C
