@@ -14,7 +14,8 @@ class zcu102(YellowBlock):
         if self.clk_src == "clk_125":
           self.pl_clk_mhz = 125
         else:
-          self.throw_error("clk rate not specified")
+          self.pl_clk_mhz = 196
+          #self.throw_error("clk rate not specified")
 
         self.T_pl_clk_ns = 1.0/self.pl_clk_mhz*1000
 
@@ -101,12 +102,14 @@ class zcu102(YellowBlock):
     def gen_constraints(self):
         cons = []
 
-        cons.append(ClockConstraint('{:s}_p'.format(self.clk_src), '{:s}_p'.format(self.clk_src), period=self.T_pl_clk_ns, port_en=True, virtual_en=False))
-        cons.append(PortConstraint('{:s}_p'.format(self.clk_src), '{:s}_p'.format(self.clk_src)))
-        # TODO: tweak this until we have the right reference clocks
-        cons.append(ClockGroupConstraint('clk_pl_0', 'pl_clk_mmcm', 'asynchronous'))
+        # These constraints are only for clk_125 clock source
+        if self.clk_src == "clk_125":
+            cons.append(ClockConstraint('{:s}_p'.format(self.clk_src), '{:s}_p'.format(self.clk_src), period=self.T_pl_clk_ns, port_en=True, virtual_en=False))
+            cons.append(PortConstraint('{:s}_p'.format(self.clk_src), '{:s}_p'.format(self.clk_src)))
+            # TODO: tweak this until we have the right reference clocks
+            cons.append(ClockGroupConstraint('clk_pl_0', 'pl_clk_mmcm', 'asynchronous'))
 
-        cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AL12 IOSTANDARD LVCMOS33} [get_ports { mmcm_locked }]'))
+            cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AL12 IOSTANDARD LVCMOS33} [get_ports { mmcm_locked }]'))
 
         return cons
 
