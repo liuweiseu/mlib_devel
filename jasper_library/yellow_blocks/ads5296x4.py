@@ -579,6 +579,7 @@ class ads5296x4_axi4lite(ads5296x4):
         self.add_source('ads5296x4_interface_v2/wb_ads5296_attach.v')
         self.add_source('ads5296x4_interface_v2/data_fifo.xci')
         self.add_source('spi_master/spi_master.v')
+        self.add_source('spi_master/axi4lite_spi_master.v')
         if self.port == self.clockport:
             self.provides = [
                              'adc%d_clk' % self.port,
@@ -595,10 +596,10 @@ class ads5296x4_axi4lite(ads5296x4):
                          'ads5296_%d_sclk5' % self.clockport,
                         ]
         self.port_prefix = self.blocktype + 'fmc%d' % self.port
-        # if the arch is axi4-lite, we need to add ports for axi4 registers
+        # if the arch is axi4-lite, we need to add axi4 registers
         self.memory_map = [
-            Register('mmcm_clksel',         mode='r',   offset=0x00),
-            Register('mmcm_locked',         mode='rw',  offset=0x04),
+            Register('mmcm_clksel',         mode='rw',  offset=0x00),
+            Register('mmcm_locked',         mode='r',   offset=0x04),
             Register('mmcm_rst',            mode='rw',  offset=0x08),
             Register('fclk_err_cnt',        mode='r',   offset=0x0c),
             Register('lclk_ctr',            mode='r',   offset=0x10),
@@ -615,7 +616,16 @@ class ads5296x4_axi4lite(ads5296x4):
             Register('delay_val',           mode='rw',  offset=0x3c),
             Register('iserdes_rst',         mode='rw',  offset=0x40)
         ]
-    
+        # spi registers from axi4lite interface
+        self.spi_memory_map = [
+            Register('spi_din',             mode='rw',  offset=0x00),
+            Register('spi_dout',            mode='r',   offset=0x04),
+            Register('spi_cs',              mode='rw',  offset=0x08),
+            Register('spi_cs_idle',         mode='rw',  offset=0x0c),
+            Register('spi_trigger',         mode='rw',  offset=0x10),
+            Register('spi_event_count',     mode='r',   offset=0x14)
+        ]
+
     def gen_children(self):
         ## A register to control the which ADC on this FMC is providing the clock
         #swreg = YellowBlock.make_block({'tag':'xps:sw_reg_sync',
@@ -639,8 +649,31 @@ class ads5296x4_axi4lite(ads5296x4):
         for b in range(self.board_count):
             inst = top.get_instance(entity=module, name="%s_%d" % (self.fullname, b))
             top.add_axi4lite_interface(regname='%s_%s_%s'%(self.unique_name, self.port, b), mode='rw', nbytes=65536, typecode=self.typecode, memory_map=self.memory_map)
-            inst.add_port('mmcm_clksel',signal='%s_%s_%s_out' % (self.unique_name, self.port, b), width=1, parent_sig=True)
-            inst.add_port('mmcm_locked',signal='%s_%s_%s_in' % (self.unique_name, self.port, b), width=1, parent_sig=True)
+            inst.add_port('mmcm_clksel',signal='%s_%s_%s_mmcm_clksel_out[0:0]' % (self.unique_name, self.port, b), width=1, parent_sig=False)
+            inst.add_port('mmcm_locked',signal='%s_%s_%s_mmcm_locked_in[0:0]' % (self.unique_name, self.port, b), width=1, parent_sig=False)
+            inst.add_port('mmcm_rst',signal='%s_%s_%s_mmcm_rst_out[0:0]' % (self.unique_name, self.port, b), width=1, parent_sig=False)
+            inst.add_port('fclk_err_cnt',signal='%s_%s_%s_fclk_err_cnt_in' % (self.unique_name, self.port, b), width=32, parent_sig=False)
+            inst.add_port('lclk_ctr',signal='%s_%s_%s_lclk_ctr_in' % (self.unique_name, self.port, b), width=32, parent_sig=False)
+            inst.add_port('fclk0_ctr',signal='%s_%s_%s_fclk0_ctr_in' % (self.unique_name, self.port, b), width=32, parent_sig=False)
+            inst.add_port('fclk1_ctr',signal='%s_%s_%s_fclk1_ctr_in' % (self.unique_name, self.port, b), width=32, parent_sig=False)
+            inst.add_port('fclk2_ctr',signal='%s_%s_%s_fclk2_ctr_in' % (self.unique_name, self.port, b), width=32, parent_sig=False)
+            inst.add_port('fclk3_ctr',signal='%s_%s_%s_fclk3_ctr_in' % (self.unique_name, self.port, b), width=32, parent_sig=False)
+            # G_NUM_UNITS is hard-coded here, we may need to change this number sometime
+            G_NUM_UNITS = 4
+            inst.add_port('bitslip',signal='%s_%s_%s_bitslip_out[%d:0]' % (self.unique_name, self.port, b,4*G_NUM_UNITS-1), width=4*G_NUM_UNITS, parent_sig=False)
+            inst.add_port('slip_index',signal='%s_%s_%s_slip_index_out[2:0]' % (self.unique_name, self.port, b), width=3, parent_sig=False)
+            inst.add_port('snapshot_trigger',signal='%s_%s_%s_snapshot_trigger_out[0:0]' % (self.unique_name, self.port, b), width=1, parent_sig=False)
+
+            if b == 0:
+                G_NUM_FCLKS = 2
+            else:
+                G_NUM_FCLKS = 3
+            delay_width = 4*2*G_NUM_UNITS + G_NUM_FCLKS + 1
+            inst.add_port('delay_load',signal='%s_%s_%s_delay_load_out[%d:0]' % (self.unique_name, self.port, b, delay_width - 1), width=delay_width, parent_sig=False)
+            inst.add_port('delay_rst',signal='%s_%s_%s_delay_rst_out[%d:0]' % (self.unique_name, self.port, b, delay_width - 1), width=delay_width, parent_sig=False)
+            inst.add_port('delay_en_vtc',signal='%s_%s_%s_delay_en_vtc_out[%d:0]' % (self.unique_name, self.port, b, delay_width - 1), width=delay_width, parent_sig=False)
+            inst.add_port('delay_val',signal='%s_%s_%s_delay_val_out[0:0]' % (self.unique_name, self.port, b), width=1, parent_sig=False)
+            inst.add_port('iserdes_rst',signal='%s_%s_%s_iserdes_rst_out[0:0]' % (self.unique_name, self.port, b), width=1, parent_sig=False)
             inst.add_parameter('G_SNAPSHOT_ADDR_BITS', SNAPSHOT_ADDR_BITS)
             inst.add_parameter('G_VERSION', self.version)
             # Delare all boards master, so that they all instantiate
@@ -750,8 +783,7 @@ class ads5296x4_axi4lite(ads5296x4):
         # wb controller
 
         # TODO: modify the wb_spi_master to axi4lite_spi_master
-        '''
-        wbctrl = top.get_instance(entity='wb_spi_master', name='wb_ads5296_controller%d' % self.port)
+        spictrl = top.get_instance(entity='axi4lite_spi_master', name='ads5296_controller%d' % self.port)
         # Configure SPI settings.
         # NBITS=24 and NCLKDIVBITS=4 gives a latency on transactions of <500 clocks.
         # The toolflow currently uses a WB arbiter with a timeout of 1000.
@@ -759,15 +791,21 @@ class ads5296x4_axi4lite(ads5296x4):
         # If the delay needs to be longer, the wb_spi_master core should be modified so it
         # acks the WB bus immediately, and then lets the user poll a register to see if the SPI transaction
         # has finished.
-        wbctrl.add_parameter("NBITS", 24)
-        wbctrl.add_parameter("NCSBITS", 3)
-        wbctrl.add_parameter("NCLKDIVBITS", 5)
-        wbctrl.add_wb_interface(nbytes=4*4, regname='ads5296_spi_controller%d' % self.port, mode='rw', typecode=self.typecode)
-        wbctrl.add_port('cs', '%s_cs' % self.port_prefix, dir='out', parent_port=True, width=3)
-        wbctrl.add_port('sclk', '%s_sclk' % self.port_prefix, dir='out', parent_port=True)
-        wbctrl.add_port('mosi', '%s_mosi' % self.port_prefix, dir='out', parent_port=True)
-        wbctrl.add_port('miso', '%s_miso' % self.port_prefix, dir='in', parent_port=True)
-        '''
+        spictrl.add_parameter("NBITS", 24)
+        spictrl.add_parameter("NCSBITS", 3)
+        spictrl.add_parameter("NCLKDIVBITS", 5)
+        top.add_axi4lite_interface(regname='ads5296_spi_controller%d' % self.port, mode='rw', nbytes=65536, typecode=self.typecode, memory_map=self.spi_memory_map)
+        spictrl.add_port('aclk', 'axil_clk', width=1, paraent_sig=False)
+        spictrl.add_port('spi_din', 'ads5296_spi_controller%d_spi_din_out'%(self.port), width=32, parent_sig=False)
+        spictrl.add_port('spi_dout', 'ads5296_spi_controller%d_spi_dout_in'%(self.port), width=32, parent_sig=False)
+        spictrl.add_port('spi_cs', 'ads5296_spi_controller%d_spi_cs_out[7:0]'%(self.port), width=8, parent_sig=False)
+        spictrl.add_port('spi_cs_idle', 'ads5296_spi_controller%d_spi_cs_idle_out[7:0]'%(self.port), width=8, parent_sig=False)
+        spictrl.add_port('spi_trigger', 'ads5296_spi_controller%d_spi_trigger_out[0:0]'%(self.port), width=1, parent_sig=False)
+        spictrl.add_port('spi_event_count', 'ads5296_spi_controller%d_spi_event_count_in'%(self.port), width=32, parent_sig=False)
+        spictrl.add_port('cs', '%s_cs' % self.port_prefix, dir='out', parent_port=True, width=3)
+        spictrl.add_port('sclk', '%s_sclk' % self.port_prefix, dir='out', parent_port=True)
+        spictrl.add_port('mosi', '%s_mosi' % self.port_prefix, dir='out', parent_port=True)
+        spictrl.add_port('miso', '%s_miso' % self.port_prefix, dir='in', parent_port=True)
 
         top.add_signal('ila_miso%d' % self.port, attributes={'keep': '"true"'})
         top.add_signal('ila_mosi%d' % self.port, attributes={'keep': '"true"'})
@@ -797,24 +835,12 @@ class ads5296x4_axi4lite(ads5296x4):
                     bram_log_width = int(ceil(log(self.adc_resolution*self.channels_per_unit,2)))
                     padding = 2**(bram_log_width-2) - self.adc_resolution
                     din = self.fullname+'_%s'%snap_chan[b*self.num_units_per_board + u]
-                    if self.platform.mmbus_architecture[0] == 'AXI4-Lite':
-                        top.add_axi4lite_interface(regname='ads5296_bram%d_%d_%d' % (self.port, b, u),
-                                mode='rw', nbytes=(2**bram_log_width//8)*2**SNAPSHOT_ADDR_BITS,
-                                typecode=TYPECODE_SWREG) #width is in bits
-                        '''
-                        
-                        '''
-                    else:
-                        wbram = top.get_instance(entity='wb_bram', name='ads5296_wb_ram%d_%d_%d' % (self.port, b, u), comment='Embedded ADS5296 bram for fmc %d, board %d, chip %d' % (self.port, b, u))
-                        wbram.add_parameter('LOG_USER_WIDTH', bram_log_width)
-                        wbram.add_parameter('USER_ADDR_BITS', SNAPSHOT_ADDR_BITS)
-                        wbram.add_parameter('N_REGISTERS','2')
-                        wbram.add_wb_interface(regname='ads5296_wb_ram%d_%d_%d' % (self.port, b, u), mode='rw', nbytes=(2**bram_log_width//8)*2**SNAPSHOT_ADDR_BITS, typecode=TYPECODE_SWREG)
-                        wbram.add_port('user_clk','user_clk', parent_sig=False)
-                        wbram.add_port('user_addr', '%s_snapshot_addr_%d' % (self.fullname, b), width=SNAPSHOT_ADDR_BITS)
-                        wbram.add_port('user_din',self.reorder_ports([din+'1',din+'2',din+'3',din+'4'], word_width=16, padding="%d'b0" % padding), parent_sig=False)
-                        wbram.add_port('user_we', '%s_snapshot_we_%d' % (self.fullname, b))
-                        wbram.add_port('user_dout','')
+                    top.add_axi4lite_interface(regname='ads5296_bram%d_%d_%d' % (self.port, b, u),
+                            mode='rw', nbytes=(2**bram_log_width//8)*2**SNAPSHOT_ADDR_BITS,
+                            typecode=TYPECODE_BRAM) #width is in bits
+                    top.assign_signal( '%s_snapshot_addr_%d' % (self.fullname, b), 'ads5296_bram%d_%d_%d_ads5296_bram%d_%d_%d_addr[%d:0]' % (self.port, b, u,self.port, b, u, bram_log_width))
+                    top.assign_signal('ads5296_bram%d_%d_%d_ads5296_bram%d_%d_%d_data_in' % (self.port, b, u, self.port, b, u,), self.reorder_ports([din+'1',din+'2',din+'3',din+'4'], word_width=16, padding="%d'b0" % padding))
+                    top.assign_signal('%s_snapshot_we_%d' % (self.fullname, b),'ads5296_bram%d_%d_%d_ads5296_bram%d_%d_%d_we' % (self.port, b, u, self.port, b, u,))
     
     def reorder_ports(self, port_list, wb_bitwidth=32, word_width=8, padding=None):
         """ Reorder output ports of ADCs to arrange sampling data in correct order in wb_bram
