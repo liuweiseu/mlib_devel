@@ -25,14 +25,14 @@ module axi4lite_spi_master#(
   reg wb_ack;
 
   /*** Registers ****/
-  reg [31:0] spi_din = 32'b0;
+  //reg [31:0] spi_din = 32'b0;
   reg [31:0] spi_dout = 32'b0;
-  reg [7:0] spi_cs;
-  reg [7:0] spi_cs_idle;
+  //reg [7:0] spi_cs;
+  //reg [7:0] spi_cs_idle;
   wire [NBITS-1:0] spi_dout_tmp;
   wire spi_dvld;
   
-  reg spi_trigger;
+  //reg spi_trigger;
   reg spi_ack;
   reg wait_for_spi = 1'b0;
    

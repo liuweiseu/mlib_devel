@@ -45,20 +45,7 @@ module ads5296x4_interface_demux2_axi4lite #(
     output        snapshot_we,
     output [G_SNAPSHOT_ADDR_BITS-1:0] snapshot_addr,
 
-    // Wishbone interface
-    /*
-    input         wb_clk_i,
-    input         wb_rst_i,
-    output [31:0] wb_dat_o,
-    output        wb_err_o,
-    output        wb_ack_o,
-    input  [31:0] wb_adr_i,
-    input  [3:0]  wb_sel_i,
-    input  [31:0] wb_dat_i,
-    input         wb_we_i,
-    input         wb_cyc_i,
-    input         wb_stb_i
-    */
+    input axil_clk,
     output mmcm_locked,
     input mmcm_clksel,
     input mmcm_rst,
@@ -299,7 +286,8 @@ module ads5296x4_interface_demux2_axi4lite #(
    *   pulse LOAD high for 1 cycle
    */
 
-  wire delay_clk = wb_clk_i;
+  //wire delay_clk = wb_clk_i;
+  wire delay_clk = axil_clk;
 
   (* async_reg = "true" *) reg [4*2*G_NUM_UNITS + 2 - 1: 0] delay_loadR;
   (* async_reg = "true" *) reg [4*2*G_NUM_UNITS + 2 - 1: 0] delay_loadRR;

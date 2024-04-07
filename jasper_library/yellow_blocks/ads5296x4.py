@@ -610,11 +610,14 @@ class ads5296x4_axi4lite(ads5296x4):
             Register('bitslip',             mode='rw',  offset=0x24),
             Register('slip_index',          mode='rw',  offset=0x28),
             Register('snapshot_trigger',    mode='rw',  offset=0x2c),
-            Register('delay_load',          mode='rw',  offset=0x30),
-            Register('delay_rst',           mode='rw',  offset=0x34),
-            Register('delay_en_vtc',        mode='rw',  offset=0x38),
-            Register('delay_val',           mode='rw',  offset=0x3c),
-            Register('iserdes_rst',         mode='rw',  offset=0x40)
+            Register('delay_load0',         mode='rw',  offset=0x30),
+            Register('delay_load1',         mode='rw',  offset=0x34),
+            Register('delay_rst0',          mode='rw',  offset=0x38),
+            Register('delay_rst1',          mode='rw',  offset=0x3C),
+            Register('delay_en_vtc0',       mode='rw',  offset=0x40),
+            Register('delay_en_vtc1',       mode='rw',  offset=0x44),
+            Register('delay_val',           mode='rw',  offset=0x48),
+            Register('iserdes_rst',         mode='rw',  offset=0x4C)
         ]
         # spi registers from axi4lite interface
         self.spi_memory_map = [
@@ -649,6 +652,7 @@ class ads5296x4_axi4lite(ads5296x4):
         for b in range(self.board_count):
             inst = top.get_instance(entity=module, name="%s_%d" % (self.fullname, b))
             top.add_axi4lite_interface(regname='%s_%s_%s'%(self.unique_name, self.port, b), mode='rw', nbytes=65536, typecode=self.typecode, memory_map=self.memory_map)
+            inst.add_port('axil_clk', 'axil_clk', parent_sig=False)
             inst.add_port('mmcm_clksel',signal='%s_%s_%s_mmcm_clksel_out[0:0]' % (self.unique_name, self.port, b), width=1, parent_sig=False)
             inst.add_port('mmcm_locked',signal='%s_%s_%s_mmcm_locked_in[0:0]' % (self.unique_name, self.port, b), width=1, parent_sig=False)
             inst.add_port('mmcm_rst',signal='%s_%s_%s_mmcm_rst_out[0:0]' % (self.unique_name, self.port, b), width=1, parent_sig=False)
@@ -663,16 +667,19 @@ class ads5296x4_axi4lite(ads5296x4):
             inst.add_port('bitslip',signal='%s_%s_%s_bitslip_out[%d:0]' % (self.unique_name, self.port, b,4*G_NUM_UNITS-1), width=4*G_NUM_UNITS, parent_sig=False)
             inst.add_port('slip_index',signal='%s_%s_%s_slip_index_out[2:0]' % (self.unique_name, self.port, b), width=3, parent_sig=False)
             inst.add_port('snapshot_trigger',signal='%s_%s_%s_snapshot_trigger_out[0:0]' % (self.unique_name, self.port, b), width=1, parent_sig=False)
-
-            if b == 0:
-                G_NUM_FCLKS = 2
-            else:
-                G_NUM_FCLKS = 3
+            # Only bother controlling 1 fclk
+            G_NUM_FCLKS = 1 
             delay_width = 4*2*G_NUM_UNITS + G_NUM_FCLKS + 1
-            inst.add_port('delay_load',signal='%s_%s_%s_delay_load_out[%d:0]' % (self.unique_name, self.port, b, delay_width - 1), width=delay_width, parent_sig=False)
-            inst.add_port('delay_rst',signal='%s_%s_%s_delay_rst_out[%d:0]' % (self.unique_name, self.port, b, delay_width - 1), width=delay_width, parent_sig=False)
-            inst.add_port('delay_en_vtc',signal='%s_%s_%s_delay_en_vtc_out[%d:0]' % (self.unique_name, self.port, b, delay_width - 1), width=delay_width, parent_sig=False)
-            inst.add_port('delay_val',signal='%s_%s_%s_delay_val_out[0:0]' % (self.unique_name, self.port, b), width=1, parent_sig=False)
+            #top.add_signal('%s_%s_%s_delay_load_out[%d:0]' % (self.unique_name, self.port, b, delay_width - 1), width = delay_width - 1)
+            top.assign_signal('%s_%s_%s_delay_load_out[%d:0]' % (self.unique_name, self.port, b, delay_width - 1), '{%s_%s_%s_delay_load1_out[1:0], %s_%s_%s_delay_load0_out}' % (self.unique_name, self.port, b,self.unique_name, self.port, b))
+            #top.add_signal('%s_%s_%s_delay_rst_out[%d:0]' % (self.unique_name, self.port, b, delay_width - 1), width = delay_width - 1)
+            top.assign_signal('%s_%s_%s_delay_rst_out[%d:0]' % (self.unique_name, self.port, b, delay_width - 1), '{%s_%s_%s_delay_rst1_out[1:0], %s_%s_%s_delay_rst0_out}' % (self.unique_name, self.port, b,self.unique_name, self.port, b))
+            #top.add_signal('%s_%s_%s_delay_en_vtc_out[%d:0]' % (self.unique_name, self.port, b, delay_width - 1), width = delay_width - 1)
+            top.assign_signal('%s_%s_%s_delay_en_vtc_out[%d:0]' % (self.unique_name, self.port, b, delay_width - 1), '{%s_%s_%s_delay_en_vtc1_out[1:0], %s_%s_%s_delay_en_vtc0_out}' % (self.unique_name, self.port, b,self.unique_name, self.port, b))
+            inst.add_port('delay_load',signal='%s_%s_%s_delay_load_out'% (self.unique_name, self.port, b), width=delay_width, parent_sig=True)
+            inst.add_port('delay_rst',signal='%s_%s_%s_delay_rst_out'% (self.unique_name, self.port, b), width=delay_width, parent_sig=True)
+            inst.add_port('delay_en_vtc',signal='%s_%s_%s_delay_en_vtc_out' % (self.unique_name, self.port, b), width=delay_width, parent_sig=True)
+            inst.add_port('delay_val',signal='%s_%s_%s_delay_val_out[8:0]' % (self.unique_name, self.port, b), width=1, parent_sig=False)
             inst.add_port('iserdes_rst',signal='%s_%s_%s_iserdes_rst_out[0:0]' % (self.unique_name, self.port, b), width=1, parent_sig=False)
             inst.add_parameter('G_SNAPSHOT_ADDR_BITS', SNAPSHOT_ADDR_BITS)
             inst.add_parameter('G_VERSION', self.version)
@@ -795,7 +802,7 @@ class ads5296x4_axi4lite(ads5296x4):
         spictrl.add_parameter("NCSBITS", 3)
         spictrl.add_parameter("NCLKDIVBITS", 5)
         top.add_axi4lite_interface(regname='ads5296_spi_controller%d' % self.port, mode='rw', nbytes=65536, typecode=self.typecode, memory_map=self.spi_memory_map)
-        spictrl.add_port('aclk', 'axil_clk', width=1, paraent_sig=False)
+        spictrl.add_port('aclk', 'axil_clk', paraent_sig=False)
         spictrl.add_port('spi_din', 'ads5296_spi_controller%d_spi_din_out'%(self.port), width=32, parent_sig=False)
         spictrl.add_port('spi_dout', 'ads5296_spi_controller%d_spi_dout_in'%(self.port), width=32, parent_sig=False)
         spictrl.add_port('spi_cs', 'ads5296_spi_controller%d_spi_cs_out[7:0]'%(self.port), width=8, parent_sig=False)
