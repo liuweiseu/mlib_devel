@@ -266,7 +266,7 @@ class fortygbe_main(forty_gbe):
         inst.add_port('qsfp_soft_reset',           '1\'b0', width=1,  dir='in', parent_sig=False)
 
         #inst.add_port('eth_if_present',            'eth_if_%s_present'%str(self.port),  width=1,  dir='out', parent_sig=False)
-        inst.add_port('eth_if_present',            '',  width=1,  dir='out', parent_sig=False)
+        #inst.add_port('eth_if_present',            '',  width=1,  dir='out', parent_sig=False)
 
         #inst.add_port('phy_rx_up',                 'phy_rx_up_%s' %str(self.port),   width=1,  dir='out', parent_sig=False)
         #inst.add_port('xlgmii_txled',              'xlgmii_txled_%s' %str(self.port),   width=2,  dir='out', parent_sig=False)
@@ -325,6 +325,8 @@ class fortygbe_main(forty_gbe):
         self.add_source("forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PCS/ip/XGMII_FIFO_DUAL_SYNC/*.xci")
         self.add_source("forty_gbe/cpu_rx_packet_size/*.xci")
         self.add_source("forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PCS/ip/RS256_FIFO/*.xci")
+        self.add_source("forty_gbe/counter.v")
+        self.add_source("forty_gbe/rate_counter.v")
         #self.add_source("forty_gbe/SKA_40GBE_PHY/IEEE802_3_XL_PHY/ip/IEEE802_3_XL_VIO/*.xci") # Only for debugging
         #self.add_source("forty_gbe/WISHBONE/wishbone_forty_gb_eth_attach.vhd") # The original SARAO/SKARAB Wb attachment
         self.add_source("forty_gbe/WISHBONE/wishbone_forty_gb_eth_attach2.v") # An attachment based on the 10GbE module
