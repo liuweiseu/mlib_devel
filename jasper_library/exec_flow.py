@@ -272,7 +272,8 @@ if __name__ == '__main__':
             prm_file = backend.prm_loc
             bitstream = backend.bitstream_loc
 
-            backend.output_fpg = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d.fpg' % (
+            #backend.output_fpg = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d.fpg' % (
+            backend.output_fpg = tf.frontend_target_base.split('.')[0] + '_%d-%02d-%02d_%02d%02d.fpg' % (
                 tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
                 tf.start_time.tm_hour, tf.start_time.tm_min)
 
@@ -351,7 +352,8 @@ if __name__ == '__main__':
         # running this seperate of `--backend` will require work of the user. The rfdc in casperfpga is currently
         # expecting the `.dtbo` and `.fpg` live in the same place with the same name (different ext) and so a
         # separate compilation will require the user to change the name of the `.dtbo` to match the `.fpg`
-        vitis.output_dtbo = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d.dtbo' % (
+        #vitis.output_dtbo = tf.frontend_target_base[:-4] + '_%d-%02d-%02d_%02d%02d.dtbo' % (
+        vitis.output_dtbo = tf.frontend_target_base.split('.')[0] + '_%d-%02d-%02d_%02d%02d.dtbo' % (
             tf.start_time.tm_year, tf.start_time.tm_mon, tf.start_time.tm_mday,
             tf.start_time.tm_hour, tf.start_time.tm_min)
 
