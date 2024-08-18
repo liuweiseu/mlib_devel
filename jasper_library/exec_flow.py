@@ -119,7 +119,8 @@ if __name__ == '__main__':
 
     # get build directory
     # use user defined directory else use a directory with same name as model
-    builddir = opts.builddir or opts.model[:-4]
+    # builddir = opts.builddir or opts.model[:-4]
+    builddir = opts.builddir or opts.model.split('.')[0]
 
     # logging stuff...
     os.system('mkdir -p %s' % builddir)

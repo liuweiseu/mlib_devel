@@ -80,7 +80,8 @@ class Toolflow(object):
         self.periph_file = self.compile_dir + '/jasper.per'
         self.git_info_file = self.compile_dir + '/git_info.tab'
         self.frontend_target = frontend_target
-        self.modelname = frontend_target.split('/')[-1][:-4]  # strip off extension
+        # self.modelname = frontend_target.split('/')[-1][:-4]  # strip off extension
+        self.modelname = frontend_target.split('/')[-1].split('.')[0]  # strip off extension
         self.frontend_target_base = os.path.basename(frontend_target)
 
         self.cores = None
