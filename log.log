@@ -1216,3 +1216,8 @@ assign_bd_address -offset 0xA0000000 -range 0x00010000 -target_address_space [ge
 [2024-08-23 21:39:06,396][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: check_timing impl_1
 [2024-08-23 21:39:06,396][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: check_zero_critical $impl_critical_count implementation
 [2024-08-23 21:39:06,396][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: check_zero_critical $synth_critical_count synthesis
+[2024-08-23 21:44:39,672][toolflow.py:1255][mkfpg][DEBUG][MainThread]: Opening core_info.tab file /home/wei/Projects/scilab_test/multi_gpios_1/core_info.tab
+[2024-08-23 21:44:39,673][toolflow.py:1256][mkfpg][DEBUG][MainThread]: Opening design_info.tab file /home/wei/Projects/scilab_test/multi_gpios_1/design_info.tab
+[2024-08-23 21:44:39,673][toolflow.py:1257][mkfpg][DEBUG][MainThread]: Opening git_info.tab file /home/wei/Projects/scilab_test/multi_gpios_1/git_info.tab
+[2024-08-23 21:44:42,799][toolflow.py:1518][compile][INFO][MainThread]: Building xsct script
+[2024-08-23 21:45:03,042][toolflow.py:1565][compile][INFO][MainThread]: Assembling jasper dt node

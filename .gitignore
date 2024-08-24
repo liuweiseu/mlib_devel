@@ -36,3 +36,6 @@ docs/_build/
 
 src/*
 workspace/*
+
+jasper.json
+.Xil/
