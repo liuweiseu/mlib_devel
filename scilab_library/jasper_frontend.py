@@ -45,6 +45,8 @@ scilab_library_path = os.getenv('MLIB_DEVEL_PATH')+ '/scilab_library'
 # open the jasper.json file
 with open('jasper.json') as f:
     blkinfo = json.load(f)
+# after reading the file, remove it
+os.remove('jasper.json')
 # open the block_info_template.json file
 with open('%s/block_info_template.json'%(scilab_library_path)) as f:
     blkinfo_template = json.load(f)
