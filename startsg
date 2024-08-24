@@ -214,8 +214,23 @@ then
   # (so MATLAB will find our startup.m file).
   cd "${MLIB_DEVEL_PATH}"
 
-  # Start sysgen in OPENGL graphics mode to prevent java errors
-  echo "Starting model_composer"
-  #"${COMPOSER_PATH}/bin/model_composer" 
-  model_composer
+  # if not define FRONTEND, start model_composer
+  if ! [ -n "${FRONTEND}" ]
+  then
+    # Start sysgen in OPENGL graphics mode to prevent java errors
+    echo "Starting model_composer"
+    model_composer
+  elif [ ${FRONTEND} == "model_composer" ]
+  then
+      # start model composer
+      echo "Starting model_composer"
+      model_composer
+  elif [ ${FRONTEND} == "scilab" ]
+  then
+      # start scilab
+      echo "Starting scilab"
+      scilab -f scilab_library/load_casper_lib.sci
+  else
+      echo "Frontend should be model_composer or modeler"
+  fi
 fi
