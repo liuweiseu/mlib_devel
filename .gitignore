@@ -39,3 +39,4 @@ workspace/*
 
 jasper.json
 .Xil/
+log.log
