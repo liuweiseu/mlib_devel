@@ -1,0 +1,1218 @@
+[2024-08-23 21:39:05,965][version.py:119][_validate_prerelease][DEBUG][MainThread]: A Release Candidate
+[2024-08-23 21:39:05,965][version.py:110][_validate_prerelease][DEBUG][MainThread]: Not a Pre-Release
+[2024-08-23 21:39:06,098][version.py:110][_validate_prerelease][DEBUG][MainThread]: Not a Pre-Release
+[2024-08-23 21:39:06,110][customlogging.py:143][sect_break][INFO][MainThread]: ********************************************************************************
+[2024-08-23 21:39:06,111][arguments.py:49][__init__][INFO][MainThread]: Loading Arguments from Command Line...
+[2024-08-23 21:39:06,111][customlogging.py:143][sect_break][INFO][MainThread]: ********************************************************************************
+[2024-08-23 21:39:06,111][arguments.py:194][_set_args_as_attrs][DEBUG][MainThread]: Setting Attribute from Arg: --log (False)
+[2024-08-23 21:39:06,111][arguments.py:194][_set_args_as_attrs][DEBUG][MainThread]: Setting Attribute from Arg: --input_file ([])
+[2024-08-23 21:39:06,111][arguments.py:194][_set_args_as_attrs][DEBUG][MainThread]: Setting Attribute from Arg: --input_folder ([])
+[2024-08-23 21:39:06,111][arguments.py:194][_set_args_as_attrs][DEBUG][MainThread]: Setting Attribute from Arg: --path ([])
+[2024-08-23 21:39:06,111][arguments.py:194][_set_args_as_attrs][DEBUG][MainThread]: Setting Attribute from Arg: --vhdl_output ()
+[2024-08-23 21:39:06,111][arguments.py:194][_set_args_as_attrs][DEBUG][MainThread]: Setting Attribute from Arg: --xml_output ()
+[2024-08-23 21:39:06,111][arguments.py:194][_set_args_as_attrs][DEBUG][MainThread]: Setting Attribute from Arg: --bus_library (work)
+[2024-08-23 21:39:06,111][arguments.py:194][_set_args_as_attrs][DEBUG][MainThread]: Setting Attribute from Arg: --slave_library (work)
+[2024-08-23 21:39:06,111][arguments.py:194][_set_args_as_attrs][DEBUG][MainThread]: Setting Attribute from Arg: --bus_definition_number (0)
+[2024-08-23 21:39:06,111][arguments.py:194][_set_args_as_attrs][DEBUG][MainThread]: Setting Attribute from Arg: --relative_output_path ()
+[2024-08-23 21:39:06,111][arguments.py:194][_set_args_as_attrs][DEBUG][MainThread]: Setting Attribute from Arg: --xml_help (False)
+[2024-08-23 21:39:06,111][arguments.py:194][_set_args_as_attrs][DEBUG][MainThread]: Setting Attribute from Arg: --relocate_path ()
+[2024-08-23 21:39:06,111][arguments.py:194][_set_args_as_attrs][DEBUG][MainThread]: Setting Attribute from Arg: --constant ([])
+[2024-08-23 21:39:06,111][arguments.py:194][_set_args_as_attrs][DEBUG][MainThread]: Setting Attribute from Arg: --tb (False)
+[2024-08-23 21:39:06,111][arguments.py:194][_set_args_as_attrs][DEBUG][MainThread]: Setting Attribute from Arg: --vhdl_top ()
+[2024-08-23 21:39:06,111][arguments.py:194][_set_args_as_attrs][DEBUG][MainThread]: Setting Attribute from Arg: --vhdl_record_name (t_axi4lite_mmap_slaves)
+[2024-08-23 21:39:06,111][arguments.py:194][_set_args_as_attrs][DEBUG][MainThread]: Setting Attribute from Arg: --zip (False)
+[2024-08-23 21:39:06,111][toolflow.py:984][xml2vhdl][INFO][MainThread]: Trying to generate AXI HDL from XML
+[2024-08-23 21:39:06,112][toolflow.py:985][xml2vhdl][INFO][MainThread]:   Input directory: ['/home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_source']
+[2024-08-23 21:39:06,112][toolflow.py:986][xml2vhdl][INFO][MainThread]:   Output XML directory: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_xml_output
+[2024-08-23 21:39:06,112][toolflow.py:987][xml2vhdl][INFO][MainThread]:   Output directory: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output
+[2024-08-23 21:39:06,112][toolflow.py:988][xml2vhdl][INFO][MainThread]:   Slave library: xil_defaultlib
+[2024-08-23 21:39:06,112][toolflow.py:989][xml2vhdl][INFO][MainThread]:   Bus library: xil_defaultlib
+[2024-08-23 21:39:06,113][xml2vhdl.py:116][__init__][INFO][MainThread]: --------------------------------------------------------------------------------
+[2024-08-23 21:39:06,113][xml2vhdl.py:117][__init__][INFO][MainThread]: Compile order:
+[2024-08-23 21:39:06,113][xml2vhdl.py:119][__init__][INFO][MainThread]: 	sys
+[2024-08-23 21:39:06,113][xml2vhdl.py:119][__init__][INFO][MainThread]: 	sw_reg
+[2024-08-23 21:39:06,113][xml2vhdl.py:119][__init__][INFO][MainThread]: 	axi4lite_top
+[2024-08-23 21:39:06,113][xml2vhdl.py:125][__init__][INFO][MainThread]: Analysing: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_source/sys_memory_map.xml
+[2024-08-23 21:39:06,113][xml2slave.py:44][__init__][INFO][MainThread]: Selected bus:
+[2024-08-23 21:39:06,113][xml2slave.py:45][__init__][INFO][MainThread]: 	name:  axi4lite
+[2024-08-23 21:39:06,113][xml2slave.py:47][__init__][INFO][MainThread]: 	width: 32 bit
+[2024-08-23 21:39:06,113][xml2slave.py:49][__init__][INFO][MainThread]: xml2vhdl.py version 1.16
+[2024-08-23 21:39:06,114][xml2slave.py:96][__init__][INFO][MainThread]: --------------------------------------------------------------------------------
+[2024-08-23 21:39:06,114][xml2slave.py:97][__init__][INFO][MainThread]: Analysing: "/home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_source/sys_memory_map.xml"
+[2024-08-23 21:39:06,114][xml2slave.py:114][__init__][INFO][MainThread]: Hierarchical levels are 1
+[2024-08-23 21:39:06,114][xml2slave.py:116][__init__][INFO][MainThread]: Nodes are 6
+[2024-08-23 21:39:06,114][xml2slave.py:118][__init__][INFO][MainThread]: Checking reserved words...
+[2024-08-23 21:39:06,114][xml2slave.py:120][__init__][INFO][MainThread]: fill_child...
+[2024-08-23 21:39:06,114][xml2slave.py:122][__init__][INFO][MainThread]: fill_complete_id...
+[2024-08-23 21:39:06,114][xml2slave.py:124][__init__][INFO][MainThread]: fill_absolute_offset...
+[2024-08-23 21:39:06,115][xml2slave.py:126][__init__][INFO][MainThread]: fill_type...
+[2024-08-23 21:39:06,115][xml2slave.py:128][__init__][INFO][MainThread]: fill_addressable...
+[2024-08-23 21:39:06,115][xml2slave.py:130][__init__][INFO][MainThread]: check_offset...
+[2024-08-23 21:39:06,115][xml2slave.py:133][__init__][INFO][MainThread]: check_bitfield...
+[2024-08-23 21:39:06,115][xml2slave.py:135][__init__][INFO][MainThread]: fill_decoder_mask...
+[2024-08-23 21:39:06,115][slave.py:402][compute_decoder_mask][INFO][MainThread]: Addresses are: 5
+[2024-08-23 21:39:06,116][slave.py:416][compute_decoder_mask][DEBUG][MainThread]: baddr: [[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]]
+[2024-08-23 21:39:06,116][slave.py:94][dec_route_add][DEBUG][MainThread]: tree_dict: {'-1v0': array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])}
+[2024-08-23 21:39:06,116][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: -1
+[2024-08-23 21:39:06,116][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0
+[2024-08-23 21:39:06,117][slave.py:107][dec_route_add][DEBUG][MainThread]: -1v0 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+[2024-08-23 21:39:06,117][slave.py:108][dec_route_add][DEBUG][MainThread]: 5
+[2024-08-23 21:39:06,117][slave.py:109][dec_route_add][DEBUG][MainThread]: 3
+[2024-08-23 21:39:06,117][slave.py:110][dec_route_add][DEBUG][MainThread]: 2
+[2024-08-23 21:39:06,117][slave.py:111][dec_route_add][DEBUG][MainThread]: 5
+[2024-08-23 21:39:06,117][slave.py:118][dec_route_add][DEBUG][MainThread]: tree_dict: {'-1v0': [], '-1v0_4v0': [array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), array([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), array([0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v1': [array([0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), array([0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])]}
+[2024-08-23 21:39:06,117][slave.py:94][dec_route_add][DEBUG][MainThread]: tree_dict: {'-1v0': [], '-1v0_4v0': [array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), array([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), array([0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v1': [array([0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), array([0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])]}
+[2024-08-23 21:39:06,117][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: -1
+[2024-08-23 21:39:06,118][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0
+[2024-08-23 21:39:06,118][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 4
+[2024-08-23 21:39:06,118][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v0
+[2024-08-23 21:39:06,118][slave.py:107][dec_route_add][DEBUG][MainThread]: -1v0_4v0 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+[2024-08-23 21:39:06,118][slave.py:108][dec_route_add][DEBUG][MainThread]: 3
+[2024-08-23 21:39:06,118][slave.py:109][dec_route_add][DEBUG][MainThread]: 2
+[2024-08-23 21:39:06,118][slave.py:110][dec_route_add][DEBUG][MainThread]: 1
+[2024-08-23 21:39:06,118][slave.py:111][dec_route_add][DEBUG][MainThread]: 3
+[2024-08-23 21:39:06,118][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 4
+[2024-08-23 21:39:06,118][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v1
+[2024-08-23 21:39:06,118][slave.py:107][dec_route_add][DEBUG][MainThread]: -1v0_4v1 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+[2024-08-23 21:39:06,118][slave.py:108][dec_route_add][DEBUG][MainThread]: 2
+[2024-08-23 21:39:06,118][slave.py:109][dec_route_add][DEBUG][MainThread]: 1
+[2024-08-23 21:39:06,118][slave.py:110][dec_route_add][DEBUG][MainThread]: 1
+[2024-08-23 21:39:06,118][slave.py:111][dec_route_add][DEBUG][MainThread]: 2
+[2024-08-23 21:39:06,118][slave.py:118][dec_route_add][DEBUG][MainThread]: tree_dict: {'-1v0': [], '-1v0_4v0': [], '-1v0_4v1': [], '-1v0_4v0_3v0': [array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), array([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v1': [array([0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v1_2v0': [array([0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v1_2v1': [array([0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])]}
+[2024-08-23 21:39:06,119][slave.py:94][dec_route_add][DEBUG][MainThread]: tree_dict: {'-1v0': [], '-1v0_4v0': [], '-1v0_4v1': [], '-1v0_4v0_3v0': [array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), array([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v1': [array([0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v1_2v0': [array([0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v1_2v1': [array([0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])]}
+[2024-08-23 21:39:06,119][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: -1
+[2024-08-23 21:39:06,119][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0
+[2024-08-23 21:39:06,119][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 4
+[2024-08-23 21:39:06,119][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v0
+[2024-08-23 21:39:06,119][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 4
+[2024-08-23 21:39:06,119][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v1
+[2024-08-23 21:39:06,119][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 3
+[2024-08-23 21:39:06,119][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v0_3v0
+[2024-08-23 21:39:06,119][slave.py:107][dec_route_add][DEBUG][MainThread]: -1v0_4v0_3v0 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+[2024-08-23 21:39:06,119][slave.py:108][dec_route_add][DEBUG][MainThread]: 2
+[2024-08-23 21:39:06,119][slave.py:109][dec_route_add][DEBUG][MainThread]: 1
+[2024-08-23 21:39:06,119][slave.py:110][dec_route_add][DEBUG][MainThread]: 1
+[2024-08-23 21:39:06,119][slave.py:111][dec_route_add][DEBUG][MainThread]: 2
+[2024-08-23 21:39:06,119][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 3
+[2024-08-23 21:39:06,119][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v0_3v1
+[2024-08-23 21:39:06,119][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 2
+[2024-08-23 21:39:06,119][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v1_2v0
+[2024-08-23 21:39:06,119][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 2
+[2024-08-23 21:39:06,119][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v1_2v1
+[2024-08-23 21:39:06,120][slave.py:118][dec_route_add][DEBUG][MainThread]: tree_dict: {'-1v0': [], '-1v0_4v0': [], '-1v0_4v1': [], '-1v0_4v0_3v0': [], '-1v0_4v0_3v1': [array([0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v1_2v0': [array([0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v1_2v1': [array([0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v0_2v0': [array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v0_2v1': [array([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])]}
+[2024-08-23 21:39:06,120][slave.py:94][dec_route_add][DEBUG][MainThread]: tree_dict: {'-1v0': [], '-1v0_4v0': [], '-1v0_4v1': [], '-1v0_4v0_3v0': [], '-1v0_4v0_3v1': [array([0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v1_2v0': [array([0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v1_2v1': [array([0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v0_2v0': [array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v0_2v1': [array([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])]}
+[2024-08-23 21:39:06,120][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: -1
+[2024-08-23 21:39:06,120][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0
+[2024-08-23 21:39:06,120][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 4
+[2024-08-23 21:39:06,120][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v0
+[2024-08-23 21:39:06,120][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 4
+[2024-08-23 21:39:06,120][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v1
+[2024-08-23 21:39:06,120][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 3
+[2024-08-23 21:39:06,120][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v0_3v0
+[2024-08-23 21:39:06,120][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 3
+[2024-08-23 21:39:06,120][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v0_3v1
+[2024-08-23 21:39:06,120][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 2
+[2024-08-23 21:39:06,121][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v1_2v0
+[2024-08-23 21:39:06,121][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 2
+[2024-08-23 21:39:06,121][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v1_2v1
+[2024-08-23 21:39:06,121][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 2
+[2024-08-23 21:39:06,121][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v0_3v0_2v0
+[2024-08-23 21:39:06,121][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 2
+[2024-08-23 21:39:06,121][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v0_3v0_2v1
+[2024-08-23 21:39:06,121][slave.py:118][dec_route_add][DEBUG][MainThread]: tree_dict: {'-1v0': [], '-1v0_4v0': [], '-1v0_4v1': [], '-1v0_4v0_3v0': [], '-1v0_4v0_3v1': [array([0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v1_2v0': [array([0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v1_2v1': [array([0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v0_2v0': [array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v0_2v1': [array([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])]}
+[2024-08-23 21:39:06,121][slave.py:439][compute_decoder_mask][DEBUG][MainThread]: Decode Dict:
+[2024-08-23 21:39:06,121][slave.py:441][compute_decoder_mask][DEBUG][MainThread]: 	addr:
+[2024-08-23 21:39:06,121][slave.py:442][compute_decoder_mask][DEBUG][MainThread]: 	0
+[2024-08-23 21:39:06,121][slave.py:443][compute_decoder_mask][DEBUG][MainThread]: 	mask:
+[2024-08-23 21:39:06,121][slave.py:444][compute_decoder_mask][DEBUG][MainThread]: 	0x1c
+[2024-08-23 21:39:06,121][slave.py:441][compute_decoder_mask][DEBUG][MainThread]: 	addr:
+[2024-08-23 21:39:06,121][slave.py:442][compute_decoder_mask][DEBUG][MainThread]: 	12
+[2024-08-23 21:39:06,121][slave.py:443][compute_decoder_mask][DEBUG][MainThread]: 	mask:
+[2024-08-23 21:39:06,121][slave.py:444][compute_decoder_mask][DEBUG][MainThread]: 	0x18
+[2024-08-23 21:39:06,122][slave.py:441][compute_decoder_mask][DEBUG][MainThread]: 	addr:
+[2024-08-23 21:39:06,122][slave.py:442][compute_decoder_mask][DEBUG][MainThread]: 	16
+[2024-08-23 21:39:06,122][slave.py:443][compute_decoder_mask][DEBUG][MainThread]: 	mask:
+[2024-08-23 21:39:06,122][slave.py:444][compute_decoder_mask][DEBUG][MainThread]: 	0x14
+[2024-08-23 21:39:06,122][slave.py:441][compute_decoder_mask][DEBUG][MainThread]: 	addr:
+[2024-08-23 21:39:06,122][slave.py:442][compute_decoder_mask][DEBUG][MainThread]: 	20
+[2024-08-23 21:39:06,122][slave.py:443][compute_decoder_mask][DEBUG][MainThread]: 	mask:
+[2024-08-23 21:39:06,122][slave.py:444][compute_decoder_mask][DEBUG][MainThread]: 	0x14
+[2024-08-23 21:39:06,122][slave.py:441][compute_decoder_mask][DEBUG][MainThread]: 	addr:
+[2024-08-23 21:39:06,122][slave.py:442][compute_decoder_mask][DEBUG][MainThread]: 	4
+[2024-08-23 21:39:06,122][slave.py:443][compute_decoder_mask][DEBUG][MainThread]: 	mask:
+[2024-08-23 21:39:06,122][slave.py:444][compute_decoder_mask][DEBUG][MainThread]: 	0x1c
+[2024-08-23 21:39:06,122][xml2slave.py:137][__init__][INFO][MainThread]: propagate_reset_value...
+[2024-08-23 21:39:06,122][xml2slave.py:139][__init__][INFO][MainThread]: default_reset...
+[2024-08-23 21:39:06,122][xml2slave.py:142][__init__][INFO][MainThread]: default_permission...
+[2024-08-23 21:39:06,122][slave.py:476][get_size][DEBUG][MainThread]: 0
+[2024-08-23 21:39:06,122][slave.py:476][get_size][DEBUG][MainThread]: 4
+[2024-08-23 21:39:06,123][slave.py:476][get_size][DEBUG][MainThread]: 12
+[2024-08-23 21:39:06,123][slave.py:476][get_size][DEBUG][MainThread]: 16
+[2024-08-23 21:39:06,123][slave.py:476][get_size][DEBUG][MainThread]: 20
+[2024-08-23 21:39:06,123][xml_gen.py:79][xml_build_output][INFO][MainThread]: Processing: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_xml_output/sys_memory_map_output.xml
+[2024-08-23 21:39:06,125][string_io.py:122][write_vhdl_file][INFO][MainThread]: Writing VHDL output file: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_sys_pkg.vhd
+[2024-08-23 21:39:06,125][string_io.py:122][write_vhdl_file][INFO][MainThread]: Writing VHDL output file: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_sys.vhd
+[2024-08-23 21:39:06,125][string_io.py:122][write_vhdl_file][INFO][MainThread]: Writing VHDL output file: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_sys_muxdemux.vhd
+[2024-08-23 21:39:06,126][xml2slave.py:834][__init__][INFO][MainThread]: Done!
+[2024-08-23 21:39:06,126][xml2slave.py:835][__init__][INFO][MainThread]: --------------------------------------------------------------------------------
+[2024-08-23 21:39:06,126][xml2vhdl.py:125][__init__][INFO][MainThread]: Analysing: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_source/sw_reg_memory_map.xml
+[2024-08-23 21:39:06,126][xml2slave.py:44][__init__][INFO][MainThread]: Selected bus:
+[2024-08-23 21:39:06,126][xml2slave.py:45][__init__][INFO][MainThread]: 	name:  axi4lite
+[2024-08-23 21:39:06,126][xml2slave.py:47][__init__][INFO][MainThread]: 	width: 32 bit
+[2024-08-23 21:39:06,126][xml2slave.py:49][__init__][INFO][MainThread]: xml2vhdl.py version 1.16
+[2024-08-23 21:39:06,126][xml2slave.py:96][__init__][INFO][MainThread]: --------------------------------------------------------------------------------
+[2024-08-23 21:39:06,126][xml2slave.py:97][__init__][INFO][MainThread]: Analysing: "/home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_source/sw_reg_memory_map.xml"
+[2024-08-23 21:39:06,127][xml2slave.py:114][__init__][INFO][MainThread]: Hierarchical levels are 1
+[2024-08-23 21:39:06,127][xml2slave.py:116][__init__][INFO][MainThread]: Nodes are 6
+[2024-08-23 21:39:06,127][xml2slave.py:118][__init__][INFO][MainThread]: Checking reserved words...
+[2024-08-23 21:39:06,127][xml2slave.py:120][__init__][INFO][MainThread]: fill_child...
+[2024-08-23 21:39:06,127][xml2slave.py:122][__init__][INFO][MainThread]: fill_complete_id...
+[2024-08-23 21:39:06,127][xml2slave.py:124][__init__][INFO][MainThread]: fill_absolute_offset...
+[2024-08-23 21:39:06,127][xml2slave.py:126][__init__][INFO][MainThread]: fill_type...
+[2024-08-23 21:39:06,127][xml2slave.py:128][__init__][INFO][MainThread]: fill_addressable...
+[2024-08-23 21:39:06,128][xml2slave.py:130][__init__][INFO][MainThread]: check_offset...
+[2024-08-23 21:39:06,128][xml2slave.py:133][__init__][INFO][MainThread]: check_bitfield...
+[2024-08-23 21:39:06,128][xml2slave.py:135][__init__][INFO][MainThread]: fill_decoder_mask...
+[2024-08-23 21:39:06,128][slave.py:402][compute_decoder_mask][INFO][MainThread]: Addresses are: 5
+[2024-08-23 21:39:06,128][slave.py:416][compute_decoder_mask][DEBUG][MainThread]: baddr: [[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]]
+[2024-08-23 21:39:06,129][slave.py:94][dec_route_add][DEBUG][MainThread]: tree_dict: {'-1v0': array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])}
+[2024-08-23 21:39:06,129][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: -1
+[2024-08-23 21:39:06,129][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0
+[2024-08-23 21:39:06,129][slave.py:107][dec_route_add][DEBUG][MainThread]: -1v0 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+[2024-08-23 21:39:06,129][slave.py:108][dec_route_add][DEBUG][MainThread]: 5
+[2024-08-23 21:39:06,129][slave.py:109][dec_route_add][DEBUG][MainThread]: 4
+[2024-08-23 21:39:06,129][slave.py:110][dec_route_add][DEBUG][MainThread]: 1
+[2024-08-23 21:39:06,129][slave.py:111][dec_route_add][DEBUG][MainThread]: 5
+[2024-08-23 21:39:06,130][slave.py:118][dec_route_add][DEBUG][MainThread]: tree_dict: {'-1v0': [], '-1v0_4v0': [array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), array([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), array([0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), array([0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v1': [array([0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])]}
+[2024-08-23 21:39:06,130][slave.py:94][dec_route_add][DEBUG][MainThread]: tree_dict: {'-1v0': [], '-1v0_4v0': [array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), array([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), array([0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), array([0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v1': [array([0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])]}
+[2024-08-23 21:39:06,130][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: -1
+[2024-08-23 21:39:06,130][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0
+[2024-08-23 21:39:06,130][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 4
+[2024-08-23 21:39:06,130][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v0
+[2024-08-23 21:39:06,130][slave.py:107][dec_route_add][DEBUG][MainThread]: -1v0_4v0 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+[2024-08-23 21:39:06,130][slave.py:108][dec_route_add][DEBUG][MainThread]: 4
+[2024-08-23 21:39:06,130][slave.py:109][dec_route_add][DEBUG][MainThread]: 2
+[2024-08-23 21:39:06,130][slave.py:110][dec_route_add][DEBUG][MainThread]: 2
+[2024-08-23 21:39:06,130][slave.py:111][dec_route_add][DEBUG][MainThread]: 4
+[2024-08-23 21:39:06,130][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 4
+[2024-08-23 21:39:06,130][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v1
+[2024-08-23 21:39:06,131][slave.py:118][dec_route_add][DEBUG][MainThread]: tree_dict: {'-1v0': [], '-1v0_4v0': [], '-1v0_4v1': [array([0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v0': [array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), array([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v1': [array([0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), array([0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])]}
+[2024-08-23 21:39:06,131][slave.py:94][dec_route_add][DEBUG][MainThread]: tree_dict: {'-1v0': [], '-1v0_4v0': [], '-1v0_4v1': [array([0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v0': [array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), array([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v1': [array([0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), array([0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])]}
+[2024-08-23 21:39:06,131][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: -1
+[2024-08-23 21:39:06,131][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0
+[2024-08-23 21:39:06,131][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 4
+[2024-08-23 21:39:06,131][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v0
+[2024-08-23 21:39:06,131][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 4
+[2024-08-23 21:39:06,131][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v1
+[2024-08-23 21:39:06,131][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 3
+[2024-08-23 21:39:06,131][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v0_3v0
+[2024-08-23 21:39:06,131][slave.py:107][dec_route_add][DEBUG][MainThread]: -1v0_4v0_3v0 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+[2024-08-23 21:39:06,131][slave.py:108][dec_route_add][DEBUG][MainThread]: 2
+[2024-08-23 21:39:06,132][slave.py:109][dec_route_add][DEBUG][MainThread]: 1
+[2024-08-23 21:39:06,132][slave.py:110][dec_route_add][DEBUG][MainThread]: 1
+[2024-08-23 21:39:06,132][slave.py:111][dec_route_add][DEBUG][MainThread]: 2
+[2024-08-23 21:39:06,132][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 3
+[2024-08-23 21:39:06,132][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v0_3v1
+[2024-08-23 21:39:06,132][slave.py:107][dec_route_add][DEBUG][MainThread]: -1v0_4v0_3v1 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+[2024-08-23 21:39:06,132][slave.py:108][dec_route_add][DEBUG][MainThread]: 2
+[2024-08-23 21:39:06,132][slave.py:109][dec_route_add][DEBUG][MainThread]: 1
+[2024-08-23 21:39:06,132][slave.py:110][dec_route_add][DEBUG][MainThread]: 1
+[2024-08-23 21:39:06,132][slave.py:111][dec_route_add][DEBUG][MainThread]: 2
+[2024-08-23 21:39:06,132][slave.py:118][dec_route_add][DEBUG][MainThread]: tree_dict: {'-1v0': [], '-1v0_4v0': [], '-1v0_4v1': [array([0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v0': [], '-1v0_4v0_3v1': [], '-1v0_4v0_3v0_2v0': [array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v0_2v1': [array([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v1_2v0': [array([0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v1_2v1': [array([0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])]}
+[2024-08-23 21:39:06,133][slave.py:94][dec_route_add][DEBUG][MainThread]: tree_dict: {'-1v0': [], '-1v0_4v0': [], '-1v0_4v1': [array([0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v0': [], '-1v0_4v0_3v1': [], '-1v0_4v0_3v0_2v0': [array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v0_2v1': [array([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v1_2v0': [array([0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v1_2v1': [array([0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])]}
+[2024-08-23 21:39:06,133][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: -1
+[2024-08-23 21:39:06,133][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0
+[2024-08-23 21:39:06,133][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 4
+[2024-08-23 21:39:06,133][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v0
+[2024-08-23 21:39:06,133][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 4
+[2024-08-23 21:39:06,133][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v1
+[2024-08-23 21:39:06,133][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 3
+[2024-08-23 21:39:06,133][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v0_3v0
+[2024-08-23 21:39:06,133][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 3
+[2024-08-23 21:39:06,133][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v0_3v1
+[2024-08-23 21:39:06,133][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 2
+[2024-08-23 21:39:06,133][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v0_3v0_2v0
+[2024-08-23 21:39:06,133][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 2
+[2024-08-23 21:39:06,133][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v0_3v0_2v1
+[2024-08-23 21:39:06,133][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 2
+[2024-08-23 21:39:06,133][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v0_3v1_2v0
+[2024-08-23 21:39:06,133][slave.py:76][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input: 2
+[2024-08-23 21:39:06,133][slave.py:77][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_4v0_3v1_2v1
+[2024-08-23 21:39:06,133][slave.py:118][dec_route_add][DEBUG][MainThread]: tree_dict: {'-1v0': [], '-1v0_4v0': [], '-1v0_4v1': [array([0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v0': [], '-1v0_4v0_3v1': [], '-1v0_4v0_3v0_2v0': [array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v0_2v1': [array([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v1_2v0': [array([0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_4v0_3v1_2v1': [array([0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])]}
+[2024-08-23 21:39:06,134][slave.py:439][compute_decoder_mask][DEBUG][MainThread]: Decode Dict:
+[2024-08-23 21:39:06,134][slave.py:441][compute_decoder_mask][DEBUG][MainThread]: 	addr:
+[2024-08-23 21:39:06,134][slave.py:442][compute_decoder_mask][DEBUG][MainThread]: 	0
+[2024-08-23 21:39:06,134][slave.py:443][compute_decoder_mask][DEBUG][MainThread]: 	mask:
+[2024-08-23 21:39:06,134][slave.py:444][compute_decoder_mask][DEBUG][MainThread]: 	0x1c
+[2024-08-23 21:39:06,134][slave.py:441][compute_decoder_mask][DEBUG][MainThread]: 	addr:
+[2024-08-23 21:39:06,134][slave.py:442][compute_decoder_mask][DEBUG][MainThread]: 	12
+[2024-08-23 21:39:06,134][slave.py:443][compute_decoder_mask][DEBUG][MainThread]: 	mask:
+[2024-08-23 21:39:06,134][slave.py:444][compute_decoder_mask][DEBUG][MainThread]: 	0x1c
+[2024-08-23 21:39:06,134][slave.py:441][compute_decoder_mask][DEBUG][MainThread]: 	addr:
+[2024-08-23 21:39:06,134][slave.py:442][compute_decoder_mask][DEBUG][MainThread]: 	16
+[2024-08-23 21:39:06,134][slave.py:443][compute_decoder_mask][DEBUG][MainThread]: 	mask:
+[2024-08-23 21:39:06,134][slave.py:444][compute_decoder_mask][DEBUG][MainThread]: 	0x10
+[2024-08-23 21:39:06,134][slave.py:441][compute_decoder_mask][DEBUG][MainThread]: 	addr:
+[2024-08-23 21:39:06,134][slave.py:442][compute_decoder_mask][DEBUG][MainThread]: 	4
+[2024-08-23 21:39:06,134][slave.py:443][compute_decoder_mask][DEBUG][MainThread]: 	mask:
+[2024-08-23 21:39:06,134][slave.py:444][compute_decoder_mask][DEBUG][MainThread]: 	0x1c
+[2024-08-23 21:39:06,134][slave.py:441][compute_decoder_mask][DEBUG][MainThread]: 	addr:
+[2024-08-23 21:39:06,134][slave.py:442][compute_decoder_mask][DEBUG][MainThread]: 	8
+[2024-08-23 21:39:06,134][slave.py:443][compute_decoder_mask][DEBUG][MainThread]: 	mask:
+[2024-08-23 21:39:06,134][slave.py:444][compute_decoder_mask][DEBUG][MainThread]: 	0x1c
+[2024-08-23 21:39:06,134][xml2slave.py:137][__init__][INFO][MainThread]: propagate_reset_value...
+[2024-08-23 21:39:06,134][xml2slave.py:139][__init__][INFO][MainThread]: default_reset...
+[2024-08-23 21:39:06,135][xml2slave.py:142][__init__][INFO][MainThread]: default_permission...
+[2024-08-23 21:39:06,135][slave.py:476][get_size][DEBUG][MainThread]: 0
+[2024-08-23 21:39:06,135][slave.py:476][get_size][DEBUG][MainThread]: 4
+[2024-08-23 21:39:06,135][slave.py:476][get_size][DEBUG][MainThread]: 8
+[2024-08-23 21:39:06,135][slave.py:476][get_size][DEBUG][MainThread]: 12
+[2024-08-23 21:39:06,135][slave.py:476][get_size][DEBUG][MainThread]: 16
+[2024-08-23 21:39:06,135][xml_gen.py:79][xml_build_output][INFO][MainThread]: Processing: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_xml_output/sw_reg_memory_map_output.xml
+[2024-08-23 21:39:06,136][string_io.py:122][write_vhdl_file][INFO][MainThread]: Writing VHDL output file: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_sw_reg_pkg.vhd
+[2024-08-23 21:39:06,137][string_io.py:122][write_vhdl_file][INFO][MainThread]: Writing VHDL output file: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_sw_reg.vhd
+[2024-08-23 21:39:06,137][string_io.py:122][write_vhdl_file][INFO][MainThread]: Writing VHDL output file: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_sw_reg_muxdemux.vhd
+[2024-08-23 21:39:06,137][xml2slave.py:834][__init__][INFO][MainThread]: Done!
+[2024-08-23 21:39:06,137][xml2slave.py:835][__init__][INFO][MainThread]: --------------------------------------------------------------------------------
+[2024-08-23 21:39:06,137][xml2vhdl.py:125][__init__][INFO][MainThread]: Analysing: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_source/axi4lite_top_ic_memory_map.xml
+[2024-08-23 21:39:06,137][xml2ic.py:468][__init__][INFO][MainThread]: --------------------------------------------------------------------------------
+[2024-08-23 21:39:06,138][xml2ic.py:469][__init__][INFO][MainThread]: xml2ic.py version 1.8"
+[2024-08-23 21:39:06,138][xml2ic.py:472][__init__][INFO][MainThread]: Processing Paths:
+[2024-08-23 21:39:06,138][xml2ic.py:474][__init__][INFO][MainThread]: 	/home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_xml_output
+[2024-08-23 21:39:06,138][xml2ic.py:668][__init__][INFO][MainThread]: Searching for VHDL Top-Level: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_source/axi4lite_top_ic_memory_map
+[2024-08-23 21:39:06,139][xml2ic.py:671][__init__][DEBUG][MainThread]: node: None
+[2024-08-23 21:39:06,139][xml2ic.py:671][__init__][DEBUG][MainThread]: node: axi4lite_top.sw_reg
+[2024-08-23 21:39:06,139][xml2ic.py:671][__init__][DEBUG][MainThread]: node: axi4lite_top.sw_reg.rreg
+[2024-08-23 21:39:06,139][xml2ic.py:671][__init__][DEBUG][MainThread]: node: axi4lite_top.sw_reg.rreg32
+[2024-08-23 21:39:06,139][xml2ic.py:671][__init__][DEBUG][MainThread]: node: axi4lite_top.sw_reg.wreg1
+[2024-08-23 21:39:06,139][xml2ic.py:671][__init__][DEBUG][MainThread]: node: axi4lite_top.sw_reg.wreg32
+[2024-08-23 21:39:06,139][xml2ic.py:671][__init__][DEBUG][MainThread]: node: axi4lite_top.sw_reg.wwreg
+[2024-08-23 21:39:06,139][xml2ic.py:671][__init__][DEBUG][MainThread]: node: axi4lite_top.sys
+[2024-08-23 21:39:06,139][xml2ic.py:671][__init__][DEBUG][MainThread]: node: axi4lite_top.sys.board_id
+[2024-08-23 21:39:06,139][xml2ic.py:671][__init__][DEBUG][MainThread]: node: axi4lite_top.sys.rev
+[2024-08-23 21:39:06,139][xml2ic.py:671][__init__][DEBUG][MainThread]: node: axi4lite_top.sys.rev_rcs
+[2024-08-23 21:39:06,139][xml2ic.py:671][__init__][DEBUG][MainThread]: node: axi4lite_top.sys.scratchpad
+[2024-08-23 21:39:06,139][xml2ic.py:671][__init__][DEBUG][MainThread]: node: axi4lite_top.sys.clkcounter
+[2024-08-23 21:39:06,139][xml2ic.py:680][__init__][WARNING][MainThread]: VHDL Top-Level not found: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_source/axi4lite_top_ic_memory_map
+[2024-08-23 21:39:06,139][xml2ic.py:686][__init__][WARNING][MainThread]: 	Using root node: axi4lite_top
+[2024-08-23 21:39:06,139][xml2ic.py:411][get_decoder_mask][INFO][MainThread]: Addresses are: 2
+[2024-08-23 21:39:06,139][xml2ic.py:427][get_decoder_mask][DEBUG][MainThread]: baddr: [[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]]
+[2024-08-23 21:39:06,140][xml2ic.py:366][dec_route_add][DEBUG][MainThread]: tree_dict: {'-1v0': array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+       [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])}
+[2024-08-23 21:39:06,140][xml2ic.py:345][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input:  -1
+[2024-08-23 21:39:06,140][xml2ic.py:346][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0
+[2024-08-23 21:39:06,140][xml2ic.py:379][dec_route_add][DEBUG][MainThread]: -1v0 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+[2024-08-23 21:39:06,140][xml2ic.py:380][dec_route_add][DEBUG][MainThread]: 2
+[2024-08-23 21:39:06,140][xml2ic.py:381][dec_route_add][DEBUG][MainThread]: 1
+[2024-08-23 21:39:06,140][xml2ic.py:382][dec_route_add][DEBUG][MainThread]: 1
+[2024-08-23 21:39:06,140][xml2ic.py:383][dec_route_add][DEBUG][MainThread]: 2
+[2024-08-23 21:39:06,140][xml2ic.py:391][dec_route_add][DEBUG][MainThread]: tree_dict: {'-1v0': [], '-1v0_5v0': [array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_5v1': [array([0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])]}
+[2024-08-23 21:39:06,140][xml2ic.py:366][dec_route_add][DEBUG][MainThread]: tree_dict: {'-1v0': [], '-1v0_5v0': [array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_5v1': [array([0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])]}
+[2024-08-23 21:39:06,140][xml2ic.py:345][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input:  -1
+[2024-08-23 21:39:06,140][xml2ic.py:346][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0
+[2024-08-23 21:39:06,141][xml2ic.py:345][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input:  5
+[2024-08-23 21:39:06,141][xml2ic.py:346][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_5v0
+[2024-08-23 21:39:06,141][xml2ic.py:345][dec_get_last_bit][DEBUG][MainThread]: get_last_bit input:  5
+[2024-08-23 21:39:06,141][xml2ic.py:346][dec_get_last_bit][DEBUG][MainThread]: get_last_bit output: -1v0_5v1
+[2024-08-23 21:39:06,141][xml2ic.py:391][dec_route_add][DEBUG][MainThread]: tree_dict: {'-1v0': [], '-1v0_5v0': [array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])], '-1v0_5v1': [array([0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       0, 0, 0, 0, 0, 0, 0, 0, 0, 0])]}
+[2024-08-23 21:39:06,141][xml2ic.py:450][get_decoder_mask][DEBUG][MainThread]: Decode Dict:
+[2024-08-23 21:39:06,141][xml2ic.py:452][get_decoder_mask][DEBUG][MainThread]: 	addr:
+[2024-08-23 21:39:06,141][xml2ic.py:453][get_decoder_mask][DEBUG][MainThread]: 	0
+[2024-08-23 21:39:06,141][xml2ic.py:454][get_decoder_mask][DEBUG][MainThread]: 	mask:
+[2024-08-23 21:39:06,141][xml2ic.py:455][get_decoder_mask][DEBUG][MainThread]: 	0x20
+[2024-08-23 21:39:06,141][xml2ic.py:452][get_decoder_mask][DEBUG][MainThread]: 	addr:
+[2024-08-23 21:39:06,141][xml2ic.py:453][get_decoder_mask][DEBUG][MainThread]: 	32
+[2024-08-23 21:39:06,141][xml2ic.py:454][get_decoder_mask][DEBUG][MainThread]: 	mask:
+[2024-08-23 21:39:06,141][xml2ic.py:455][get_decoder_mask][DEBUG][MainThread]: 	0x20
+[2024-08-23 21:39:06,142][string_io.py:122][write_vhdl_file][INFO][MainThread]: Writing VHDL output file: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_axi4lite_top_mmap_pkg.vhd
+[2024-08-23 21:39:06,142][string_io.py:122][write_vhdl_file][INFO][MainThread]: Writing VHDL output file: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic_pkg.vhd
+[2024-08-23 21:39:06,142][string_io.py:122][write_vhdl_file][INFO][MainThread]: Writing VHDL output file: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic.vhd
+[2024-08-23 21:39:06,142][string_io.py:122][write_vhdl_file][INFO][MainThread]: Writing VHDL output file: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_axi4lite_top_example.vho
+[2024-08-23 21:39:06,144][xml2ic.py:853][__init__][INFO][MainThread]: Writing XML output file: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_xml_output/axi4lite_top_ic_memory_map_output.xml
+[2024-08-23 21:39:06,145][xml2ic.py:862][__init__][INFO][MainThread]: Generating HTML Tables from: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_xml_output/axi4lite_top_ic_memory_map_output.xml
+[2024-08-23 21:39:06,145][xml2htmltable.py:497][__init__][DEBUG][MainThread]: Sorted alltableitems: ['axi4lite_top.sw_reg.rreg', '0xA0000000', 0, 32, 'r', 'rreg', 'sw_reg_rreg', '0xffffffff', '0x0', 0]
+[2024-08-23 21:39:06,145][xml2htmltable.py:497][__init__][DEBUG][MainThread]: Sorted alltableitems: ['axi4lite_top.sw_reg.rreg32', '0xA0000004', 0, 32, 'r', 'rreg32', 'sw_reg_rreg32', '0xffffffff', '0x0', 0]
+[2024-08-23 21:39:06,145][xml2htmltable.py:497][__init__][DEBUG][MainThread]: Sorted alltableitems: ['axi4lite_top.sw_reg.wreg1', '0xA0000008', 0, 32, 'rw', 'wreg1', 'sw_reg_wreg1', '0xffffffff', '0', 0]
+[2024-08-23 21:39:06,145][xml2htmltable.py:497][__init__][DEBUG][MainThread]: Sorted alltableitems: ['axi4lite_top.sw_reg.wreg32', '0xA000000C', 0, 32, 'rw', 'wreg32', 'sw_reg_wreg32', '0xffffffff', '0', 0]
+[2024-08-23 21:39:06,145][xml2htmltable.py:497][__init__][DEBUG][MainThread]: Sorted alltableitems: ['axi4lite_top.sw_reg.wwreg', '0xA0000010', 0, 32, 'rw', 'wwreg', 'sw_reg_wwreg', '0xffffffff', '0', 0]
+[2024-08-23 21:39:06,145][xml2htmltable.py:497][__init__][DEBUG][MainThread]: Sorted alltableitems: ['axi4lite_top.sys.board_id', '0xA0000020', 0, 32, 'r', 'board_id', 'sys_board_id', '0xffffffff', '166', 0]
+[2024-08-23 21:39:06,145][xml2htmltable.py:497][__init__][DEBUG][MainThread]: Sorted alltableitems: ['axi4lite_top.sys.rev', '0xA0000024', 0, 32, 'r', 'rev', 'sys_rev', '0xffffffff', '131072', 0]
+[2024-08-23 21:39:06,145][xml2htmltable.py:497][__init__][DEBUG][MainThread]: Sorted alltableitems: ['axi4lite_top.sys.rev_rcs', '0xA000002C', 0, 32, 'r', 'rev_rcs', 'sys_rev_rcs', '0xffffffff', '1', 0]
+[2024-08-23 21:39:06,145][xml2htmltable.py:497][__init__][DEBUG][MainThread]: Sorted alltableitems: ['axi4lite_top.sys.scratchpad', '0xA0000030', 0, 32, 'rw', 'scratchpad', 'sys_scratchpad', '0xffffffff', '0', 0]
+[2024-08-23 21:39:06,145][xml2htmltable.py:497][__init__][DEBUG][MainThread]: Sorted alltableitems: ['axi4lite_top.sys.clkcounter', '0xA0000034', 0, 32, 'r', 'clkcounter', 'sys_clkcounter', '0xffffffff', '0x0', 0]
+[2024-08-23 21:39:06,145][xml2htmltable.py:176][generate_multifield_html_table][DEBUG][MainThread]: New Register: axi4lite_top.sw_reg.rreg, Changed from: 
+[2024-08-23 21:39:06,145][xml2htmltable.py:231][generate_multifield_html_table][DEBUG][MainThread]: Processing Register: axi4lite_top.sw_reg.rreg, Field: rreg
+[2024-08-23 21:39:06,145][xml2htmltable.py:176][generate_multifield_html_table][DEBUG][MainThread]: New Register: axi4lite_top.sw_reg.rreg32, Changed from: axi4lite_top.sw_reg.rreg
+[2024-08-23 21:39:06,145][xml2htmltable.py:191][generate_multifield_html_table][DEBUG][MainThread]: Finalising Table for Register: axi4lite_top.sw_reg.rreg32
+[2024-08-23 21:39:06,145][xml2htmltable.py:212][generate_multifield_html_table][DEBUG][MainThread]: close_multifield_table Table for Register: axi4lite_top.sw_reg.rreg32
+[2024-08-23 21:39:06,146][xml2htmltable.py:215][generate_multifield_html_table][DEBUG][MainThread]: pop_multifield_descriptions_table Table for Register: axi4lite_top.sw_reg.rreg32
+[2024-08-23 21:39:06,146][xml2htmltable.py:297][pop_multifield_descriptions_table][DEBUG][MainThread]: <Description Table Generation>
+[2024-08-23 21:39:06,146][xml2htmltable.py:313][pop_multifield_descriptions_table][DEBUG][MainThread]: <Description Table Generation>: ['axi4lite_top.sw_reg.rreg', '0xA0000000', 0, 32, 'r', 'rreg', 'sw_reg_rreg', '0xffffffff', '0x0', 0]
+[2024-08-23 21:39:06,146][xml2htmltable.py:231][generate_multifield_html_table][DEBUG][MainThread]: Processing Register: axi4lite_top.sw_reg.rreg32, Field: rreg32
+[2024-08-23 21:39:06,146][xml2htmltable.py:176][generate_multifield_html_table][DEBUG][MainThread]: New Register: axi4lite_top.sw_reg.wreg1, Changed from: axi4lite_top.sw_reg.rreg32
+[2024-08-23 21:39:06,146][xml2htmltable.py:191][generate_multifield_html_table][DEBUG][MainThread]: Finalising Table for Register: axi4lite_top.sw_reg.wreg1
+[2024-08-23 21:39:06,146][xml2htmltable.py:212][generate_multifield_html_table][DEBUG][MainThread]: close_multifield_table Table for Register: axi4lite_top.sw_reg.wreg1
+[2024-08-23 21:39:06,146][xml2htmltable.py:215][generate_multifield_html_table][DEBUG][MainThread]: pop_multifield_descriptions_table Table for Register: axi4lite_top.sw_reg.wreg1
+[2024-08-23 21:39:06,146][xml2htmltable.py:297][pop_multifield_descriptions_table][DEBUG][MainThread]: <Description Table Generation>
+[2024-08-23 21:39:06,146][xml2htmltable.py:313][pop_multifield_descriptions_table][DEBUG][MainThread]: <Description Table Generation>: ['axi4lite_top.sw_reg.rreg32', '0xA0000004', 0, 32, 'r', 'rreg32', 'sw_reg_rreg32', '0xffffffff', '0x0', 0]
+[2024-08-23 21:39:06,146][xml2htmltable.py:231][generate_multifield_html_table][DEBUG][MainThread]: Processing Register: axi4lite_top.sw_reg.wreg1, Field: wreg1
+[2024-08-23 21:39:06,146][xml2htmltable.py:176][generate_multifield_html_table][DEBUG][MainThread]: New Register: axi4lite_top.sw_reg.wreg32, Changed from: axi4lite_top.sw_reg.wreg1
+[2024-08-23 21:39:06,146][xml2htmltable.py:191][generate_multifield_html_table][DEBUG][MainThread]: Finalising Table for Register: axi4lite_top.sw_reg.wreg32
+[2024-08-23 21:39:06,146][xml2htmltable.py:212][generate_multifield_html_table][DEBUG][MainThread]: close_multifield_table Table for Register: axi4lite_top.sw_reg.wreg32
+[2024-08-23 21:39:06,146][xml2htmltable.py:215][generate_multifield_html_table][DEBUG][MainThread]: pop_multifield_descriptions_table Table for Register: axi4lite_top.sw_reg.wreg32
+[2024-08-23 21:39:06,146][xml2htmltable.py:297][pop_multifield_descriptions_table][DEBUG][MainThread]: <Description Table Generation>
+[2024-08-23 21:39:06,146][xml2htmltable.py:313][pop_multifield_descriptions_table][DEBUG][MainThread]: <Description Table Generation>: ['axi4lite_top.sw_reg.wreg1', '0xA0000008', 0, 32, 'rw', 'wreg1', 'sw_reg_wreg1', '0xffffffff', '0', 0]
+[2024-08-23 21:39:06,146][xml2htmltable.py:231][generate_multifield_html_table][DEBUG][MainThread]: Processing Register: axi4lite_top.sw_reg.wreg32, Field: wreg32
+[2024-08-23 21:39:06,146][xml2htmltable.py:176][generate_multifield_html_table][DEBUG][MainThread]: New Register: axi4lite_top.sw_reg.wwreg, Changed from: axi4lite_top.sw_reg.wreg32
+[2024-08-23 21:39:06,146][xml2htmltable.py:191][generate_multifield_html_table][DEBUG][MainThread]: Finalising Table for Register: axi4lite_top.sw_reg.wwreg
+[2024-08-23 21:39:06,146][xml2htmltable.py:212][generate_multifield_html_table][DEBUG][MainThread]: close_multifield_table Table for Register: axi4lite_top.sw_reg.wwreg
+[2024-08-23 21:39:06,146][xml2htmltable.py:215][generate_multifield_html_table][DEBUG][MainThread]: pop_multifield_descriptions_table Table for Register: axi4lite_top.sw_reg.wwreg
+[2024-08-23 21:39:06,146][xml2htmltable.py:297][pop_multifield_descriptions_table][DEBUG][MainThread]: <Description Table Generation>
+[2024-08-23 21:39:06,146][xml2htmltable.py:313][pop_multifield_descriptions_table][DEBUG][MainThread]: <Description Table Generation>: ['axi4lite_top.sw_reg.wreg32', '0xA000000C', 0, 32, 'rw', 'wreg32', 'sw_reg_wreg32', '0xffffffff', '0', 0]
+[2024-08-23 21:39:06,146][xml2htmltable.py:231][generate_multifield_html_table][DEBUG][MainThread]: Processing Register: axi4lite_top.sw_reg.wwreg, Field: wwreg
+[2024-08-23 21:39:06,146][xml2htmltable.py:176][generate_multifield_html_table][DEBUG][MainThread]: New Register: axi4lite_top.sys.board_id, Changed from: axi4lite_top.sw_reg.wwreg
+[2024-08-23 21:39:06,146][xml2htmltable.py:191][generate_multifield_html_table][DEBUG][MainThread]: Finalising Table for Register: axi4lite_top.sys.board_id
+[2024-08-23 21:39:06,146][xml2htmltable.py:212][generate_multifield_html_table][DEBUG][MainThread]: close_multifield_table Table for Register: axi4lite_top.sys.board_id
+[2024-08-23 21:39:06,146][xml2htmltable.py:215][generate_multifield_html_table][DEBUG][MainThread]: pop_multifield_descriptions_table Table for Register: axi4lite_top.sys.board_id
+[2024-08-23 21:39:06,146][xml2htmltable.py:297][pop_multifield_descriptions_table][DEBUG][MainThread]: <Description Table Generation>
+[2024-08-23 21:39:06,146][xml2htmltable.py:313][pop_multifield_descriptions_table][DEBUG][MainThread]: <Description Table Generation>: ['axi4lite_top.sw_reg.wwreg', '0xA0000010', 0, 32, 'rw', 'wwreg', 'sw_reg_wwreg', '0xffffffff', '0', 0]
+[2024-08-23 21:39:06,147][xml2htmltable.py:231][generate_multifield_html_table][DEBUG][MainThread]: Processing Register: axi4lite_top.sys.board_id, Field: board_id
+[2024-08-23 21:39:06,147][xml2htmltable.py:176][generate_multifield_html_table][DEBUG][MainThread]: New Register: axi4lite_top.sys.rev, Changed from: axi4lite_top.sys.board_id
+[2024-08-23 21:39:06,147][xml2htmltable.py:191][generate_multifield_html_table][DEBUG][MainThread]: Finalising Table for Register: axi4lite_top.sys.rev
+[2024-08-23 21:39:06,147][xml2htmltable.py:212][generate_multifield_html_table][DEBUG][MainThread]: close_multifield_table Table for Register: axi4lite_top.sys.rev
+[2024-08-23 21:39:06,147][xml2htmltable.py:215][generate_multifield_html_table][DEBUG][MainThread]: pop_multifield_descriptions_table Table for Register: axi4lite_top.sys.rev
+[2024-08-23 21:39:06,147][xml2htmltable.py:297][pop_multifield_descriptions_table][DEBUG][MainThread]: <Description Table Generation>
+[2024-08-23 21:39:06,147][xml2htmltable.py:313][pop_multifield_descriptions_table][DEBUG][MainThread]: <Description Table Generation>: ['axi4lite_top.sys.board_id', '0xA0000020', 0, 32, 'r', 'board_id', 'sys_board_id', '0xffffffff', '166', 0]
+[2024-08-23 21:39:06,147][xml2htmltable.py:231][generate_multifield_html_table][DEBUG][MainThread]: Processing Register: axi4lite_top.sys.rev, Field: rev
+[2024-08-23 21:39:06,147][xml2htmltable.py:176][generate_multifield_html_table][DEBUG][MainThread]: New Register: axi4lite_top.sys.rev_rcs, Changed from: axi4lite_top.sys.rev
+[2024-08-23 21:39:06,147][xml2htmltable.py:191][generate_multifield_html_table][DEBUG][MainThread]: Finalising Table for Register: axi4lite_top.sys.rev_rcs
+[2024-08-23 21:39:06,147][xml2htmltable.py:212][generate_multifield_html_table][DEBUG][MainThread]: close_multifield_table Table for Register: axi4lite_top.sys.rev_rcs
+[2024-08-23 21:39:06,147][xml2htmltable.py:215][generate_multifield_html_table][DEBUG][MainThread]: pop_multifield_descriptions_table Table for Register: axi4lite_top.sys.rev_rcs
+[2024-08-23 21:39:06,147][xml2htmltable.py:297][pop_multifield_descriptions_table][DEBUG][MainThread]: <Description Table Generation>
+[2024-08-23 21:39:06,147][xml2htmltable.py:313][pop_multifield_descriptions_table][DEBUG][MainThread]: <Description Table Generation>: ['axi4lite_top.sys.rev', '0xA0000024', 0, 32, 'r', 'rev', 'sys_rev', '0xffffffff', '131072', 0]
+[2024-08-23 21:39:06,147][xml2htmltable.py:231][generate_multifield_html_table][DEBUG][MainThread]: Processing Register: axi4lite_top.sys.rev_rcs, Field: rev_rcs
+[2024-08-23 21:39:06,147][xml2htmltable.py:176][generate_multifield_html_table][DEBUG][MainThread]: New Register: axi4lite_top.sys.scratchpad, Changed from: axi4lite_top.sys.rev_rcs
+[2024-08-23 21:39:06,147][xml2htmltable.py:191][generate_multifield_html_table][DEBUG][MainThread]: Finalising Table for Register: axi4lite_top.sys.scratchpad
+[2024-08-23 21:39:06,147][xml2htmltable.py:212][generate_multifield_html_table][DEBUG][MainThread]: close_multifield_table Table for Register: axi4lite_top.sys.scratchpad
+[2024-08-23 21:39:06,147][xml2htmltable.py:215][generate_multifield_html_table][DEBUG][MainThread]: pop_multifield_descriptions_table Table for Register: axi4lite_top.sys.scratchpad
+[2024-08-23 21:39:06,147][xml2htmltable.py:297][pop_multifield_descriptions_table][DEBUG][MainThread]: <Description Table Generation>
+[2024-08-23 21:39:06,147][xml2htmltable.py:313][pop_multifield_descriptions_table][DEBUG][MainThread]: <Description Table Generation>: ['axi4lite_top.sys.rev_rcs', '0xA000002C', 0, 32, 'r', 'rev_rcs', 'sys_rev_rcs', '0xffffffff', '1', 0]
+[2024-08-23 21:39:06,147][xml2htmltable.py:231][generate_multifield_html_table][DEBUG][MainThread]: Processing Register: axi4lite_top.sys.scratchpad, Field: scratchpad
+[2024-08-23 21:39:06,147][xml2htmltable.py:176][generate_multifield_html_table][DEBUG][MainThread]: New Register: axi4lite_top.sys.clkcounter, Changed from: axi4lite_top.sys.scratchpad
+[2024-08-23 21:39:06,147][xml2htmltable.py:191][generate_multifield_html_table][DEBUG][MainThread]: Finalising Table for Register: axi4lite_top.sys.clkcounter
+[2024-08-23 21:39:06,147][xml2htmltable.py:212][generate_multifield_html_table][DEBUG][MainThread]: close_multifield_table Table for Register: axi4lite_top.sys.clkcounter
+[2024-08-23 21:39:06,147][xml2htmltable.py:215][generate_multifield_html_table][DEBUG][MainThread]: pop_multifield_descriptions_table Table for Register: axi4lite_top.sys.clkcounter
+[2024-08-23 21:39:06,147][xml2htmltable.py:297][pop_multifield_descriptions_table][DEBUG][MainThread]: <Description Table Generation>
+[2024-08-23 21:39:06,147][xml2htmltable.py:313][pop_multifield_descriptions_table][DEBUG][MainThread]: <Description Table Generation>: ['axi4lite_top.sys.scratchpad', '0xA0000030', 0, 32, 'rw', 'scratchpad', 'sys_scratchpad', '0xffffffff', '0', 0]
+[2024-08-23 21:39:06,147][xml2htmltable.py:231][generate_multifield_html_table][DEBUG][MainThread]: Processing Register: axi4lite_top.sys.clkcounter, Field: clkcounter
+[2024-08-23 21:39:06,147][xml2htmltable.py:283][generate_multifield_html_table][DEBUG][MainThread]: Finalising Register with Empty LSB for Register: axi4lite_top.sys.clkcounter
+[2024-08-23 21:39:06,147][xml2htmltable.py:297][pop_multifield_descriptions_table][DEBUG][MainThread]: <Description Table Generation>
+[2024-08-23 21:39:06,148][xml2htmltable.py:313][pop_multifield_descriptions_table][DEBUG][MainThread]: <Description Table Generation>: ['axi4lite_top.sys.clkcounter', '0xA0000034', 0, 32, 'r', 'clkcounter', 'sys_clkcounter', '0xffffffff', '0x0', 0]
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <!DOCTYPE html>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <html>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <head>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <link rel="stylesheet" href="regtables.css">
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: </head>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <body>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <h2>Auto Generated Register Tables</h2>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <p>The following tables have been automatically generated using the XML file used to create the Memory-Mapped Register locations.
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: Descriptions have been extracted from the XML file used to generate the Memory-Mapped Registers and their corresponding fields.</p>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <h3>All Register</h3>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <p>The Absolute Addresses are shown at this level of hierachy. They may change if a connection
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: to an upstream AXI4-Lite is made.</p>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <table width="75%" class="doxtable" id="absolutetable">
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <thead>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <tr>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <th width="75%" align="left">Register</th>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <th width="25%" align="right">Absolute Address</th>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: </tr>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: </thead>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <tr>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <td align="left" id="abstabentryaxi4lite_top.sw_reg.rreg"><tt><a href="#axi4lite_top.sw_reg.rreg">axi4lite_top.sw_reg.rreg</a></tt></td>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <td align="right"><tt>0xA0000000</tt></td>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: </tr>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <tr>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <td align="left" id="abstabentryaxi4lite_top.sw_reg.rreg32"><tt><a href="#axi4lite_top.sw_reg.rreg32">axi4lite_top.sw_reg.rreg32</a></tt></td>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <td align="right"><tt>0xA0000004</tt></td>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: </tr>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <tr>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <td align="left" id="abstabentryaxi4lite_top.sw_reg.wreg1"><tt><a href="#axi4lite_top.sw_reg.wreg1">axi4lite_top.sw_reg.wreg1</a></tt></td>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <td align="right"><tt>0xA0000008</tt></td>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: </tr>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <tr>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <td align="left" id="abstabentryaxi4lite_top.sw_reg.wreg32"><tt><a href="#axi4lite_top.sw_reg.wreg32">axi4lite_top.sw_reg.wreg32</a></tt></td>
+[2024-08-23 21:39:06,148][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <td align="right"><tt>0xA000000C</tt></td>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: </tr>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <tr>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <td align="left" id="abstabentryaxi4lite_top.sw_reg.wwreg"><tt><a href="#axi4lite_top.sw_reg.wwreg">axi4lite_top.sw_reg.wwreg</a></tt></td>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <td align="right"><tt>0xA0000010</tt></td>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: </tr>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <tr>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <td align="left" id="abstabentryaxi4lite_top.sys.board_id"><tt><a href="#axi4lite_top.sys.board_id">axi4lite_top.sys.board_id</a></tt></td>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <td align="right"><tt>0xA0000020</tt></td>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: </tr>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <tr>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <td align="left" id="abstabentryaxi4lite_top.sys.rev"><tt><a href="#axi4lite_top.sys.rev">axi4lite_top.sys.rev</a></tt></td>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <td align="right"><tt>0xA0000024</tt></td>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: </tr>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <tr>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <td align="left" id="abstabentryaxi4lite_top.sys.rev_rcs"><tt><a href="#axi4lite_top.sys.rev_rcs">axi4lite_top.sys.rev_rcs</a></tt></td>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <td align="right"><tt>0xA000002C</tt></td>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: </tr>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <tr>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <td align="left" id="abstabentryaxi4lite_top.sys.scratchpad"><tt><a href="#axi4lite_top.sys.scratchpad">axi4lite_top.sys.scratchpad</a></tt></td>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <td align="right"><tt>0xA0000030</tt></td>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: </tr>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <tr>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <td align="left" id="abstabentryaxi4lite_top.sys.clkcounter"><tt><a href="#axi4lite_top.sys.clkcounter">axi4lite_top.sys.clkcounter</a></tt></td>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: <td align="right"><tt>0xA0000034</tt></td>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: </tr>
+[2024-08-23 21:39:06,149][xml2htmltable.py:507][__init__][DEBUG][MainThread]: <absolutehtmltable>: </table>
+[2024-08-23 21:39:06,150][xml2ic.py:867][__init__][INFO][MainThread]: Generated HTML File: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_xml_output/html/axi4lite_top_ic_memory_map_output.html
+[2024-08-23 21:39:06,150][xml2ic.py:885][__init__][INFO][MainThread]: Done!
+[2024-08-23 21:39:06,150][xml2ic.py:886][__init__][INFO][MainThread]: --------------------------------------------------------------------------------
+[2024-08-23 21:39:06,150][xml2vhdl.py:133][__init__][INFO][MainThread]: []
+[2024-08-23 21:39:06,150][toolflow.py:223][generate_hdl][INFO][MainThread]: instantiating user_ip
+[2024-08-23 21:39:06,150][verilog.py:645][set_cur_blk][DEBUG][MainThread]: Initializing second-layer dictionairies for: default
+[2024-08-23 21:39:06,150][verilog.py:645][set_cur_blk][DEBUG][MainThread]: Initializing second-layer dictionairies for: usermodule: split_link5
+[2024-08-23 21:39:06,150][verilog.py:980][add_port][DEBUG][MainThread]: Attempting to add port "clk" (parent sig: False, parent port: False)
+[2024-08-23 21:39:06,151][verilog.py:984][add_port][DEBUG][MainThread]:   Port "clk" is new
+[2024-08-23 21:39:06,151][verilog.py:980][add_port][DEBUG][MainThread]: Attempting to add port "multi_gpios_1_wwreg_user_data_out" (parent sig: False, parent port: False)
+[2024-08-23 21:39:06,151][verilog.py:984][add_port][DEBUG][MainThread]:   Port "multi_gpios_1_wwreg_user_data_out" is new
+[2024-08-23 21:39:06,151][verilog.py:980][add_port][DEBUG][MainThread]: Attempting to add port "multi_gpios_1_gpio0_gateway" (parent sig: False, parent port: False)
+[2024-08-23 21:39:06,151][verilog.py:984][add_port][DEBUG][MainThread]:   Port "multi_gpios_1_gpio0_gateway" is new
+[2024-08-23 21:39:06,151][verilog.py:980][add_port][DEBUG][MainThread]: Attempting to add port "multi_gpios_1_rreg_user_data_in" (parent sig: False, parent port: False)
+[2024-08-23 21:39:06,151][verilog.py:984][add_port][DEBUG][MainThread]:   Port "multi_gpios_1_rreg_user_data_in" is new
+[2024-08-23 21:39:06,151][verilog.py:645][set_cur_blk][DEBUG][MainThread]: Initializing second-layer dictionairies for: default
+[2024-08-23 21:39:06,151][verilog.py:645][set_cur_blk][DEBUG][MainThread]: Initializing second-layer dictionairies for: usermodule: direct_link4
+[2024-08-23 21:39:06,151][verilog.py:980][add_port][DEBUG][MainThread]: Attempting to add port "clk" (parent sig: False, parent port: False)
+[2024-08-23 21:39:06,151][verilog.py:984][add_port][DEBUG][MainThread]:   Port "clk" is new
+[2024-08-23 21:39:06,151][verilog.py:980][add_port][DEBUG][MainThread]: Attempting to add port "multi_gpios_1_wreg1_user_data_out" (parent sig: False, parent port: False)
+[2024-08-23 21:39:06,151][verilog.py:984][add_port][DEBUG][MainThread]:   Port "multi_gpios_1_wreg1_user_data_out" is new
+[2024-08-23 21:39:06,151][verilog.py:980][add_port][DEBUG][MainThread]: Attempting to add port "multi_gpios_1_gpio_gateway" (parent sig: False, parent port: False)
+[2024-08-23 21:39:06,151][verilog.py:984][add_port][DEBUG][MainThread]:   Port "multi_gpios_1_gpio_gateway" is new
+[2024-08-23 21:39:06,151][verilog.py:645][set_cur_blk][DEBUG][MainThread]: Initializing second-layer dictionairies for: default
+[2024-08-23 21:39:06,151][verilog.py:645][set_cur_blk][DEBUG][MainThread]: Initializing second-layer dictionairies for: usermodule: direct_link5
+[2024-08-23 21:39:06,151][verilog.py:980][add_port][DEBUG][MainThread]: Attempting to add port "clk" (parent sig: False, parent port: False)
+[2024-08-23 21:39:06,151][verilog.py:984][add_port][DEBUG][MainThread]:   Port "clk" is new
+[2024-08-23 21:39:06,151][verilog.py:980][add_port][DEBUG][MainThread]: Attempting to add port "multi_gpios_1_wreg32_user_data_out" (parent sig: False, parent port: False)
+[2024-08-23 21:39:06,152][verilog.py:984][add_port][DEBUG][MainThread]:   Port "multi_gpios_1_wreg32_user_data_out" is new
+[2024-08-23 21:39:06,152][verilog.py:980][add_port][DEBUG][MainThread]: Attempting to add port "multi_gpios_1_rreg32_user_data_in" (parent sig: False, parent port: False)
+[2024-08-23 21:39:06,152][verilog.py:984][add_port][DEBUG][MainThread]:   Port "multi_gpios_1_rreg32_user_data_in" is new
+[2024-08-23 21:39:06,152][toolflow.py:225][generate_hdl][INFO][MainThread]: Finalizing top-level design
+[2024-08-23 21:39:06,152][toolflow.py:227][generate_hdl][INFO][MainThread]: regenerating top
+[2024-08-23 21:39:06,152][toolflow.py:611][regenerate_top][DEBUG][MainThread]: Looking for a max_devices_per_arbiter spec
+[2024-08-23 21:39:06,152][verilog.py:1079][instantiate_child_ports][DEBUG][MainThread]: Instantiating child ports for axi4lite_interconnect
+[2024-08-23 21:39:06,152][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_aclk as signal axil_clk to top
+[2024-08-23 21:39:06,152][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "axil_clk" is new
+[2024-08-23 21:39:06,152][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_aresetn as signal axil_rst_n to top
+[2024-08-23 21:39:06,152][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "axil_rst_n" is new
+[2024-08-23 21:39:06,152][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_sw_reg_rreg_in as signal sw_reg_rreg_in to top
+[2024-08-23 21:39:06,152][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sw_reg_rreg_in" is new
+[2024-08-23 21:39:06,152][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_sw_reg_rreg_in_we as signal sw_reg_rreg_in_we to top
+[2024-08-23 21:39:06,152][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sw_reg_rreg_in_we" is new
+[2024-08-23 21:39:06,152][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_sw_reg_rreg32_in as signal sw_reg_rreg32_in to top
+[2024-08-23 21:39:06,152][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sw_reg_rreg32_in" is new
+[2024-08-23 21:39:06,152][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_sw_reg_rreg32_in_we as signal sw_reg_rreg32_in_we to top
+[2024-08-23 21:39:06,152][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sw_reg_rreg32_in_we" is new
+[2024-08-23 21:39:06,153][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_sw_reg_wreg1_out as signal sw_reg_wreg1_out to top
+[2024-08-23 21:39:06,153][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sw_reg_wreg1_out" is new
+[2024-08-23 21:39:06,153][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_sw_reg_wreg1_out_we as signal sw_reg_wreg1_out_we to top
+[2024-08-23 21:39:06,153][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sw_reg_wreg1_out_we" is new
+[2024-08-23 21:39:06,153][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_sw_reg_wreg32_out as signal sw_reg_wreg32_out to top
+[2024-08-23 21:39:06,153][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sw_reg_wreg32_out" is new
+[2024-08-23 21:39:06,153][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_sw_reg_wreg32_out_we as signal sw_reg_wreg32_out_we to top
+[2024-08-23 21:39:06,153][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sw_reg_wreg32_out_we" is new
+[2024-08-23 21:39:06,153][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_sw_reg_wwreg_out as signal sw_reg_wwreg_out to top
+[2024-08-23 21:39:06,153][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sw_reg_wwreg_out" is new
+[2024-08-23 21:39:06,153][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_sw_reg_wwreg_out_we as signal sw_reg_wwreg_out_we to top
+[2024-08-23 21:39:06,153][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sw_reg_wwreg_out_we" is new
+[2024-08-23 21:39:06,153][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_sys_board_id_in as signal sys_board_id_in to top
+[2024-08-23 21:39:06,153][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sys_board_id_in" is new
+[2024-08-23 21:39:06,153][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_sys_board_id_in_we as signal sys_board_id_in_we to top
+[2024-08-23 21:39:06,153][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sys_board_id_in_we" is new
+[2024-08-23 21:39:06,153][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_sys_rev_in as signal sys_rev_in to top
+[2024-08-23 21:39:06,153][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sys_rev_in" is new
+[2024-08-23 21:39:06,153][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_sys_rev_in_we as signal sys_rev_in_we to top
+[2024-08-23 21:39:06,153][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sys_rev_in_we" is new
+[2024-08-23 21:39:06,153][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_sys_rev_rcs_in as signal sys_rev_rcs_in to top
+[2024-08-23 21:39:06,153][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sys_rev_rcs_in" is new
+[2024-08-23 21:39:06,154][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_sys_rev_rcs_in_we as signal sys_rev_rcs_in_we to top
+[2024-08-23 21:39:06,154][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sys_rev_rcs_in_we" is new
+[2024-08-23 21:39:06,154][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_sys_scratchpad_out as signal sys_scratchpad_out to top
+[2024-08-23 21:39:06,154][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sys_scratchpad_out" is new
+[2024-08-23 21:39:06,154][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_sys_scratchpad_out_we as signal sys_scratchpad_out_we to top
+[2024-08-23 21:39:06,154][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sys_scratchpad_out_we" is new
+[2024-08-23 21:39:06,154][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_sys_clkcounter_in as signal sys_clkcounter_in to top
+[2024-08-23 21:39:06,154][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sys_clkcounter_in" is new
+[2024-08-23 21:39:06,154][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axi4lite_sys_clkcounter_in_we as signal sys_clkcounter_in_we to top
+[2024-08-23 21:39:06,154][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sys_clkcounter_in_we" is new
+[2024-08-23 21:39:06,154][verilog.py:1079][instantiate_child_ports][DEBUG][MainThread]: Instantiating child ports for split_link5_inst
+[2024-08-23 21:39:06,154][verilog.py:1079][instantiate_child_ports][DEBUG][MainThread]: Instantiating child ports for multi_gpios_1_gpio
+[2024-08-23 21:39:06,154][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port gateway as signal multi_gpios_1_gpio_gateway to top
+[2024-08-23 21:39:06,154][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "multi_gpios_1_gpio_gateway" is new
+[2024-08-23 21:39:06,154][verilog.py:1088][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port io_pad to top
+[2024-08-23 21:39:06,154][verilog.py:980][add_port][DEBUG][MainThread]: Attempting to add port "gpio_led_1_1_ext" (parent sig: False, parent port: False)
+[2024-08-23 21:39:06,154][verilog.py:984][add_port][DEBUG][MainThread]:   Port "gpio_led_1_1_ext" is new
+[2024-08-23 21:39:06,154][verilog.py:1079][instantiate_child_ports][DEBUG][MainThread]: Instantiating child ports for multi_gpios_1_gpio0
+[2024-08-23 21:39:06,154][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port gateway as signal multi_gpios_1_gpio0_gateway to top
+[2024-08-23 21:39:06,154][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "multi_gpios_1_gpio0_gateway" is new
+[2024-08-23 21:39:06,154][verilog.py:1088][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port io_pad to top
+[2024-08-23 21:39:06,154][verilog.py:980][add_port][DEBUG][MainThread]: Attempting to add port "gpio_led_0_0_ext" (parent sig: False, parent port: False)
+[2024-08-23 21:39:06,154][verilog.py:984][add_port][DEBUG][MainThread]:   Port "gpio_led_0_0_ext" is new
+[2024-08-23 21:39:06,155][verilog.py:1079][instantiate_child_ports][DEBUG][MainThread]: Instantiating child ports for zcu216_clk_infr_inst
+[2024-08-23 21:39:06,155][verilog.py:1088][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port pl_clk_p to top
+[2024-08-23 21:39:06,155][verilog.py:980][add_port][DEBUG][MainThread]: Attempting to add port "pl_clk_p" (parent sig: False, parent port: False)
+[2024-08-23 21:39:06,155][verilog.py:984][add_port][DEBUG][MainThread]:   Port "pl_clk_p" is new
+[2024-08-23 21:39:06,155][verilog.py:1088][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port pl_clk_n to top
+[2024-08-23 21:39:06,155][verilog.py:980][add_port][DEBUG][MainThread]: Attempting to add port "pl_clk_n" (parent sig: False, parent port: False)
+[2024-08-23 21:39:06,155][verilog.py:984][add_port][DEBUG][MainThread]:   Port "pl_clk_n" is new
+[2024-08-23 21:39:06,155][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port adc_clk as signal adc_clk to top
+[2024-08-23 21:39:06,155][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "adc_clk" is new
+[2024-08-23 21:39:06,155][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port adc_clk90 as signal adc_clk90 to top
+[2024-08-23 21:39:06,155][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "adc_clk90" is new
+[2024-08-23 21:39:06,155][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port adc_clk180 as signal adc_clk180 to top
+[2024-08-23 21:39:06,155][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "adc_clk180" is new
+[2024-08-23 21:39:06,155][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port adc_clk270 as signal adc_clk270 to top
+[2024-08-23 21:39:06,155][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "adc_clk270" is new
+[2024-08-23 21:39:06,155][verilog.py:1088][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port mmcm_locked to top
+[2024-08-23 21:39:06,155][verilog.py:980][add_port][DEBUG][MainThread]: Attempting to add port "mmcm_locked" (parent sig: False, parent port: False)
+[2024-08-23 21:39:06,155][verilog.py:984][add_port][DEBUG][MainThread]:   Port "mmcm_locked" is new
+[2024-08-23 21:39:06,155][verilog.py:1079][instantiate_child_ports][DEBUG][MainThread]: Instantiating child ports for multi_gpios_1_rreg
+[2024-08-23 21:39:06,155][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port IP_BUS as signal multi_gpios_1_rreg_user_data_in to top
+[2024-08-23 21:39:06,155][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "multi_gpios_1_rreg_user_data_in" is new
+[2024-08-23 21:39:06,155][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port OP_BUS as signal sw_reg_rreg_in to top
+[2024-08-23 21:39:06,156][verilog.py:1038][add_signal][DEBUG][MainThread]:   Signal "sw_reg_rreg_in" already exists
+[2024-08-23 21:39:06,156][verilog.py:1079][instantiate_child_ports][DEBUG][MainThread]: Instantiating child ports for multi_gpios_1_rreg32
+[2024-08-23 21:39:06,156][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port IP_BUS as signal multi_gpios_1_rreg32_user_data_in to top
+[2024-08-23 21:39:06,156][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "multi_gpios_1_rreg32_user_data_in" is new
+[2024-08-23 21:39:06,156][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port OP_BUS as signal sw_reg_rreg32_in to top
+[2024-08-23 21:39:06,156][verilog.py:1038][add_signal][DEBUG][MainThread]:   Signal "sw_reg_rreg32_in" already exists
+[2024-08-23 21:39:06,156][verilog.py:1079][instantiate_child_ports][DEBUG][MainThread]: Instantiating child ports for multi_gpios_1_wreg1
+[2024-08-23 21:39:06,156][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port OP_BUS as signal multi_gpios_1_wreg1_user_data_out to top
+[2024-08-23 21:39:06,156][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "multi_gpios_1_wreg1_user_data_out" is new
+[2024-08-23 21:39:06,156][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port IP_BUS as signal sw_reg_wreg1_out to top
+[2024-08-23 21:39:06,156][verilog.py:1038][add_signal][DEBUG][MainThread]:   Signal "sw_reg_wreg1_out" already exists
+[2024-08-23 21:39:06,156][verilog.py:1079][instantiate_child_ports][DEBUG][MainThread]: Instantiating child ports for multi_gpios_1_wreg32
+[2024-08-23 21:39:06,156][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port OP_BUS as signal multi_gpios_1_wreg32_user_data_out to top
+[2024-08-23 21:39:06,156][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "multi_gpios_1_wreg32_user_data_out" is new
+[2024-08-23 21:39:06,156][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port IP_BUS as signal sw_reg_wreg32_out to top
+[2024-08-23 21:39:06,156][verilog.py:1038][add_signal][DEBUG][MainThread]:   Signal "sw_reg_wreg32_out" already exists
+[2024-08-23 21:39:06,156][verilog.py:1079][instantiate_child_ports][DEBUG][MainThread]: Instantiating child ports for multi_gpios_1_wwreg
+[2024-08-23 21:39:06,156][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port OP_BUS as signal multi_gpios_1_wwreg_user_data_out to top
+[2024-08-23 21:39:06,156][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "multi_gpios_1_wwreg_user_data_out" is new
+[2024-08-23 21:39:06,156][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port IP_BUS as signal sw_reg_wwreg_out to top
+[2024-08-23 21:39:06,156][verilog.py:1038][add_signal][DEBUG][MainThread]:   Signal "sw_reg_wwreg_out" already exists
+[2024-08-23 21:39:06,156][verilog.py:1079][instantiate_child_ports][DEBUG][MainThread]: Instantiating child ports for sys_block_counter_inst
+[2024-08-23 21:39:06,156][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port user_clk as signal user_clk to top
+[2024-08-23 21:39:06,157][verilog.py:1038][add_signal][DEBUG][MainThread]:   Signal "user_clk" already exists
+[2024-08-23 21:39:06,157][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port user_rst as signal user_rst to top
+[2024-08-23 21:39:06,157][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "user_rst" is new
+[2024-08-23 21:39:06,157][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port we as signal sys_clkcounter_we to top
+[2024-08-23 21:39:06,157][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sys_clkcounter_we" is new
+[2024-08-23 21:39:06,157][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port count_out as signal sys_clkcounter_cdc to top
+[2024-08-23 21:39:06,157][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "sys_clkcounter_cdc" is new
+[2024-08-23 21:39:06,157][verilog.py:1079][instantiate_child_ports][DEBUG][MainThread]: Instantiating child ports for sys_block_counter_cdc_inst
+[2024-08-23 21:39:06,157][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port IP_BUS as signal sys_clkcounter_cdc to top
+[2024-08-23 21:39:06,157][verilog.py:1038][add_signal][DEBUG][MainThread]:   Signal "sys_clkcounter_cdc" already exists
+[2024-08-23 21:39:06,157][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port OP_BUS as signal sys_clkcounter_in to top
+[2024-08-23 21:39:06,157][verilog.py:1038][add_signal][DEBUG][MainThread]:   Signal "sys_clkcounter_in" already exists
+[2024-08-23 21:39:06,157][verilog.py:1079][instantiate_child_ports][DEBUG][MainThread]: Instantiating child ports for direct_link5_inst
+[2024-08-23 21:39:06,157][verilog.py:1079][instantiate_child_ports][DEBUG][MainThread]: Instantiating child ports for direct_link4_inst
+[2024-08-23 21:39:06,157][verilog.py:1079][instantiate_child_ports][DEBUG][MainThread]: Instantiating child ports for rfsoc4x2_bd_inst
+[2024-08-23 21:39:06,157][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port pl_sys_clk as signal pl_sys_clk to top
+[2024-08-23 21:39:06,157][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "pl_sys_clk" is new
+[2024-08-23 21:39:06,157][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axil_rst as signal axil_rst to top
+[2024-08-23 21:39:06,157][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "axil_rst" is new
+[2024-08-23 21:39:06,157][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port axil_arst_n as signal axil_arst_n to top
+[2024-08-23 21:39:06,157][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "axil_arst_n" is new
+[2024-08-23 21:39:06,157][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port m_axi_awaddr as signal M_AXI_awaddr to top
+[2024-08-23 21:39:06,158][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "M_AXI_awaddr" is new
+[2024-08-23 21:39:06,158][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port m_axi_awprot as signal M_AXI_awprot to top
+[2024-08-23 21:39:06,158][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "M_AXI_awprot" is new
+[2024-08-23 21:39:06,158][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port m_axi_awvalid as signal M_AXI_awvalid to top
+[2024-08-23 21:39:06,158][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "M_AXI_awvalid" is new
+[2024-08-23 21:39:06,158][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port m_axi_awready as signal M_AXI_awready to top
+[2024-08-23 21:39:06,158][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "M_AXI_awready" is new
+[2024-08-23 21:39:06,158][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port m_axi_wdata as signal M_AXI_wdata to top
+[2024-08-23 21:39:06,158][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "M_AXI_wdata" is new
+[2024-08-23 21:39:06,158][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port m_axi_wstrb as signal M_AXI_wstrb to top
+[2024-08-23 21:39:06,158][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "M_AXI_wstrb" is new
+[2024-08-23 21:39:06,158][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port m_axi_wvalid as signal M_AXI_wvalid to top
+[2024-08-23 21:39:06,158][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "M_AXI_wvalid" is new
+[2024-08-23 21:39:06,158][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port m_axi_wready as signal M_AXI_wready to top
+[2024-08-23 21:39:06,158][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "M_AXI_wready" is new
+[2024-08-23 21:39:06,158][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port m_axi_bresp as signal M_AXI_bresp to top
+[2024-08-23 21:39:06,158][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "M_AXI_bresp" is new
+[2024-08-23 21:39:06,158][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port m_axi_bvalid as signal M_AXI_bvalid to top
+[2024-08-23 21:39:06,158][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "M_AXI_bvalid" is new
+[2024-08-23 21:39:06,158][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port m_axi_bready as signal M_AXI_bready to top
+[2024-08-23 21:39:06,158][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "M_AXI_bready" is new
+[2024-08-23 21:39:06,158][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port m_axi_araddr as signal M_AXI_araddr to top
+[2024-08-23 21:39:06,158][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "M_AXI_araddr" is new
+[2024-08-23 21:39:06,159][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port m_axi_arprot as signal M_AXI_arprot to top
+[2024-08-23 21:39:06,159][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "M_AXI_arprot" is new
+[2024-08-23 21:39:06,159][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port m_axi_arvalid as signal M_AXI_arvalid to top
+[2024-08-23 21:39:06,159][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "M_AXI_arvalid" is new
+[2024-08-23 21:39:06,159][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port m_axi_arready as signal M_AXI_arready to top
+[2024-08-23 21:39:06,159][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "M_AXI_arready" is new
+[2024-08-23 21:39:06,159][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port m_axi_rdata as signal M_AXI_rdata to top
+[2024-08-23 21:39:06,159][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "M_AXI_rdata" is new
+[2024-08-23 21:39:06,159][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port m_axi_rresp as signal M_AXI_rresp to top
+[2024-08-23 21:39:06,159][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "M_AXI_rresp" is new
+[2024-08-23 21:39:06,159][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port m_axi_rvalid as signal M_AXI_rvalid to top
+[2024-08-23 21:39:06,159][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "M_AXI_rvalid" is new
+[2024-08-23 21:39:06,159][verilog.py:1083][instantiate_child_ports][DEBUG][MainThread]:   Adding instance port m_axi_rready as signal M_AXI_rready to top
+[2024-08-23 21:39:06,159][verilog.py:1035][add_signal][DEBUG][MainThread]:   Signal "M_AXI_rready" is new
+[2024-08-23 21:39:06,159][verilog.py:1292][gen_port_list][DEBUG][MainThread]: Generating port gpio_led_1_1_ext
+[2024-08-23 21:39:06,159][verilog.py:1292][gen_port_list][DEBUG][MainThread]: Generating port gpio_led_0_0_ext
+[2024-08-23 21:39:06,159][verilog.py:1292][gen_port_list][DEBUG][MainThread]: Generating port pl_clk_n
+[2024-08-23 21:39:06,159][verilog.py:1292][gen_port_list][DEBUG][MainThread]: Generating port pl_clk_p
+[2024-08-23 21:39:06,159][verilog.py:1292][gen_port_list][DEBUG][MainThread]: Generating port mmcm_locked
+[2024-08-23 21:39:06,159][verilog.py:1303][gen_port_list][DEBUG][MainThread]: i: 6 n_ports: 5
+[2024-08-23 21:39:06,159][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal axil_clk
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal axil_rst_n
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sw_reg_rreg32_in
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sw_reg_rreg32_in_we
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sw_reg_rreg_in
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sw_reg_rreg_in_we
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sw_reg_wreg1_out
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sw_reg_wreg1_out_we
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sw_reg_wreg32_out
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sw_reg_wreg32_out_we
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sw_reg_wwreg_out
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sw_reg_wwreg_out_we
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sys_board_id_in
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sys_board_id_in_we
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sys_clkcounter_in
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sys_clkcounter_in_we
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sys_rev_in
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sys_rev_in_we
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sys_rev_rcs_in
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sys_rev_rcs_in_we
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sys_scratchpad_out
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sys_scratchpad_out_we
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal multi_gpios_1_gpio_gateway
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal multi_gpios_1_gpio0_gateway
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal adc_clk
+[2024-08-23 21:39:06,160][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal adc_clk180
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal adc_clk270
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal adc_clk90
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal multi_gpios_1_rreg_user_data_in
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal multi_gpios_1_rreg32_user_data_in
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal multi_gpios_1_wreg1_user_data_out
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal multi_gpios_1_wreg32_user_data_out
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal multi_gpios_1_wwreg_user_data_out
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sys_clkcounter_cdc
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sys_clkcounter_we
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal user_rst
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal sys_clk
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal user_clk
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal user_clk180
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal user_clk270
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal user_clk90
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal M_AXI_araddr
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal M_AXI_arprot
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal M_AXI_arready
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal M_AXI_arvalid
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal M_AXI_awaddr
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal M_AXI_awprot
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal M_AXI_awready
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal M_AXI_awvalid
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal M_AXI_bready
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal M_AXI_bresp
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal M_AXI_bvalid
+[2024-08-23 21:39:06,161][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal M_AXI_rdata
+[2024-08-23 21:39:06,162][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal M_AXI_rready
+[2024-08-23 21:39:06,162][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal M_AXI_rresp
+[2024-08-23 21:39:06,162][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal M_AXI_rvalid
+[2024-08-23 21:39:06,162][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal M_AXI_wdata
+[2024-08-23 21:39:06,162][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal M_AXI_wready
+[2024-08-23 21:39:06,162][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal M_AXI_wstrb
+[2024-08-23 21:39:06,162][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal M_AXI_wvalid
+[2024-08-23 21:39:06,162][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal axil_arst_n
+[2024-08-23 21:39:06,162][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal axil_rst
+[2024-08-23 21:39:06,162][verilog.py:1349][gen_signals_dec_str][DEBUG][MainThread]: Writing verilog for signal pl_sys_clk
+[2024-08-23 21:39:06,162][toolflow.py:630][regenerate_top][INFO][MainThread]: Dumping pickle of top-level Verilog module
+[2024-08-23 21:39:06,163][toolflow.py:229][generate_hdl][INFO][MainThread]: generating auxiliary HDL
+[2024-08-23 21:39:06,163][toolflow.py:236][generate_peripheral_hdl][INFO][MainThread]: Generating yellow block custom hdl files
+[2024-08-23 21:39:06,164][toolflow.py:639][generate_consts][INFO][MainThread]: Extracting constraints from peripherals
+[2024-08-23 21:39:06,164][toolflow.py:643][generate_consts][INFO][MainThread]: Getting constraints for block RFSoC4x2
+[2024-08-23 21:39:06,164][toolflow.py:643][generate_consts][INFO][MainThread]: Getting constraints for block gpio
+[2024-08-23 21:39:06,164][constraints.py:41][__init__][DEBUG][MainThread]: new PortConstraint:
+[2024-08-23 21:39:06,164][constraints.py:42][__init__][DEBUG][MainThread]:   portname: gpio_led_1_1_ext
+[2024-08-23 21:39:06,164][constraints.py:43][__init__][DEBUG][MainThread]:   iogroup: led
+[2024-08-23 21:39:06,164][constraints.py:44][__init__][DEBUG][MainThread]:   port_index: [0]
+[2024-08-23 21:39:06,164][constraints.py:45][__init__][DEBUG][MainThread]:   iogroup_index: [1]
+[2024-08-23 21:39:06,164][constraints.py:46][__init__][DEBUG][MainThread]:   loc: None
+[2024-08-23 21:39:06,164][constraints.py:47][__init__][DEBUG][MainThread]:   iostd: None
+[2024-08-23 21:39:06,164][constraints.py:48][__init__][DEBUG][MainThread]:   drive_strength: None
+[2024-08-23 21:39:06,164][constraints.py:49][__init__][DEBUG][MainThread]:   diff_term: None
+[2024-08-23 21:39:06,164][constraints.py:375][__init__][DEBUG][MainThread]: New set max delay constraint
+[2024-08-23 21:39:06,164][constraints.py:376][__init__][DEBUG][MainThread]: source path: None
+[2024-08-23 21:39:06,164][constraints.py:377][__init__][DEBUG][MainThread]: destination path: [get_ports {gpio_led_1_1_ext[*]}]
+[2024-08-23 21:39:06,164][constraints.py:378][__init__][DEBUG][MainThread]: constraint delay: 1.0
+[2024-08-23 21:39:06,165][constraints.py:408][__init__][DEBUG][MainThread]: New set max delay constraint
+[2024-08-23 21:39:06,165][constraints.py:409][__init__][DEBUG][MainThread]: source path: None
+[2024-08-23 21:39:06,165][constraints.py:410][__init__][DEBUG][MainThread]: destination path: [get_ports {gpio_led_1_1_ext[*]}]
+[2024-08-23 21:39:06,165][constraints.py:411][__init__][DEBUG][MainThread]: constraint delay: 1.0
+[2024-08-23 21:39:06,165][constraints.py:437][__init__][DEBUG][MainThread]: New false path constraint
+[2024-08-23 21:39:06,165][constraints.py:438][__init__][DEBUG][MainThread]: source path: None
+[2024-08-23 21:39:06,165][constraints.py:439][__init__][DEBUG][MainThread]: destination path: [get_ports {gpio_led_1_1_ext[*]}]
+[2024-08-23 21:39:06,165][toolflow.py:643][generate_consts][INFO][MainThread]: Getting constraints for block gpio0
+[2024-08-23 21:39:06,165][constraints.py:41][__init__][DEBUG][MainThread]: new PortConstraint:
+[2024-08-23 21:39:06,165][constraints.py:42][__init__][DEBUG][MainThread]:   portname: gpio_led_0_0_ext
+[2024-08-23 21:39:06,165][constraints.py:43][__init__][DEBUG][MainThread]:   iogroup: led
+[2024-08-23 21:39:06,165][constraints.py:44][__init__][DEBUG][MainThread]:   port_index: [0]
+[2024-08-23 21:39:06,165][constraints.py:45][__init__][DEBUG][MainThread]:   iogroup_index: [0]
+[2024-08-23 21:39:06,165][constraints.py:46][__init__][DEBUG][MainThread]:   loc: None
+[2024-08-23 21:39:06,165][constraints.py:47][__init__][DEBUG][MainThread]:   iostd: None
+[2024-08-23 21:39:06,165][constraints.py:48][__init__][DEBUG][MainThread]:   drive_strength: None
+[2024-08-23 21:39:06,165][constraints.py:49][__init__][DEBUG][MainThread]:   diff_term: None
+[2024-08-23 21:39:06,165][constraints.py:375][__init__][DEBUG][MainThread]: New set max delay constraint
+[2024-08-23 21:39:06,165][constraints.py:376][__init__][DEBUG][MainThread]: source path: None
+[2024-08-23 21:39:06,165][constraints.py:377][__init__][DEBUG][MainThread]: destination path: [get_ports {gpio_led_0_0_ext[*]}]
+[2024-08-23 21:39:06,165][constraints.py:378][__init__][DEBUG][MainThread]: constraint delay: 1.0
+[2024-08-23 21:39:06,165][constraints.py:408][__init__][DEBUG][MainThread]: New set max delay constraint
+[2024-08-23 21:39:06,165][constraints.py:409][__init__][DEBUG][MainThread]: source path: None
+[2024-08-23 21:39:06,165][constraints.py:410][__init__][DEBUG][MainThread]: destination path: [get_ports {gpio_led_0_0_ext[*]}]
+[2024-08-23 21:39:06,165][constraints.py:411][__init__][DEBUG][MainThread]: constraint delay: 1.0
+[2024-08-23 21:39:06,166][constraints.py:437][__init__][DEBUG][MainThread]: New false path constraint
+[2024-08-23 21:39:06,166][constraints.py:438][__init__][DEBUG][MainThread]: source path: None
+[2024-08-23 21:39:06,166][constraints.py:439][__init__][DEBUG][MainThread]: destination path: [get_ports {gpio_led_0_0_ext[*]}]
+[2024-08-23 21:39:06,166][toolflow.py:643][generate_consts][INFO][MainThread]: Getting constraints for block rreg
+[2024-08-23 21:39:06,166][toolflow.py:643][generate_consts][INFO][MainThread]: Getting constraints for block rreg32
+[2024-08-23 21:39:06,166][toolflow.py:643][generate_consts][INFO][MainThread]: Getting constraints for block wreg1
+[2024-08-23 21:39:06,166][toolflow.py:643][generate_consts][INFO][MainThread]: Getting constraints for block wreg32
+[2024-08-23 21:39:06,166][toolflow.py:643][generate_consts][INFO][MainThread]: Getting constraints for block wwreg
+[2024-08-23 21:39:06,166][toolflow.py:643][generate_consts][INFO][MainThread]: Getting constraints for block RFSoC4x2
+[2024-08-23 21:39:06,166][constraints.py:168][__init__][DEBUG][MainThread]: New clock constraint
+[2024-08-23 21:39:06,166][constraints.py:169][__init__][DEBUG][MainThread]: clock signal: pl_clk_p
+[2024-08-23 21:39:06,166][constraints.py:170][__init__][DEBUG][MainThread]: name: pl_clk_p
+[2024-08-23 21:39:06,166][constraints.py:171][__init__][DEBUG][MainThread]: freq: None
+[2024-08-23 21:39:06,166][constraints.py:172][__init__][DEBUG][MainThread]: period: 8.138020833333334
+[2024-08-23 21:39:06,166][constraints.py:173][__init__][DEBUG][MainThread]: port_en: True
+[2024-08-23 21:39:06,166][constraints.py:174][__init__][DEBUG][MainThread]: waveform_min: 0.0
+[2024-08-23 21:39:06,166][constraints.py:175][__init__][DEBUG][MainThread]: waveform_max: None
+[2024-08-23 21:39:06,166][constraints.py:176][__init__][DEBUG][MainThread]: virtual_en: False
+[2024-08-23 21:39:06,167][constraints.py:41][__init__][DEBUG][MainThread]: new PortConstraint:
+[2024-08-23 21:39:06,167][constraints.py:42][__init__][DEBUG][MainThread]:   portname: pl_clk_p
+[2024-08-23 21:39:06,167][constraints.py:43][__init__][DEBUG][MainThread]:   iogroup: pl_clk_p
+[2024-08-23 21:39:06,167][constraints.py:44][__init__][DEBUG][MainThread]:   port_index: []
+[2024-08-23 21:39:06,167][constraints.py:45][__init__][DEBUG][MainThread]:   iogroup_index: [0]
+[2024-08-23 21:39:06,167][constraints.py:46][__init__][DEBUG][MainThread]:   loc: None
+[2024-08-23 21:39:06,167][constraints.py:47][__init__][DEBUG][MainThread]:   iostd: None
+[2024-08-23 21:39:06,167][constraints.py:48][__init__][DEBUG][MainThread]:   drive_strength: None
+[2024-08-23 21:39:06,167][constraints.py:49][__init__][DEBUG][MainThread]:   diff_term: None
+[2024-08-23 21:39:06,167][constraints.py:256][__init__][DEBUG][MainThread]: New clock group constraint
+[2024-08-23 21:39:06,167][constraints.py:257][__init__][DEBUG][MainThread]: clock name group 1: clk_pl_0
+[2024-08-23 21:39:06,167][constraints.py:258][__init__][DEBUG][MainThread]: clock name group 2: pl_clk_mmcm
+[2024-08-23 21:39:06,167][constraints.py:259][__init__][DEBUG][MainThread]: clock domain relationship: asynchronous
+[2024-08-23 21:39:06,167][toolflow.py:643][generate_consts][INFO][MainThread]: Getting constraints for block sys_block0
+[2024-08-23 21:39:06,167][toolflow.py:643][generate_consts][INFO][MainThread]: Getting constraints for block mpsoc
+[2024-08-23 21:39:06,167][toolflow.py:643][generate_consts][INFO][MainThread]: Getting constraints for block axi_proto_conv
+[2024-08-23 21:39:06,167][toolflow.py:643][generate_consts][INFO][MainThread]: Getting constraints for block axi4lite_interconnect
+[2024-08-23 21:39:06,167][toolflow.py:655][generate_consts][INFO][MainThread]: Generating physical constraints
+[2024-08-23 21:39:06,167][constraints.py:119][gen_physical_const][DEBUG][MainThread]: Attempting to get physical constraints for port gpio_led_1_1_ext on led 
+[2024-08-23 21:39:06,168][constraints.py:123][gen_physical_const][DEBUG][MainThread]: Setting pin loc: gpio_led_1_1_ext AW10
+[2024-08-23 21:39:06,168][constraints.py:126][gen_physical_const][DEBUG][MainThread]: Setting pin iostd: gpio_led_1_1_ext LVCMOS18
+[2024-08-23 21:39:06,168][constraints.py:129][gen_physical_const][DEBUG][MainThread]: Setting pin drive_strength: gpio_led_1_1_ext 8
+[2024-08-23 21:39:06,168][constraints.py:119][gen_physical_const][DEBUG][MainThread]: Attempting to get physical constraints for port gpio_led_0_0_ext on led 
+[2024-08-23 21:39:06,168][constraints.py:123][gen_physical_const][DEBUG][MainThread]: Setting pin loc: gpio_led_0_0_ext AR11
+[2024-08-23 21:39:06,168][constraints.py:126][gen_physical_const][DEBUG][MainThread]: Setting pin iostd: gpio_led_0_0_ext LVCMOS18
+[2024-08-23 21:39:06,168][constraints.py:129][gen_physical_const][DEBUG][MainThread]: Setting pin drive_strength: gpio_led_0_0_ext 8
+[2024-08-23 21:39:06,168][constraints.py:119][gen_physical_const][DEBUG][MainThread]: Attempting to get physical constraints for port pl_clk_p on pl_clk_p 
+[2024-08-23 21:39:06,168][constraints.py:123][gen_physical_const][DEBUG][MainThread]: Setting pin loc: pl_clk_p AN11
+[2024-08-23 21:39:06,168][constraints.py:126][gen_physical_const][DEBUG][MainThread]: Setting pin iostd: pl_clk_p LVDS
+[2024-08-23 21:39:06,168][constraints.py:129][gen_physical_const][DEBUG][MainThread]: Setting pin drive_strength: pl_clk_p None
+[2024-08-23 21:39:06,168][toolflow.py:532][write_core_info][DEBUG][MainThread]: Opening /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/rfsoc4x2/core_info.tab
+[2024-08-23 21:39:06,168][toolflow.py:544][write_core_info][DEBUG][MainThread]: Adding core_info.tab entry for rreg
+[2024-08-23 21:39:06,168][toolflow.py:544][write_core_info][DEBUG][MainThread]: Adding core_info.tab entry for rreg32
+[2024-08-23 21:39:06,168][toolflow.py:544][write_core_info][DEBUG][MainThread]: Adding core_info.tab entry for wreg1
+[2024-08-23 21:39:06,168][toolflow.py:544][write_core_info][DEBUG][MainThread]: Adding core_info.tab entry for wreg32
+[2024-08-23 21:39:06,168][toolflow.py:544][write_core_info][DEBUG][MainThread]: Adding core_info.tab entry for wwreg
+[2024-08-23 21:39:06,168][toolflow.py:544][write_core_info][DEBUG][MainThread]: Adding core_info.tab entry for sys
+[2024-08-23 21:39:06,168][toolflow.py:554][write_core_info][DEBUG][MainThread]: Opening /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/rfsoc4x2/core_info.tab
+[2024-08-23 21:39:06,168][toolflow.py:570][write_core_jam_info][DEBUG][MainThread]: Opening /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/rfsoc4x2/core_info.jam.tab
+[2024-08-23 21:39:06,168][toolflow.py:582][write_core_jam_info][DEBUG][MainThread]: Adding core_info.jam.tab entry for rreg
+[2024-08-23 21:39:06,169][toolflow.py:582][write_core_jam_info][DEBUG][MainThread]: Adding core_info.jam.tab entry for rreg32
+[2024-08-23 21:39:06,169][toolflow.py:582][write_core_jam_info][DEBUG][MainThread]: Adding core_info.jam.tab entry for wreg1
+[2024-08-23 21:39:06,169][toolflow.py:582][write_core_jam_info][DEBUG][MainThread]: Adding core_info.jam.tab entry for wreg32
+[2024-08-23 21:39:06,169][toolflow.py:582][write_core_jam_info][DEBUG][MainThread]: Adding core_info.jam.tab entry for wwreg
+[2024-08-23 21:39:06,169][toolflow.py:582][write_core_jam_info][DEBUG][MainThread]: Adding core_info.jam.tab entry for sys
+[2024-08-23 21:39:06,169][toolflow.py:587][write_core_jam_info][DEBUG][MainThread]: Opening /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/rfsoc4x2/core_info.jam.tab
+[2024-08-23 21:39:06,273][toolflow.py:667][constraints_rule_check][INFO][MainThread]: Carrying out constraints rule check
+[2024-08-23 21:39:06,274][toolflow.py:675][constraints_rule_check][WARNING][MainThread]: Port pl_clk_n (instantiated by rfsoc4x2: RFSoC4x2) has no constraints!
+[2024-08-23 21:39:06,274][toolflow.py:675][constraints_rule_check][WARNING][MainThread]: Port mmcm_locked (instantiated by rfsoc4x2: RFSoC4x2) has no constraints!
+[2024-08-23 21:39:06,274][toolflow.py:676][constraints_rule_check][INFO][MainThread]: Constraint rule check complete
+[2024-08-23 21:39:06,389][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/Projects/scilab_test/multi_gpios_1/top.v
+[2024-08-23 21:39:06,389][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/Projects/scilab_test/multi_gpios_1/top.v
+[2024-08-23 21:39:06,389][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/gpio_simulink2ext
+[2024-08-23 21:39:06,389][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/gpio_simulink2ext
+[2024-08-23 21:39:06,389][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/wb_register_simulink2ppc
+[2024-08-23 21:39:06,389][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/wb_register_simulink2ppc
+[2024-08-23 21:39:06,389][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/wb_register_ppc2simulink
+[2024-08-23 21:39:06,389][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/wb_register_ppc2simulink
+[2024-08-23 21:39:06,389][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/infrastructure/zcu216_clk_infrastructure.sv
+[2024-08-23 21:39:06,389][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/infrastructure/zcu216_clk_infrastructure.sv
+[2024-08-23 21:39:06,389][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd
+[2024-08-23 21:39:06,389][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/utils/cdc_synchroniser.vhd
+[2024-08-23 21:39:06,389][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/sys_block
+[2024-08-23 21:39:06,389][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/sys_block
+[2024-08-23 21:39:06,389][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd
+[2024-08-23 21:39:06,389][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd
+[2024-08-23 21:39:06,389][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_slave_logic.vhd
+[2024-08-23 21:39:06,389][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_slave_logic.vhd
+[2024-08-23 21:39:06,389][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/Projects/scilab_test/multi_gpios_1/split_link5.v
+[2024-08-23 21:39:06,389][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/Projects/scilab_test/multi_gpios_1/split_link5.v
+[2024-08-23 21:39:06,389][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/Projects/scilab_test/multi_gpios_1/direct_link4.v
+[2024-08-23 21:39:06,390][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/Projects/scilab_test/multi_gpios_1/direct_link4.v
+[2024-08-23 21:39:06,390][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/Projects/scilab_test/multi_gpios_1/direct_link5.v
+[2024-08-23 21:39:06,390][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/Projects/scilab_test/multi_gpios_1/direct_link5.v
+[2024-08-23 21:39:06,390][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/Projects/scilab_test/multi_gpios_1/axi4lite_ic_wrapper.vhdl
+[2024-08-23 21:39:06,390][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/Projects/scilab_test/multi_gpios_1/axi4lite_ic_wrapper.vhdl
+[2024-08-23 21:39:06,390][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_sys.vhd
+[2024-08-23 21:39:06,390][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_sys.vhd
+[2024-08-23 21:39:06,390][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_sw_reg_pkg.vhd
+[2024-08-23 21:39:06,390][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_sw_reg_pkg.vhd
+[2024-08-23 21:39:06,390][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic.vhd
+[2024-08-23 21:39:06,390][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic.vhd
+[2024-08-23 21:39:06,390][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_axi4lite_top_mmap_pkg.vhd
+[2024-08-23 21:39:06,390][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_axi4lite_top_mmap_pkg.vhd
+[2024-08-23 21:39:06,390][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_sys_pkg.vhd
+[2024-08-23 21:39:06,390][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_sys_pkg.vhd
+[2024-08-23 21:39:06,390][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_sw_reg_muxdemux.vhd
+[2024-08-23 21:39:06,390][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_sw_reg_muxdemux.vhd
+[2024-08-23 21:39:06,390][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_sys_muxdemux.vhd
+[2024-08-23 21:39:06,390][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_sys_muxdemux.vhd
+[2024-08-23 21:39:06,390][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic_pkg.vhd
+[2024-08-23 21:39:06,390][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_axi4lite_top_ic_pkg.vhd
+[2024-08-23 21:39:06,390][toolflow.py:1839][add_source][DEBUG][MainThread]: Adding source file: /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_sw_reg.vhd
+[2024-08-23 21:39:06,390][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force /home/wei/Projects/scilab_test/multi_gpios_1/xml2vhdl_hdl_output/axi4lite_sw_reg.vhd
+[2024-08-23 21:39:06,390][toolflow.py:2577][gen_constraint_file][INFO][MainThread]: parsing constraint <castro.PinConstraint object at 0x7fb975db8df0>
+[2024-08-23 21:39:06,391][toolflow.py:2340][get_tcl_const][DEBUG][MainThread]: New PortConstraint instance found: gpio_led_1_1_ext -> led
+[2024-08-23 21:39:06,391][toolflow.py:2343][get_tcl_const][DEBUG][MainThread]: Getting loc for port index 0
+[2024-08-23 21:39:06,391][toolflow.py:2346][get_tcl_const][DEBUG][MainThread]: LOC constraint found at AW10
+[2024-08-23 21:39:06,391][toolflow.py:2353][get_tcl_const][DEBUG][MainThread]: Getting iostd for port index 0
+[2024-08-23 21:39:06,391][toolflow.py:2356][get_tcl_const][DEBUG][MainThread]: IOSTD constraint found: LVCMOS18
+[2024-08-23 21:39:06,391][toolflow.py:2363][get_tcl_const][DEBUG][MainThread]: Getting drive_strength for port index 0
+[2024-08-23 21:39:06,391][toolflow.py:2366][get_tcl_const][DEBUG][MainThread]: DRIVE_STRENGTH constraint found: 8
+[2024-08-23 21:39:06,391][toolflow.py:2373][get_tcl_const][DEBUG][MainThread]: Getting diff_term for port index 0
+[2024-08-23 21:39:06,391][toolflow.py:2374][get_tcl_const][DEBUG][MainThread]: with port name gpio_led_1_1_ext
+[2024-08-23 21:39:06,391][toolflow.py:2577][gen_constraint_file][INFO][MainThread]: parsing constraint <castro.PinConstraint object at 0x7fb975db8e20>
+[2024-08-23 21:39:06,391][toolflow.py:2340][get_tcl_const][DEBUG][MainThread]: New PortConstraint instance found: gpio_led_0_0_ext -> led
+[2024-08-23 21:39:06,391][toolflow.py:2343][get_tcl_const][DEBUG][MainThread]: Getting loc for port index 0
+[2024-08-23 21:39:06,391][toolflow.py:2346][get_tcl_const][DEBUG][MainThread]: LOC constraint found at AR11
+[2024-08-23 21:39:06,391][toolflow.py:2353][get_tcl_const][DEBUG][MainThread]: Getting iostd for port index 0
+[2024-08-23 21:39:06,391][toolflow.py:2356][get_tcl_const][DEBUG][MainThread]: IOSTD constraint found: LVCMOS18
+[2024-08-23 21:39:06,391][toolflow.py:2363][get_tcl_const][DEBUG][MainThread]: Getting drive_strength for port index 0
+[2024-08-23 21:39:06,391][toolflow.py:2366][get_tcl_const][DEBUG][MainThread]: DRIVE_STRENGTH constraint found: 8
+[2024-08-23 21:39:06,391][toolflow.py:2373][get_tcl_const][DEBUG][MainThread]: Getting diff_term for port index 0
+[2024-08-23 21:39:06,391][toolflow.py:2374][get_tcl_const][DEBUG][MainThread]: with port name gpio_led_0_0_ext
+[2024-08-23 21:39:06,391][toolflow.py:2577][gen_constraint_file][INFO][MainThread]: parsing constraint <castro.PinConstraint object at 0x7fb975db8e50>
+[2024-08-23 21:39:06,392][toolflow.py:2340][get_tcl_const][DEBUG][MainThread]: New PortConstraint instance found: pl_clk_p -> pl_clk_p
+[2024-08-23 21:39:06,392][toolflow.py:2343][get_tcl_const][DEBUG][MainThread]: Getting loc for port index 0
+[2024-08-23 21:39:06,392][toolflow.py:2346][get_tcl_const][DEBUG][MainThread]: LOC constraint found at AN11
+[2024-08-23 21:39:06,392][toolflow.py:2353][get_tcl_const][DEBUG][MainThread]: Getting iostd for port index 0
+[2024-08-23 21:39:06,392][toolflow.py:2356][get_tcl_const][DEBUG][MainThread]: IOSTD constraint found: LVDS
+[2024-08-23 21:39:06,392][toolflow.py:2363][get_tcl_const][DEBUG][MainThread]: Getting drive_strength for port index 0
+[2024-08-23 21:39:06,392][toolflow.py:2373][get_tcl_const][DEBUG][MainThread]: Getting diff_term for port index 0
+[2024-08-23 21:39:06,392][toolflow.py:2374][get_tcl_const][DEBUG][MainThread]: with port name pl_clk_p
+[2024-08-23 21:39:06,392][toolflow.py:2577][gen_constraint_file][INFO][MainThread]: parsing constraint <castro.ClkConstraint object at 0x7fb975db8be0>
+[2024-08-23 21:39:06,392][toolflow.py:2384][get_tcl_const][DEBUG][MainThread]: New Clock constraint found
+[2024-08-23 21:39:06,392][toolflow.py:2577][gen_constraint_file][INFO][MainThread]: parsing constraint <castro.ClkGrpConstraint object at 0x7fb975db8c10>
+[2024-08-23 21:39:06,392][toolflow.py:2392][get_tcl_const][DEBUG][MainThread]: New Clock group constraint found
+[2024-08-23 21:39:06,392][toolflow.py:2577][gen_constraint_file][INFO][MainThread]: parsing constraint <castro.MaxDelayConstraint object at 0x7fb975db8cd0>
+[2024-08-23 21:39:06,392][toolflow.py:2404][get_tcl_const][DEBUG][MainThread]: New Max delay constraint found
+[2024-08-23 21:39:06,392][toolflow.py:2577][gen_constraint_file][INFO][MainThread]: parsing constraint <castro.MaxDelayConstraint object at 0x7fb975db8d00>
+[2024-08-23 21:39:06,392][toolflow.py:2404][get_tcl_const][DEBUG][MainThread]: New Max delay constraint found
+[2024-08-23 21:39:06,392][toolflow.py:2577][gen_constraint_file][INFO][MainThread]: parsing constraint <castro.MinDelayConstraint object at 0x7fb975db8d60>
+[2024-08-23 21:39:06,393][toolflow.py:2408][get_tcl_const][DEBUG][MainThread]: New Min delay constraint found
+[2024-08-23 21:39:06,393][toolflow.py:2577][gen_constraint_file][INFO][MainThread]: parsing constraint <castro.MinDelayConstraint object at 0x7fb975db8d90>
+[2024-08-23 21:39:06,393][toolflow.py:2408][get_tcl_const][DEBUG][MainThread]: New Min delay constraint found
+[2024-08-23 21:39:06,393][toolflow.py:2577][gen_constraint_file][INFO][MainThread]: parsing constraint <castro.FalsePthConstraint object at 0x7fb975db8c40>
+[2024-08-23 21:39:06,393][toolflow.py:2412][get_tcl_const][DEBUG][MainThread]: New False Path constraint found
+[2024-08-23 21:39:06,393][toolflow.py:2577][gen_constraint_file][INFO][MainThread]: parsing constraint <castro.FalsePthConstraint object at 0x7fb975db8c70>
+[2024-08-23 21:39:06,393][toolflow.py:2412][get_tcl_const][DEBUG][MainThread]: New False Path constraint found
+[2024-08-23 21:39:06,393][toolflow.py:2577][gen_constraint_file][INFO][MainThread]: parsing constraint <castro.RawConstraint object at 0x7fb975db8eb0>
+[2024-08-23 21:39:06,393][toolflow.py:2420][get_tcl_const][DEBUG][MainThread]: New Raw constraint found
+[2024-08-23 21:39:06,393][toolflow.py:2579][gen_constraint_file][INFO][MainThread]: Constraints: set_property PACKAGE_PIN AW10 [get_ports gpio_led_1_1_ext[0]]
+set_property IOSTANDARD LVCMOS18 [get_ports gpio_led_1_1_ext[0]]
+set_property DRIVE 8 [get_ports gpio_led_1_1_ext[0]]
+set_property PACKAGE_PIN AR11 [get_ports gpio_led_0_0_ext[0]]
+set_property IOSTANDARD LVCMOS18 [get_ports gpio_led_0_0_ext[0]]
+set_property DRIVE 8 [get_ports gpio_led_0_0_ext[0]]
+set_property PACKAGE_PIN AN11 [get_ports pl_clk_p]
+set_property IOSTANDARD LVDS [get_ports pl_clk_p]
+create_clock -period 8.138 -name pl_clk_p -waveform {0.000 4.069} [get_ports {pl_clk_p}]
+set_clock_groups -asynchronous -group [get_clocks clk_pl_0] -group [get_clocks pl_clk_mmcm]
+set_max_delay 1.0 -to [get_ports {gpio_led_1_1_ext[*]}]
+set_max_delay 1.0 -to [get_ports {gpio_led_0_0_ext[*]}]
+set_min_delay 1.0 -to [get_ports {gpio_led_1_1_ext[*]}]
+set_min_delay 1.0 -to [get_ports {gpio_led_0_0_ext[*]}]
+set_false_path -to [get_ports {gpio_led_1_1_ext[*]}]
+set_false_path -to [get_ports {gpio_led_0_0_ext[*]}]
+set_property -dict { PACKAGE_PIN AU10 IOSTANDARD LVCMOS18 } [get_ports { mmcm_locked }]
+
+[2024-08-23 21:39:06,393][toolflow.py:2581][gen_constraint_file][INFO][MainThread]: Finished writing constraints file: /home/wei/Projects/scilab_test/multi_gpios_1/user_const.xdc
+[2024-08-23 21:39:06,393][toolflow.py:1907][add_const_file][DEBUG][MainThread]: Adding constraint file: /home/wei/Projects/scilab_test/multi_gpios_1/user_const.xdc
+[2024-08-23 21:39:06,393][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files -force -fileset constrs_1 /home/wei/Projects/scilab_test/multi_gpios_1/user_const.xdc
+[2024-08-23 21:39:06,393][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: set impl_dir "/home/wei/Projects/scilab_test/multi_gpios_1/myproj/myproj.runs/impl_1"
+[2024-08-23 21:39:06,394][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: set bin_file "/home/wei/Projects/scilab_test/multi_gpios_1/myproj/myproj.runs/impl_1/top.bin"
+[2024-08-23 21:39:06,394][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: set bit_file "/home/wei/Projects/scilab_test/multi_gpios_1/myproj/myproj.runs/impl_1/top.bit"
+[2024-08-23 21:39:06,394][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: set hex_file "/home/wei/Projects/scilab_test/multi_gpios_1/myproj/myproj.runs/impl_1/top.hex"
+[2024-08-23 21:39:06,394][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: set mcs_file "/home/wei/Projects/scilab_test/multi_gpios_1/myproj/myproj.runs/impl_1/top.mcs"
+[2024-08-23 21:39:06,394][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: set prm_file "/home/wei/Projects/scilab_test/multi_gpios_1/myproj/myproj.runs/impl_1/top.prm"
+[2024-08-23 21:39:06,394][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: set xsa_file "/home/wei/Projects/scilab_test/multi_gpios_1/myproj/myproj.runs/impl_1/top.xsa"
+[2024-08-23 21:39:06,394][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: set jbd_name "rfsoc4x2_bd"
+[2024-08-23 21:39:06,394][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: 
+proc check_timing {run} {
+  if { [get_property STATS.WNS [get_runs $run] ] < 0 } {
+    send_msg_id "CASPER-1" {CRITICAL WARNING} "ERROR: Found timing violations => Worst Negative Slack: [get_property STATS.WNS [get_runs $run]] ns"
+  } else {
+    puts "No timing violations => Worst Negative Slack: [get_property STATS.WNS [get_runs $run]] ns"
+  }
+
+  if { [get_property STATS.TNS [get_runs $run] ] < 0 } {
+    send_msg_id "CASPER-1" {CRITICAL WARNING} "ERROR: Found timing violations => Total Negative Slack: [get_property STATS.TNS [get_runs $run]] ns"
+  }
+
+  if { [get_property STATS.WHS [get_runs $run] ] < 0 } {
+    send_msg_id "CASPER-1" {CRITICAL WARNING} "ERROR: Found timing violations => Worst Hold Slack: [get_property STATS.WHS [get_runs $run]] ns"
+  } else {
+    puts "No timing violations => Worst Hold Slack: [get_property STATS.WHS [get_runs $run]] ns"
+  }
+
+  if { [get_property STATS.THS [get_runs $run] ] < 0 } {
+    send_msg_id "CASPER-1" {CRITICAL WARNING} "ERROR: Found timing violations => Total Hold Slack: [get_property STATS.THS [get_runs $run]] ns"
+  }
+}
+
+[2024-08-23 21:39:06,394][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: 
+proc check_zero_critical {count mess} {
+  if {$count > 0} {
+    puts "************************************************"
+    send_msg_id "CASPER-2" {CRITICAL WARNING} "$mess critical warning count: $count"
+    puts "************************************************"
+  }
+}
+
+[2024-08-23 21:39:06,394][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: 
+proc puts_red {s} {
+  puts -nonewline "\[1;31m"; #RED
+  puts $s
+  puts -nonewline "\[0m";# Reset
+}
+
+[2024-08-23 21:39:06,394][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: puts "Starting tcl script"
+[2024-08-23 21:39:06,394][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: cd /home/wei/Projects/scilab_test/multi_gpios_1
+[2024-08-23 21:39:06,394][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: create_project -f myproj myproj -part xczu48dr-ffvg1517-2-e
+[2024-08-23 21:39:06,394][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: create_bd_design $jbd_name
+[2024-08-23 21:39:06,394][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: current_bd_design $jbd_name
+[2024-08-23 21:39:06,394][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: set_property target_language VHDL [current_project]
+[2024-08-23 21:39:06,394][toolflow.py:2545][gen_bd_tcl_cmds][INFO][MainThread]: Assembling the block design from yellow block peripherals
+[2024-08-23 21:39:06,394][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: create_bd_cell -type ip -vlnv xilinx.com:ip:zynq_ultra_ps_e:* mpsoc
+create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:* proc_sys_reset
+create_bd_cell -type ip -vlnv xilinx.com:ip:axi_protocol_converter:* axi_proto_conv
+source /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/zynq/rfsoc4x2_mpsoc.tcl
+create_bd_net pl_sys_clk
+connect_bd_net -net pl_sys_clk [get_bd_pins mpsoc/pl_clk0]
+create_bd_net pl_resetn
+connect_bd_net -net pl_resetn [get_bd_pins mpsoc/pl_resetn0]
+set_property -dict [list \
+CONFIG.PSU__USE__M_AXI_GP0 {1} \
+CONFIG.PSU__MAXIGP0__DATA_WIDTH {32} \
+CONFIG.PSU__USE__M_AXI_GP1 {0} \
+CONFIG.PSU__MAXIGP1__DATA_WIDTH {128} \
+CONFIG.PSU__USE__M_AXI_GP2 {0} \
+CONFIG.PSU__MAXIGP2__DATA_WIDTH {128} \
+] [get_bd_cells mpsoc]
+set freq_mhz [get_property CONFIG.PSU__CRF_APB__TOPSW_LSBUS_CTRL__ACT_FREQMHZ [get_bd_cells mpsoc]]
+set ps_freq_hz [expr $freq_mhz*1e6]
+connect_bd_net -net pl_sys_clk [get_bd_pins mpsoc/maxihpm0_fpd_aclk]
+create_bd_port -dir O -type clk pl_sys_clk
+connect_bd_net -net pl_sys_clk [get_bd_ports pl_sys_clk]
+connect_bd_net -net pl_sys_clk [get_bd_pins proc_sys_reset/slowest_sync_clk]
+create_bd_net axil_rst
+create_bd_net axil_arst_n
+connect_bd_net -net pl_resetn [get_bd_pins proc_sys_reset/ext_reset_in]
+connect_bd_net -net axil_rst [get_bd_pins proc_sys_reset/peripheral_reset]
+connect_bd_net -net axil_arst_n [get_bd_pins proc_sys_reset/peripheral_aresetn]
+create_bd_port -dir O -type rst axil_rst
+create_bd_port -dir O -type rst axil_arst_n
+connect_bd_net -net axil_rst [get_bd_ports axil_rst]
+connect_bd_net -net axil_arst_n [get_bd_ports axil_arst_n]
+set_property -dict [list \
+CONFIG.ARUSER_WIDTH {0} \
+CONFIG.AWUSER_WIDTH {0} \
+CONFIG.BUSER_WIDTH {0} \
+CONFIG.DATA_WIDTH {32} \
+CONFIG.ID_WIDTH {16} \
+CONFIG.MI_PROTOCOL {AXI4LITE} \
+CONFIG.READ_WRITE_MODE {READ_WRITE} \
+CONFIG.RUSER_WIDTH {0} \
+CONFIG.SI_PROTOCOL {AXI4} \
+CONFIG.TRANSLATION_MODE {2} \
+CONFIG.WUSER_WIDTH {0} \
+] [get_bd_cells axi_proto_conv]
+connect_bd_net -net pl_sys_clk [get_bd_pins axi_proto_conv/aclk]
+connect_bd_net -net axil_arst_n [get_bd_pins axi_proto_conv/aresetn]
+connect_bd_intf_net [get_bd_intf_pins mpsoc/M_AXI_HPM0_FPD] [get_bd_intf_pins axi_proto_conv/S_AXI]
+create_bd_intf_port -mode Master -vlnv xilinx.com:interface:aximm_rtl:1.0 M_AXI
+set_property -dict [list \
+CONFIG.PROTOCOL [get_property CONFIG.PROTOCOL [get_bd_intf_pins axi_proto_conv/M_AXI]] \
+CONFIG.ADDR_WIDTH [get_property CONFIG.ADDR_WIDTH [get_bd_intf_pins axi_proto_conv/M_AXI]] \
+CONFIG.DATA_WIDTH [get_property CONFIG.DATA_WIDTH [get_bd_intf_pins axi_proto_conv/M_AXI]] \
+CONFIG.HAS_BURST [get_property CONFIG.HAS_BURST [get_bd_intf_pins axi_proto_conv/M_AXI]] \
+CONFIG.HAS_LOCK [get_property CONFIG.HAS_LOCK [get_bd_intf_pins axi_proto_conv/M_AXI]] \
+CONFIG.HAS_PROT [get_property CONFIG.HAS_PROT [get_bd_intf_pins axi_proto_conv/M_AXI]] \
+CONFIG.HAS_CACHE [get_property CONFIG.HAS_CACHE [get_bd_intf_pins axi_proto_conv/M_AXI]] \
+CONFIG.HAS_QOS [get_property CONFIG.HAS_QOS [get_bd_intf_pins axi_proto_conv/M_AXI]] \
+CONFIG.HAS_REGION [get_property CONFIG.HAS_REGION [get_bd_intf_pins axi_proto_conv/M_AXI]] \
+CONFIG.SUPPORTS_NARROW_BURST [get_property CONFIG.SUPPORTS_NARROW_BURST [get_bd_intf_pins axi_proto_conv/M_AXI]] \
+CONFIG.MAX_BURST_LENGTH [get_property CONFIG.MAX_BURST_LENGTH [get_bd_intf_pins axi_proto_conv/M_AXI]] \
+CONFIG.FREQ_HZ $ps_freq_hz \
+] [get_bd_intf_ports M_AXI]
+connect_bd_intf_net [get_bd_intf_pins axi_proto_conv/M_AXI] [get_bd_intf_pins M_AXI]
+assign_bd_address -offset 0xA0000000 -range 0x00010000 -target_address_space [get_bd_addr_spaces mpsoc/Data] [get_bd_addr_segs M_AXI/Reg] -force
+[2024-08-23 21:39:06,394][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: set_property top top [current_fileset]
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: update_compile_order -fileset sources_1
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: if {[llength [glob -nocomplain [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe]] > 0} {
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: file copy -force {*}[glob [get_property directory [current_project]]/myproj.srcs/sources_1/imports/*.coe] [get_property directory [current_project]]/myproj.srcs/sources_1/ip/
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: }
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: upgrade_ip -quiet [get_ips *]
+[2024-08-23 21:39:06,395][toolflow.py:2092][add_compile_cmds][DEBUG][MainThread]: adding the upgrade_ip command to the tcl script
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: reset_run synth_1
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: launch_runs synth_1 -jobs 4
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: wait_on_run synth_1
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: open_run synth_1
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: set synth_critical_count [get_msg_config -count -severity {CRITICAL WARNING}]
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: set_property STEPS.POST_PLACE_POWER_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: set_property STEPS.WRITE_BITSTREAM.ARGS.BIN_FILE true [get_runs impl_1]
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: set_property STEPS.PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: set_property STEPS.POST_ROUTE_PHYS_OPT_DESIGN.IS_ENABLED true [get_runs impl_1]
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: launch_runs impl_1 -jobs 4
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: wait_on_run impl_1
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: open_run impl_1
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: set impl_critical_count [get_msg_config -count -severity {CRITICAL WARNING}]
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: launch_runs impl_1 -to_step write_bitstream
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: wait_on_run impl_1
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: cd [get_property DIRECTORY [current_project]]
+[2024-08-23 21:39:06,395][toolflow.py:2531][gen_yellowblock_tcl_cmds][INFO][MainThread]: Extracting yellow block tcl commands from peripherals
+[2024-08-23 21:39:06,395][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: write_hw_platform -fixed -include_bit -force -file $xsa_file
+[2024-08-23 21:39:06,396][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: import_files {/home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_slave_logic.vhd /home/wei/scilab_demo/mlib_devel/jasper_library/hdl_sources/axi4_lite/axi4lite_pkg.vhd}
+[2024-08-23 21:39:06,396][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: update_compile_order -fileset sources_1
+[2024-08-23 21:39:06,396][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: save_bd_design
+[2024-08-23 21:39:06,396][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: validate_bd_design
+[2024-08-23 21:39:06,396][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: generate_target all [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/rfsoc4x2_bd/rfsoc4x2_bd.bd]
+[2024-08-23 21:39:06,396][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: make_wrapper -files [get_files [get_property directory [current_project]]/myproj.srcs/sources_1/bd/rfsoc4x2_bd/rfsoc4x2_bd.bd] -top
+[2024-08-23 21:39:06,396][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: add_files -norecurse [get_property directory [current_project]]/myproj.srcs/sources_1/bd/rfsoc4x2_bd/hdl/rfsoc4x2_bd_wrapper.vhd
+[2024-08-23 21:39:06,396][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: update_compile_order -fileset sources_1
+[2024-08-23 21:39:06,396][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: check_timing impl_1
+[2024-08-23 21:39:06,396][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: check_zero_critical $impl_critical_count implementation
+[2024-08-23 21:39:06,396][toolflow.py:1928][add_tcl_cmd][DEBUG][MainThread]: Adding tcl command: check_zero_critical $synth_critical_count synthesis
