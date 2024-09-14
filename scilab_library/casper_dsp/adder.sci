@@ -30,7 +30,7 @@ function [x, y, typ]= adder(job, arg1, arg2)
       model.sim = list('adder',4);
       model.blocktype = 'c';
       // Type : column vector of real numbers.
-      model.rpar = [0, 4, 5, 6, 7, 8, 9, 10, 11];
+      model.rpar = [0, 3, 4, 5];
       // TODO: do we have to set in2??
       model.in = [1, 2];
       model.in2 = [];

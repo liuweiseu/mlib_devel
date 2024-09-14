@@ -44,5 +44,14 @@
         "arith_types": 2,
         "sim_port": "on",
         "show_format": "on"
+    },
+    "adder":
+    {
+        "name": "adder",
+        "fullpath": "",
+        "tag": "dsp:adder",
+        "a_bitwidth": 32,
+        "b_bitwidth": 32,
+        "c_bitwidth": 32
     }
 }
