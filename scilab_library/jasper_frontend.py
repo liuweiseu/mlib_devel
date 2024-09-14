@@ -35,7 +35,7 @@ def write_blkinfo_to_dict(blk_info, blk_tmp):
     return template
 
 # dump the jasper_dict to jasper.per
-def dump_jasper_per(jasper_per, fn = 'jasper.per'):
+def dump_jasper(jasper_per, fn = 'jasper.per'):
     f = open(fn, 'w+')
     yaml.dump(jasper_per, f, sort_keys=False)
     f.close()
@@ -46,7 +46,7 @@ scilab_library_path = os.getenv('MLIB_DEVEL_PATH')+ '/scilab_library'
 with open('jasper.json') as f:
     blkinfo = json.load(f)
 # after reading the file, remove it
-os.remove('jasper.json')
+# os.remove('jasper.json')
 # open the block_info_template.json file
 with open('%s/block_info_template.json'%(scilab_library_path)) as f:
     blkinfo_template = json.load(f)
@@ -73,13 +73,17 @@ for k, v in blkinfo.items():
 yellow_blocks = {}
 for blk in blk_objs:
     tag = blk['tag']
-    # populate yellow block
-    key = proj_name + '/' + blk['val'][0][0]
-    yellow_blocks[key] = write_blkinfo_to_dict(blk, blkinfo_template[tag])
-    yellow_blocks[key]['fullpath'] = key
+    # check if the block in the blockinfo starts with xps
+    if blkinfo_template[tag]['tag'].startswith('xps'):
+        # populate yellow block
+        key = proj_name + '/' + blk['val'][0][0]
+        yellow_blocks[key] = write_blkinfo_to_dict(blk, blkinfo_template[tag])
+        yellow_blocks[key]['fullpath'] = key
 
 # generate user_module dict
 user_modules = {}
+# TODO: as we are adding dsp blocks in the design, we need to re-write code for the user_module
+'''
 user_module_dict = gen_ip(blkinfo)
 for k,v in user_module_dict.items():
     user_modules[k] = {}
@@ -94,14 +98,32 @@ for k,v in user_module_dict.items():
     # populate sources
     user_modules[k]['sources'] = []
     user_modules[k]['sources'].append('%s/%s.v'%(filepath, k))
-
+'''
 # generate jasper.per
 jasper_per = {}
 jasper_per['yellow_blocks'] = yellow_blocks
 jasper_per['user_modules'] = user_modules
 #jasper_per_str = json.dumps(jasper_per, indent=2)
 #print(jasper_per_str)
-dump_jasper_per(jasper_per, fn='%s/jasper.per'%(filepath)) 
+dump_jasper(jasper_per, fn='%s/jasper.per'%(filepath)) 
+
+# now, we need to generate jasper.dsp, which contains the dsp block info
+dsp_blocks = {}
+for blk in blk_objs:
+    tag = blk['tag']
+    # check if the block in the blockinfo starts with dsp or xps:xsg
+    # we need xps:xsg as it contains the platform info
+    if blkinfo_template[tag]['tag'].startswith('dsp') or blkinfo_template[tag]['tag'] == 'xps:xsg':
+        # populate dsp block
+        key = proj_name + '/' + blk['val'][0][0]
+        dsp_blocks[key] = write_blkinfo_to_dict(blk, blkinfo_template[tag])
+        dsp_blocks[key]['fullpath'] = key
+# generate jasper.dsp
+jasper_dsp = {}
+jasper_dsp['dsp_blocks'] = dsp_blocks
+#jasper_dsp_str = json.dumps(jasper_dsp, indent=2)
+#print(jasper_dsp_str)
+dump_jasper(jasper_dsp, fn='%s/jasper.dsp'%(filepath))
 
 # generate design_info.tab
 gen_design_info(yellow_blocks, proj_name, fn='%s/design_info.tab'%(filepath))

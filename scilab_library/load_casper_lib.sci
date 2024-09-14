@@ -12,9 +12,9 @@ exec('scilab_library/jasper_frontend.sci');
 disp('------Loading CASPER XPS...------');
 
 // load the xps blocks
-exec('scilab_library/casper_xps/rfsoc4x2.sci');
-exec('scilab_library/casper_xps/gpio.sci');
-exec('scilab_library/casper_xps/swreg.sci');
+exec('scilab_library/scilab_blocks/casper_xps/rfsoc4x2.sci');
+exec('scilab_library/scilab_blocks/casper_xps/gpio.sci');
+exec('scilab_library/scilab_blocks/casper_xps/swreg.sci');
 
 // create the blocks
 rfsoc4x2_inst = rfsoc4x2("define");
@@ -23,7 +23,7 @@ swreg_out_inst = swreg("define");
 
 // add the blocks to the palette
 cur_dir = pwd();
-xps_fig_dir = cur_dir + '/scilab_library/casper_xps/figures/';
+xps_fig_dir = cur_dir + '/scilab_library/scilab_blocks/casper_xps/figures/';
 pal = xcosPal("CASPER XPS");
 pal = xcosPalAddBlock(pal, rfsoc4x2_inst, xps_fig_dir + 'rfsoc4x2.png', xps_fig_dir + 'rfsoc4x2.png');
 pal = xcosPalAddBlock(pal, gpio_inst, xps_fig_dir + 'gpio.png', xps_fig_dir + 'gpio.png');
@@ -37,12 +37,12 @@ disp('------ CASPER XPS loaded --------');
 disp('------Loading CASPER DSP...------');
 
 // load the xps blocks
-exec('scilab_library/casper_dsp/adder.sci');
+exec('scilab_library/scilab_blocks/casper_dsp/adder.sci');
 
 // create the blocks
 adder_inst = adder("define");
 cur_dir = pwd();
-dsp_fig_dir = cur_dir + '/scilab_library/casper_dsp/figures/';
+dsp_fig_dir = cur_dir + '/scilab_library/scilab_blocks/casper_dsp/figures/';
 pal = xcosPal("CASPER DSP");
 pal = xcosPalAddBlock(pal, adder_inst, dsp_fig_dir + 'adder.png', dsp_fig_dir + 'adder.png');
 xcosPalAdd(pal);
