@@ -3,6 +3,7 @@ sys.path.append('../jasper_library')
 
 import logging
 import yaml
+import pickle
 from toolflow import Toolflow
 import dsp_blocks.dsp_block as dsp_block
 import verilog
@@ -26,12 +27,17 @@ class DSPflow(Toolflow):
         self.topfile = None
         self.top = None
         self.dsp_objs = None
+        # In dspflow, we don't have peripherals.
+        # The reason we have this attribute is that the yellow_block class uses it.
+        self.periph_objs = None
         self.dsp_modules = None
         self.constraints = None
         self.sources = []
         self.ips = []
         self.tcl_sources = []
         self.const_files = []
+        # by default, we don't have user modules.
+        self.user_modules = {}
         
     
     def _parse_dsp_file(self):
@@ -78,6 +84,9 @@ class DSPflow(Toolflow):
             self.dsp_objs.append(dsp_block.DSPBlock.make_block(
                 self.dsp_modules[pk], self.plat))
         self._expand_children(self.dsp_objs)
+        # some methods in yellow_block class use the peripherals attribute,
+        # so we have to set it to dsp_modules
+        self.periph_objs = self.dsp_objs
     
     def build_top(self):
         """
@@ -100,3 +109,39 @@ class DSPflow(Toolflow):
             self.top = verilog.VerilogModule(name='top', topfile=self.topfile)
         else:
             self.top = verilog.VerilogModule(name='top')
+    
+    def _instantiate_periphs(self):
+        """
+        Calls each dsp block's modify_top method against the class'
+        top VerilogModule instance.
+        We don't have axi modules in the dsp blocks, so the axi related code is removed here.
+        """
+        self.logger.info('top: %s' % self.topfile)
+        for obj in self.periph_objs:
+            self.logger.debug('modifying top for obj %s' % obj.name)
+            # self.top.set_cur_blk(obj.fullname)
+            if '/' in obj.fullpath:
+                obj.fullpath = obj.fullpath.partition('/')[2]
+            self.top.set_cur_blk('%s: %s'%(obj.tag.split(':')[1], obj.fullpath))
+            obj.modify_top(self.top)
+            self.sources += obj.sources
+            self.ips += obj.ips
+    
+    def regenerate_top(self):
+        """
+        Generate the verilog for the modified top
+        module. This involves computing the wishbone
+        interconnect / addressing and generating new
+        code for yellow block instances.
+        """
+        # Write top module file
+        self.top.gen_module_file(filename=self.compile_dir+'/top.v')
+        # Write any submodule files required for the compile. This is probably
+        # only the hierarchical WB arbiter, or nothing at all
+        for key, val in self.top.generated_sub_modules.items():
+            self.logger.info("Writing sub module file %s.v" % key)
+            with open(self.compile_dir+'/%s.v'%key, 'w') as fh:
+                fh.write(val)
+                self.sources.append(fh.name)
+        self.logger.info("Dumping pickle of top-level Verilog module")
+        pickle.dump(self.top, open('%s/top.pickle' % self.compile_dir,'wb'))

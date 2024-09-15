@@ -9,15 +9,12 @@ class adder(DSPBlock):
     def modify_top(self,top):
         # create a verilog module
         module = 'adder'
-        inst = VerilogModule(entity=module, name=self.fullname)
+        inst = top.get_instance(entity=module, name=self.fullname)
         # TODO: add parameters
         # add ports
-        inst.add_port('clk', 'clk')
-        inst.add_port('a', self.fullname+'_a')
-        inst.add_port('b', self.fullname+'_b')
-        inst.add_port('sum', self.fullname+'_sum')
-        # Add the adder module to the top
-        top.add_signal(self.fullname+'_a', 32)
-        top.add_signal(self.fullname+'_b', 32)
-        top.add_signal(self.fullname+'_sum', 32)
+        inst.add_port('clk', 'clk', parent_port=True, dir='in')
+        inst.add_port('a', self.fullname+'_a', parent_port = True, width=32, dir='in')
+        inst.add_port('b', self.fullname+'_b', parent_port = True, width=32, dir='in')
+        inst.add_port('sum', self.fullname+'_sum', parent_port = True, width=32, dir='out')
+
         
