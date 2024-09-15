@@ -3,9 +3,11 @@
 import os
 import sys
 sys.path.append('../jasper_library')
+sys.path.append('../jasper_library/yellow_blocks')
+
 import logging
 from argparse import ArgumentParser
-import toolflow
+import dspflow
 
 if __name__ == '__main__':
     parser = ArgumentParser(prog=os.path.basename(__file__))
@@ -35,3 +37,6 @@ if __name__ == '__main__':
     handler.setFormatter(logformat)
     logger.addHandler(handler)
     logger.info('Starting generating DSP IP')
+
+    tf = dspflow.DSPflow(opts.jobs)
+    tf.gen_dsp_objs()

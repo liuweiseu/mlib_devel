@@ -1,3 +1,6 @@
+import os
+mlib_devel_path = os.getenv('MLIB_DEVEL_PATH')
+
 import sys
 # add the jasper_library to the path
 sys.path.append('../../jasper_library')
@@ -13,14 +16,14 @@ class DSPBlock(YellowBlock):
     # 2. the modify method 
     # 3. make_block method, as the tag for dsp blocks is different
     def initialize(self):
-        print('in DSPBlock initialize')
+        pass
     
     def modify(self, design, top_module):
-        print('in DSPBlock modify')
+        pass
     
     @staticmethod
     def make_block(blk, platform, hdl_root=None):
-        if blk['tag'].startswith('xps:'):
+        if blk['tag'].startswith('dsp:'):
             # This seems a little dubious
             # Import the yellow block from the same package
             # that this YellowBlock class lives
