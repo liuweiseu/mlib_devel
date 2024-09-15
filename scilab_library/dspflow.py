@@ -5,6 +5,7 @@ import logging
 import yaml
 from toolflow import Toolflow
 import dsp_blocks.dsp_block as dsp_block
+import verilog
 
 class DSPflow(Toolflow):
     """
@@ -31,6 +32,7 @@ class DSPflow(Toolflow):
         self.ips = []
         self.tcl_sources = []
         self.const_files = []
+        
     
     def _parse_dsp_file(self):
         """
@@ -76,3 +78,25 @@ class DSPflow(Toolflow):
             self.dsp_objs.append(dsp_block.DSPBlock.make_block(
                 self.dsp_modules[pk], self.plat))
         self._expand_children(self.dsp_objs)
+    
+    def build_top(self):
+        """
+        This method is almost the same as the one in the Toolflow class.
+        The difference is the two "try...except..." are removed.
+        Not sure why the "try...except..." are used in the Toolflow class.
+        """
+        self.topfile = self.compile_dir+'/top.v'
+        # delete top.v file if it exists, otherwise synthesis will fail
+        if os.path.exists(self.topfile):
+            os.remove(self.topfile)
+        # os.system('cp %s %s'%(basetopfile, self.topfile))
+        self.sources.append(self.topfile)
+        for source in self.plat.sources:
+            self.sources.append(os.getenv('HDL_ROOT')+'/'+source)
+        for source in self.plat.consts:
+            self.const_files.append(os.getenv('HDL_ROOT') + '/%s/%s' % (
+                self.plat.name, source))
+        if os.path.exists(self.topfile):
+            self.top = verilog.VerilogModule(name='top', topfile=self.topfile)
+        else:
+            self.top = verilog.VerilogModule(name='top')
