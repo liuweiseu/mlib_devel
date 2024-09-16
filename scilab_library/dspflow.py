@@ -5,8 +5,10 @@ import logging
 import yaml
 import pickle
 from toolflow import Toolflow
+from toolflow import VivadoBackend
 import dsp_blocks.dsp_block as dsp_block
 import verilog
+import castro
 
 class DSPflow(Toolflow):
     """
@@ -38,6 +40,7 @@ class DSPflow(Toolflow):
         self.const_files = []
         # by default, we don't have user modules.
         self.user_modules = {}
+        self.template_project = None
         
     
     def _parse_dsp_file(self):
@@ -145,3 +148,81 @@ class DSPflow(Toolflow):
                 self.sources.append(fh.name)
         self.logger.info("Dumping pickle of top-level Verilog module")
         pickle.dump(self.top, open('%s/top.pickle' % self.compile_dir,'wb'))
+
+    def dump_castro(self, filename):
+        """
+        Build a 'standard' Castro object, which is the
+        interface between the toolflow and the backends.
+        """
+        """
+        In DSPflow, we don't have constraints, so the constraints code is removed currently.
+        """
+        c = castro.Castro(self.top.name, self.sources, self.ips, template_project=self.template_project)
+        c.synthesis = castro.Synthesis()
+        c.synthesis.platform_name = self.plat.name
+        c.synthesis.fpga_manufacturer = self.plat.manufacturer
+        c.synthesis.fpga_model = self.plat.fpga
+        c.synthesis.pin_map = self.plat._pins
+        with open(filename, 'w') as fh:
+            fh.write(yaml.dump(c))
+
+class VivadoDSPBackend(VivadoBackend):
+    """
+    This class is used for generating a vivado project for DSP blocks.
+    An IP core will be created from this project, which only contains all of the dsp blocks.
+    """
+
+    def initialize(self):
+        """
+        Simplify the initialize method.
+        """
+        plat = self.plat
+
+        if plat.manufacturer.lower() != self.manufacturer.lower():
+            self.logger.error('Trying to compile a %s FPGA using %s %s' % (
+                plat.manufacturer, self.manufacturer, self.name))
+
+        self.add_tcl_cmd('puts "Starting tcl script"', stage='init')
+        # Create Vivado Project in project mode only
+        if plat.project_mode:
+            # Create a project or use a template if provided
+            self.add_tcl_cmd('cd %s' % self.compile_dir, stage='init')
+            if self.template_project is None:
+                self.add_tcl_cmd('create_project -f %s %s -part %s' % (
+                    self.project_name, self.project_name,
+                    plat.fpga), stage='init')
+            else:
+                self.add_tcl_cmd('exec cp %s .' % (self.template_project), stage='init')
+                template_basename = os.path.basename(self.template_project)
+                if template_basename.endswith('.zip'):
+                    self.add_tcl_cmd('exec unzip %s' % template_basename, stage='init')
+                    self.add_tcl_cmd('cd myproj', stage='init')
+                    self.add_tcl_cmd('open_project myproj', stage='init')
+            if hasattr(plat, 'board'):
+                self.add_tcl_cmd('set_property board_part %s [current_project]' % plat.board)
+        # Create the part in non-project mode (project runs in memory only)
+        else:
+            if self.template_project is not None:
+                self.logger.error("Can't build from a template project in non-project mode!")
+                raise RuntimeError
+            self.add_tcl_cmd('file mkdir %s/%s' % (self.compile_dir,
+                                                   self.project_name))
+            self.add_tcl_cmd('set_part %s' % plat.fpga)
+        # Set the project to default to vhdl    
+        self.add_tcl_cmd('set_property target_language VHDL [current_project]', stage='init')
+
+    def add_compile_cmds(self, cores=8, plat=None, synth_strat=None, impl_strat=None, threads='multi'):
+        """
+        Add the tcl commands for compiling the design, and then launch vivado in batch mode.
+        As we only need to generate an IP core, we overwrite this method.
+        """
+        tcl = self.add_tcl_cmd
+        # Project Mode is enabled
+        if plat.project_mode:
+            # For generating an IP core, we only need to run synthesis
+            # Pre-Synthesis Commands
+            self.add_tcl_cmd('set_property top top [current_fileset]', stage='pre_synth')
+            self.add_tcl_cmd('update_compile_order -fileset sources_1', stage='pre_synth')
+            self.add_tcl_cmd('ipx::package_project -root_dir %s/%s/%s.srcs -vendor user.org -library user -taxonomy /UserIP'%(self.compile_dir, self.project_name, self.project_name), stage='pre_synth')
+        else:
+            pass
