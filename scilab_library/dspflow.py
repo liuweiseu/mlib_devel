@@ -41,6 +41,7 @@ class DSPflow(Toolflow):
         # by default, we don't have user modules.
         self.user_modules = {}
         self.template_project = None
+        self.top_module_name = self.compile_dir.split('/')[-1]
         
     
     def _parse_dsp_file(self):
@@ -97,7 +98,8 @@ class DSPflow(Toolflow):
         The difference is the two "try...except..." are removed.
         Not sure why the "try...except..." are used in the Toolflow class.
         """
-        self.topfile = self.compile_dir+'/top.v'
+        #self.topfile = self.compile_dir+'/top.v'
+        self.topfile = self.compile_dir+'/%s_ip.v'%(self.top_module_name)
         # delete top.v file if it exists, otherwise synthesis will fail
         if os.path.exists(self.topfile):
             os.remove(self.topfile)
@@ -109,9 +111,9 @@ class DSPflow(Toolflow):
             self.const_files.append(os.getenv('HDL_ROOT') + '/%s/%s' % (
                 self.plat.name, source))
         if os.path.exists(self.topfile):
-            self.top = verilog.VerilogModule(name='top', topfile=self.topfile)
+            self.top = verilog.VerilogModule(name='%s_ip'%(self.top_module_name), topfile=self.topfile)
         else:
-            self.top = verilog.VerilogModule(name='top')
+            self.top = verilog.VerilogModule(name='%s_ip'%(self.top_module_name))
     
     def _instantiate_periphs(self):
         """
@@ -138,7 +140,8 @@ class DSPflow(Toolflow):
         code for yellow block instances.
         """
         # Write top module file
-        self.top.gen_module_file(filename=self.compile_dir+'/top.v')
+        #self.top.gen_module_file(filename=self.compile_dir+'/top.v')
+        self.top.gen_module_file(filename=self.compile_dir+'/%s_ip.v'%(self.top_module_name))
         # Write any submodule files required for the compile. This is probably
         # only the hierarchical WB arbiter, or nothing at all
         for key, val in self.top.generated_sub_modules.items():
@@ -147,7 +150,7 @@ class DSPflow(Toolflow):
                 fh.write(val)
                 self.sources.append(fh.name)
         self.logger.info("Dumping pickle of top-level Verilog module")
-        pickle.dump(self.top, open('%s/top.pickle' % self.compile_dir,'wb'))
+        pickle.dump(self.top, open('%s/%s_ip.pickle' %(self.compile_dir, self.top_module_name),'wb'))
 
     def dump_castro(self, filename):
         """
@@ -176,6 +179,8 @@ class VivadoDSPBackend(VivadoBackend):
         """
         Simplify the initialize method.
         """
+        # get the module name
+        self.top_module_name = self.compile_dir.split('/')[-1]
         plat = self.plat
 
         if plat.manufacturer.lower() != self.manufacturer.lower():
@@ -221,7 +226,7 @@ class VivadoDSPBackend(VivadoBackend):
         if plat.project_mode:
             # For generating an IP core, we only need to run synthesis
             # Pre-Synthesis Commands
-            self.add_tcl_cmd('set_property top top [current_fileset]', stage='pre_synth')
+            self.add_tcl_cmd('set_property top %s [current_fileset]'%(self.top_module_name), stage='pre_synth')
             self.add_tcl_cmd('update_compile_order -fileset sources_1', stage='pre_synth')
             self.add_tcl_cmd('ipx::package_project -root_dir %s/%s/%s.srcs -vendor user.org -library user -taxonomy /UserIP'%(self.compile_dir, self.project_name, self.project_name), stage='pre_synth')
         else:
