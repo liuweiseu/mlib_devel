@@ -38,5 +38,24 @@ if __name__ == '__main__':
     logger.addHandler(handler)
     logger.info('Starting generating DSP IP')
 
-    tf = dspflow.DSPflow(opts.jobs)
+    tf = dspflow.DSPflow(builddir, opts.jobs)
     tf.gen_dsp_objs()
+    tf.build_top()
+    tf.generate_hdl()
+    tf.dump_castro(tf.compile_dir+'/castro.yml')
+    # use Non-project mode to genenrate the vivado project
+    # TODO: Do we need project mode to generate this project?
+    if opts.be == 'vivado':
+        platform = tf.plat
+        platform.project_mode = True
+        backend = dspflow.VivadoDSPBackend(plat=platform,
+                                                compile_dir=tf.compile_dir,
+                                                periph_objs=tf.periph_objs)
+        backend.import_from_castro(backend.compile_dir + '/castro.yml')
+        # set a new project name, so that it's different from the original project(myproj)
+        backend.project_name = 'dspproj'
+        backend.initialize()
+        backend.compile(cores=opts.cores, plat=platform)
+    else:
+        # TODO: Add support for other backends
+        pass
