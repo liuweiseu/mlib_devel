@@ -99,6 +99,8 @@ function [x, y, typ]= gpio(job, arg1, arg2)
       // Type : column vector of strings.
       exprs = ['gpio'; 'custom'; '0'; 'out'; 'boolean'; '1'; '0'; '0'; '1'];
       gr_i = [];
+      // set block tag
+      model.label = "xps";
       x=standard_define([4 2],model,exprs,gr_i)
       disp('gpio block loaded...')
   end

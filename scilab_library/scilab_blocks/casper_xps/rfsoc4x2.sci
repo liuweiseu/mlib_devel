@@ -62,6 +62,8 @@ function [x, y, typ]= rfsoc4x2(job, arg1, arg2)
       // Type : column vector of strings.
       exprs = ['RFSoC4x2';'rfsoc4x2:xczu48dr'; 'adc_clk'; '245.76'; '122.88'; '1'];
       gr_i = [];
+      // set block tag
+      model.label = "xps";
       x=standard_define([4 4],model,exprs,gr_i)
       disp('rfsoc4x2 block loaded...')
   end

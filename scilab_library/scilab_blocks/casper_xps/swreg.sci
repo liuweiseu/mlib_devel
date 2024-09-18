@@ -80,6 +80,8 @@
       // Type : column vector of strings.
       exprs = ['swreg'; 'From Processor';'0'; '0'; '1'; 'reg'; '1'; '0'; '2'];
       gr_i = [];
+      //set the block tag
+      model.label = "xps";
       x=standard_define([4 2],model,exprs,gr_i)
       disp('swreg block loaded...')
   end

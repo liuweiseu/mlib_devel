@@ -56,6 +56,10 @@ if __name__ == '__main__':
         backend.project_name = 'dspproj'
         backend.initialize()
         backend.compile(cores=opts.cores, plat=platform)
+        # copy gogogo.tcl to dspproj.tcl, as  gogogo.tcl will be overwritten.
+        os.system('cp %s/gogogo.tcl %s/dspproj.tcl' % (backend.compile_dir, backend.compile_dir))
+        # let's delete gogogo.tcl, as it's not needed anymore
+        os.system('rm %s/gogogo.tcl' % backend.compile_dir)
     else:
         # TODO: Add support for other backends
         pass

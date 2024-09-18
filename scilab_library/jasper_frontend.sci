@@ -6,8 +6,7 @@ function [build_cmd] = jasper_frontend(fn)
     // chdir(name);
     // disp some info
     disp('Starting jasper for model: '+ name);
-    builddir = pwd();
-    disp('Build directory: '+ builddir);
+
     // generate a fake modelpath for exec_flow.py
     modelpath = fn;
 
@@ -35,8 +34,9 @@ function [build_cmd] = jasper_frontend(fn)
             // we need graphics.exprs
             val = obj.graphics.exprs;
             id = obj.model.rpar;
+            type = obj.model.label;
             // then we need to create a struct for the info
-            st('blk.'+string(blkid))= struct('tag', obj.gui, 'blkid', i, 'id', id, 'val', val);
+            st('blk.'+string(blkid))= struct('type', type, 'tag', obj.gui, 'blkid', i, 'id', id, 'val', val);
             blkid = blkid + 1;
         end
         // if it's a link obj, get the link info
