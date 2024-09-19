@@ -27,7 +27,7 @@ function [build_cmd] = jasper_frontend(fn)
             // if it's a split_f block, we don't need to get the info
             if obj.gui == 'SPLIT_f' then
                 // this is a special block, we don't need to get the info
-                st('blk.'+string(blkid))= struct('tag', 'scilab-blk:'+obj.gui, 'blkid', i);
+                st('blk.'+string(blkid))= struct('type', 'scilab-blk', 'tag', 'scilab-blk:'+obj.gui, 'blkid', i);
                 blkid = blkid + 1;
                 continue;
             end
