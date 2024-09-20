@@ -148,7 +148,7 @@ def gen_link_info(proj_name, blk_objs, link_objs, link_type = 'xps'):
                 raise ValueError('Both blk_from and blk_to are SPLIT_f blk')
     elif link_type == 'xps_dsp':
         # if the link type is xps_dsp, the ports are io ports.
-        # So we just need to throw these blocks out, and label them as in blocks or out blocks.
+        # So we just need to stord the info in a dict, and throw the dict out.
         for link in link_objs:
             blkid_from = link['from'][0]
             blkid_to = link['to'][0]
@@ -156,7 +156,26 @@ def gen_link_info(proj_name, blk_objs, link_objs, link_type = 'xps'):
             blk_from = find_blk(blk_objs, blkid_from)
             # get the blk with blkid_to
             blk_to = find_blk(blk_objs, blkid_to)
-            
+            if blk_from['type'] == 'dsp':
+                # to the dsp proj, this is a output port
+                # get the uniqe name of the blk
+                blk_name = blk_from['val'][0][0]
+                if blk_name not in link_info:
+                    link_info[blk_name] = {}
+                if 'out' not in link_info[blk_name]:
+                    link_info[blk_name]['out'] = []
+                # store the port number in link_info[blk_name]['out']
+                link_info[blk_name]['out'].append(link['from'][1])
+            if blk_to['type'] == 'dsp':
+                # to the dsp proj, this is a input port
+                # get the uniqe name of the blk
+                blk_name = blk_to['val'][0][0]
+                if blk_name not in link_info:
+                    link_info[blk_name] = {}
+                if 'in' not in link_info[blk_name]:
+                    link_info[blk_name]['in'] = []
+                # store the port number in link_info[blk_name]['in']
+                link_info[blk_name]['in'].append(link['to'][1])
     return link_info
 
 # generate the port info dict
@@ -215,12 +234,16 @@ def gen_port_info(blkinfo):
         else:
             # TODO: this could happen, as we may have scilab-blk: SPLIT_f in the design.
             # We need to handle this case.
-            raise ValueError('The link type is not xps or dsp')
-        
-    
+            raise ValueError('The link type is not xps or dsp') 
+    xps_link_info = {}
+    xpk_link_info = gen_link_info(proj_name, blk_objs, xps_link_objs, 'xps')
+    dsp_link_info = {}
+    dsp_link_info = gen_link_info(proj_name, blk_objs, dsp_link_objs, 'dsp')
+    xps_dsp_link_info = {}
+    xps_dsp_link_info = gen_link_info(proj_name, blk_objs, xps_dsp_link_objs, 'xps_dsp')
     #print(module_info)
     # generate the user module based on the module_info
-    for k, v in module_info.items():
-        gen_user_module(k, v['in'], v['out'], v['ibits'][0], filepath)
+    # for k, v in module_info.items():
+    #     gen_user_module(k, v['in'], v['out'], v['ibits'][0], filepath)
     # return the module_info for generating jasper.per
-    return module_info
+    return xps_link_info, dsp_link_info, xps_dsp_link_info

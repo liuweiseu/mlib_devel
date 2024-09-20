@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 from utils.design_info import gen_design_info
 from utils.git_info import gen_git_info
-from utils.gen_ip import gen_ip
+from mlib_devel.scilab_library.utils.gen_link_info import gen_link_info
 
 # write the blkinfo to the dict
 def write_blkinfo_to_dict(blk_info, blk_tmp):
