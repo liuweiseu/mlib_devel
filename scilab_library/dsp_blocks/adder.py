@@ -13,8 +13,8 @@ class adder(DSPBlock):
         # TODO: add parameters
         # add ports
         inst.add_port('clk', 'clk', parent_port=True, dir='in')
-        inst.add_port('a', self.fullname+'_a', parent_port = True, width=32, dir='in')
-        inst.add_port('b', self.fullname+'_b', parent_port = True, width=32, dir='in')
-        inst.add_port('sum', self.fullname+'_sum', parent_port = True, width=32, dir='out')
+        inst.add_port('in0', self.fullname+'_in0', parent_port = True, width=32, dir='in')
+        inst.add_port('in1', self.fullname+'_in1', parent_port = True, width=32, dir='in')
+        inst.add_port('out', self.fullname+'_out0', parent_port = True, width=32, dir='out')
 
         

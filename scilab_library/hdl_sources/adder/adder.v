@@ -1,12 +1,12 @@
 module adder(
     input clk,
-    input [31:0] a,
-    input [31:0] b,
-    output reg [31:0] sum
+    input [31:0] in0,
+    input [31:0] in1,
+    output reg [31:0] out0
 );
 
 always @(posedge clk) begin
-    sum <= a + b;
+    out0 <= in0 + in1;
 end
 
 endmodule;

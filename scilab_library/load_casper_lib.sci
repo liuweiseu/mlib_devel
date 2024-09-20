@@ -3,6 +3,10 @@ loadXcosLibs;
 // load the scilab functions
 exec('scilab_library/jasper.sci');
 exec('scilab_library/jasper_frontend.sci');
+exec('scilab_library/scilab_blocks/utils/gen_port_name.sci');
+exec('scilab_library/scilab_blocks/utils/gen_port_suffix.sci');
+exec('scilab_library/scilab_blocks/utils/get_port_width.sci');
+exec('scilab_library/scilab_blocks/utils/search_for_src_blk.sci');
 
 // TODO: load the xps and dsp blocks automatically
 // all of the blocks in the scilab_library/casper_xps and 
