@@ -59,15 +59,12 @@ filepath = blkfn.split('.')[0]
 # get the scilab blk, blk objs and link objs from the jaser.json file
 scilab_blk_objs = []
 blk_objs = []
-link_objs = []
+link_info = blkinfo['link_info']
 for k, v in blkinfo.items():
     if k.startswith('blk'):
-        if v['tag'].startswith('scilab-blk'):
-            scilab_blk_objs.append(v)
-        else:
-            blk_objs.append(v)
+        blk_objs.append(v)
     if k.startswith('link'):
-        link_objs.append(v)
+        link_info.append(v)
 
 # genenrate yellow blocks dict
 yellow_blocks = {}

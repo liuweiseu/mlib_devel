@@ -14,13 +14,14 @@ function [port_info] = gen_port_info(proj_name, blk_objs, link_obj)
         dst_blk_id = -1;
         dst_blk = 'Null';
         dst_port_width = -1;
+        dst_blk_name = 'Null';
     else
         // get the blk name
         // it's always in the first exprs
-        blk_name = obj_to.graphics.exprs(1);
+        dst_blk_name = obj_to.graphics.exprs(1);
         // get the suffix
         suffix = gen_port_suffix(dst_blk_tag, dst_port_id, dst_port_dir);
-        dst_port_name = proj_name + '_' + blk_name + '_' + suffix;
+        dst_port_name = proj_name + '_' + dst_blk_name + '_' + suffix;
         dst_port_id = link_obj.to(2);
         dst_blk_id = obj_to_id;
         dst_blk = obj_to;
@@ -37,29 +38,33 @@ function [port_info] = gen_port_info(proj_name, blk_objs, link_obj)
         // the SPLIT_f block is a split block, which is annoying...
         // we need to check where the split block is connected from, and then do a direct connect
         [src_blk_id, src_blk, src_port_id, src_port_dir] = search_for_src_blk(blk_objs, obj_from_id);
-        blk_name = src_blk.graphics.exprs(1);
+        src_blk_name = src_blk.graphics.exprs(1);
         src_blk_tag = src_blk.gui;
         suffix = gen_port_suffix(src_blk_tag, src_port_id, src_port_dir);
-        src_port_name = proj_name + '_' + blk_name + '_' + suffix;
+        src_port_name = proj_name + '_' + src_blk_name + '_' + suffix;
         src_blk = blk_objs(src_blk_id);
         src_port_width = get_port_width(src_blk, src_port_id, src_port_dir);
     else
         // get the blk name
         // it's always in the first exprs
-        blk_name = obj_from.graphics.exprs(1);
+        src_blk_name = obj_from.graphics.exprs(1);
         // get the suffix
         suffix = gen_port_suffix(src_blk_tag, src_port_id, src_port_dir);
-        src_port_name = proj_name + '_' + blk_name + '_' + suffix;
+        src_port_name = proj_name + '_' + src_blk_name + '_' + suffix;
         src_port_id = link_obj.from(2);
         src_blk_id = obj_from_id;
         src_blk = obj_from;
         src_port_width = get_port_width(src_blk, src_port_id, src_port_dir);
     end
     port_info = struct();
+    port_info('src_blk_tag') = src_blk_tag;
+    port_info('src_blk_name') = src_blk_name;
     port_info('src_blk_id') = src_blk_id;
     port_info('src_port_name') = src_port_name;
     port_info('src_port_id') = src_port_id;
     port_info('src_port_width') = src_port_width;
+    port_info('dst_blk_tag') = dst_blk_tag;
+    port_info('dst_blk_name') = dst_blk_name;
     port_info('dst_blk_id') = dst_blk_id;
     port_info('dst_port_name') = dst_port_name;
     port_info('dst_port_id') = dst_port_id;
