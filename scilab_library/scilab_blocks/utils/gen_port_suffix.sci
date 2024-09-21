@@ -17,9 +17,9 @@ function [suffix] = gen_port_suffix(blk_tag, port_num, port_dir)
     // 
     elseif blk_tag == 'adder' then
         if port_dir == 'in' then
-            suffix = 'in' + string(port_num);
+            suffix = 'in' + string(port_num-1);
         else
-            suffix = 'out' + string(port_num);
+            suffix = 'out' + string(port_num-1);
         end
     else
         // TODO: add more suffixes

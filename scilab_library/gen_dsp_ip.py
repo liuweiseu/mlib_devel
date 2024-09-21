@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-import os
+import os, json
 import sys
 sys.path.append('../jasper_library')
 sys.path.append('../jasper_library/yellow_blocks')
@@ -22,7 +22,7 @@ if __name__ == '__main__':
                     help="Backend to use. Default: vivado")
     
     opts = parser.parse_args()
-
+    
     # get build directory
     # use user defined directory else use a directory with same name as model
     builddir = opts.builddir or opts.model.split('.')[0]

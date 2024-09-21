@@ -229,5 +229,14 @@ class VivadoDSPBackend(VivadoBackend):
             self.add_tcl_cmd('set_property top %s [current_fileset]'%(self.top_module_name), stage='pre_synth')
             self.add_tcl_cmd('update_compile_order -fileset sources_1', stage='pre_synth')
             self.add_tcl_cmd('ipx::package_project -root_dir %s/%s/%s.srcs -vendor user.org -library user -taxonomy /UserIP'%(self.compile_dir, self.project_name, self.project_name), stage='pre_synth')
+            self.add_tcl_cmd('set_property display_name %s_ip [ipx::current_core]'%(self.top_module_name), stage='pre_synth') 
+            self.add_tcl_cmd('set_property description %s_ip [ipx::current_core]'%(self.top_module_name), stage='pre_synth') 
+            self.add_tcl_cmd('set_property core_revision 2 [ipx::current_core]', stage='pre_synth')
+            self.add_tcl_cmd('ipx::create_xgui_files [ipx::current_core]', stage='pre_synth')
+            self.add_tcl_cmd('ipx::update_checksums [ipx::current_core]', stage='pre_synth')
+            self.add_tcl_cmd('ipx::check_integrity [ipx::current_core]', stage='pre_synth') 
+            self.add_tcl_cmd('ipx::save_core [ipx::current_core]', stage='pre_synth')
+            self.add_tcl_cmd('set_property  ip_repo_paths %s/dspproj/dspproj.srcs [current_project]'%(self.compile_dir), stage='pre_synth')
+            self.add_tcl_cmd('update_ip_catalog', stage='pre_synth')
         else:
             pass

@@ -1,4 +1,4 @@
-import os
+import os, json
 mlib_devel_path = os.getenv('MLIB_DEVEL_PATH')
 
 import sys
@@ -12,9 +12,23 @@ from yellow_block import YellowBlock
 class DSPBlock(YellowBlock):
     # The DSPBlock class is a subclass of the YellowBlock class
     # All of the dsp blocks will override:
-    # 1. the initialize method
-    # 2. the modify method 
-    # 3. make_block method, as the tag for dsp blocks is different
+    # 1. __init__ method
+    # 2. the initialize method
+    # 3. the modify method 
+    # 4. make_block method, as the tag for dsp blocks is different
+    def __init__(self, blk, platform, hdl_root=None, link_info_file = mlib_devel_path+'/jasper.json'):
+        # The __init__ method of the DSPBlock class takes in the following arguments:
+        # 1. self
+        # 2. blk
+        # 3. platform
+        # 4. hdl_root
+        # 5. link_info_file
+        # The __init__ method of the DSPBlock class initializes
+        super(DSPBlock, self).__init__(blk, platform, hdl_root=hdl_root)
+        self.link_info_file = link_info_file
+        # populate the parent ports
+        self._get_parent_ports_info()
+
     def initialize(self):
         pass
     
@@ -40,3 +54,25 @@ class DSPBlock(YellowBlock):
         else:
             # Don't do anything for non-xps blocks.
             pass
+    
+    def _get_parent_ports_info(self):
+        # we need to get the link info here
+        with open(self.link_info_file) as f:
+            blkinfo = json.load(f)
+            self.link_info = blkinfo['link_info']
+        self.parent_ports = {}
+        self.parent_ports['in'] = []
+        self.parent_ports['out'] = []
+        for link in self.link_info:
+            if link['dst_blk_name'] == self.unique_name and link['link_type'] == 'xps_dsp':
+                    self.parent_ports['in'].append(link)
+            if link['src_blk_name'] == self.unique_name and link['link_type'] == 'dsp_xps':
+                    self.parent_ports['out'].append(link)
+    
+    def _populate_parent_ports(self, top):
+        for link in self.parent_ports['in']:
+             top.add_port(link['src_port_name'], width=link['src_port_width'], dir='in')
+             top.assign_signal(link['dst_port_name'], link['src_port_name']) 
+        for link in self.parent_ports['out']:
+            top.add_port(link['dst_port_name'], width=link['dst_port_width'], dir='out')
+            top.assign_signal(link['src_port_name'], link['dst_port_name'])
