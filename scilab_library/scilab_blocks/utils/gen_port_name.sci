@@ -8,7 +8,7 @@ function [port_info] = gen_port_info(proj_name, blk_objs, link_obj)
     dst_port_id = link_obj.to(2);
     dst_port_dir = 'in';
     if dst_blk_tag == 'SPLIT_f' then
-        disp('This is a SPLIT_f block, which will be dealt with later.');
+        //disp('This is a SPLIT_f block, which will be dealt with later.');
         dst_port_name = 'Null';
         dst_port_id = -1;
         dst_blk_id = -1;
@@ -71,7 +71,7 @@ function [port_info] = gen_port_info(proj_name, blk_objs, link_obj)
     port_info('dst_port_width') = dst_port_width;
     // check the link type: xps-xps, dsp-dsp, xps-dsp, dsp-xps
     if dst_blk_id ~= -1 then
-        port_info('link_type') = src_blk.model.label + '-' + dst_blk.model.label;
+        port_info('link_type') = src_blk.model.label + '_' + dst_blk.model.label;
     else
         port_info('link_type') = 'Null';
     end
