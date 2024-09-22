@@ -22,6 +22,9 @@ blkfn = blkinfo['project']['filename']
 model_name = blkfn.split('/')[-1].split('.')[0]
 filepath = blkfn.split('.')[0]
 
+# create the build directory, and log file
+os.system('mkdir -p %s/glues' % filepath)
+
 # get the scilab blk, blk objs and link objs from the jaser.json file
 scilab_blk_objs = []
 blk_objs = []
@@ -53,7 +56,7 @@ xps_blocks['sysgen_ip']['ip_name'] = model_name
 xps_user_modules = {}
 for link in link_info:
     if link['link_type'] == 'xps_xps':
-        gen_glue_module(link, file_dir=filepath)
+        gen_glue_module(link, file_dir=filepath+'/glues')
         module_name = link['link_type'] + '_' + link['src_blk_name'] + '_' + link['dst_blk_name']
         xps_user_modules[module_name] = {}
         xps_user_modules[module_name]['clock'] = 'clk'
@@ -63,7 +66,7 @@ for link in link_info:
         xps_user_modules[module_name]['ports'].append(link['dst_port_name'])
         # add sources
         xps_user_modules[module_name]['sources'] = []
-        xps_user_modules[module_name]['sources'].append('%s/%s.v'%(filepath, module_name))  
+        xps_user_modules[module_name]['sources'].append('%s/glues/%s.v'%(filepath, module_name))  
 # add ip core info to xps_user_modules
 xps_user_modules['%s_ip'%(model_name)] = {}
 xps_user_modules['%s_ip'%(model_name)]['clock'] = 'clk'
@@ -97,7 +100,7 @@ for blk in blk_objs:
 dsp_user_modules = {}
 for link in link_info:
     if link['link_type'] == 'dsp_dsp':
-        gen_glue_module(link, file_dir=filepath)
+        gen_glue_module(link, file_dir=filepath+'/glues')
         module_name = link['link_type'] + '_' + link['src_blk_name'] + '_' + link['dst_blk_name']
         dsp_user_modules[module_name] = {}
         dsp_user_modules[module_name]['clock'] = 'clk'
@@ -107,7 +110,7 @@ for link in link_info:
         dsp_user_modules[module_name]['ports'].append(link['dst_port_name'])
         # add sources
         dsp_user_modules[module_name]['sources'] = []
-        dsp_user_modules[module_name]['sources'].append('%s/%s.v'%(filepath, module_name))  
+        dsp_user_modules[module_name]['sources'].append('%s/glues/%s.v'%(filepath, module_name))  
 # generate jasper.dsp
 jasper_dsp = {}
 jasper_dsp['dsp_blocks'] = dsp_blocks
