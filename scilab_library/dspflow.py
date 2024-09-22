@@ -1,5 +1,5 @@
 import sys, os
-sys.path.append('../jasper_library')
+sys.path.append('jasper_library')
 
 import logging
 import yaml
@@ -99,7 +99,7 @@ class DSPflow(Toolflow):
         Not sure why the "try...except..." are used in the Toolflow class.
         """
         #self.topfile = self.compile_dir+'/top.v'
-        self.topfile = self.compile_dir+'/%s_ip.v'%(self.top_module_name)
+        self.topfile = self.compile_dir+'/%s_core.v'%(self.top_module_name)
         # delete top.v file if it exists, otherwise synthesis will fail
         if os.path.exists(self.topfile):
             os.remove(self.topfile)
@@ -111,9 +111,9 @@ class DSPflow(Toolflow):
             self.const_files.append(os.getenv('HDL_ROOT') + '/%s/%s' % (
                 self.plat.name, source))
         if os.path.exists(self.topfile):
-            self.top = verilog.VerilogModule(name='%s_ip'%(self.top_module_name), topfile=self.topfile)
+            self.top = verilog.VerilogModule(name='%s_core'%(self.top_module_name), topfile=self.topfile)
         else:
-            self.top = verilog.VerilogModule(name='%s_ip'%(self.top_module_name))
+            self.top = verilog.VerilogModule(name='%s_core'%(self.top_module_name))
     
     def _instantiate_periphs(self):
         """
@@ -141,7 +141,7 @@ class DSPflow(Toolflow):
         """
         # Write top module file
         #self.top.gen_module_file(filename=self.compile_dir+'/top.v')
-        self.top.gen_module_file(filename=self.compile_dir+'/%s_ip.v'%(self.top_module_name))
+        self.top.gen_module_file(filename=self.compile_dir+'/%s_core.v'%(self.top_module_name))
         # Write any submodule files required for the compile. This is probably
         # only the hierarchical WB arbiter, or nothing at all
         for key, val in self.top.generated_sub_modules.items():
@@ -150,7 +150,7 @@ class DSPflow(Toolflow):
                 fh.write(val)
                 self.sources.append(fh.name)
         self.logger.info("Dumping pickle of top-level Verilog module")
-        pickle.dump(self.top, open('%s/%s_ip.pickle' %(self.compile_dir, self.top_module_name),'wb'))
+        pickle.dump(self.top, open('%s/%s_core.pickle' %(self.compile_dir, self.top_module_name),'wb'))
 
     def dump_castro(self, filename):
         """
@@ -229,8 +229,11 @@ class VivadoDSPBackend(VivadoBackend):
             self.add_tcl_cmd('set_property top %s [current_fileset]'%(self.top_module_name), stage='pre_synth')
             self.add_tcl_cmd('update_compile_order -fileset sources_1', stage='pre_synth')
             self.add_tcl_cmd('ipx::package_project -root_dir %s/%s/%s.srcs -vendor user.org -library user -taxonomy /UserIP'%(self.compile_dir, self.project_name, self.project_name), stage='pre_synth')
-            self.add_tcl_cmd('set_property display_name %s_ip [ipx::current_core]'%(self.top_module_name), stage='pre_synth') 
-            self.add_tcl_cmd('set_property description %s_ip [ipx::current_core]'%(self.top_module_name), stage='pre_synth') 
+            self.add_tcl_cmd('set_property vendor User_Company [ipx::current_core]', stage='pre_synth') 
+            self.add_tcl_cmd('set_property library SysGen [ipx::current_core]', stage='pre_synth') 
+            self.add_tcl_cmd('set_property name %s [ipx::current_core]'%(self.top_module_name), stage='pre_synth') 
+            self.add_tcl_cmd('set_property display_name %s [ipx::current_core]'%(self.top_module_name), stage='pre_synth') 
+            self.add_tcl_cmd('set_property description %s [ipx::current_core]'%(self.top_module_name), stage='pre_synth') 
             self.add_tcl_cmd('set_property core_revision 2 [ipx::current_core]', stage='pre_synth')
             self.add_tcl_cmd('ipx::create_xgui_files [ipx::current_core]', stage='pre_synth')
             self.add_tcl_cmd('ipx::update_checksums [ipx::current_core]', stage='pre_synth')

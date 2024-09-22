@@ -9,4 +9,4 @@ always @(posedge clk) begin
     out0 <= in0 + in1;
 end
 
-endmodule;
+endmodule

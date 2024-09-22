@@ -109,9 +109,13 @@ function [build_cmd] = jasper_frontend(fn)
     unix_s(scilab_library_path+'/jasper_frontend.py');
     disp('*  Frontend python script complete!    *');
     disp('****************************************');
-    // create a build_cmd
+    build_cmd = struct();
+    python_path = 'python';
+    // create a build_cmd for the dsp project
+    jasper_python = [getenv('MLIB_DEVEL_PATH')+'/scilab_library/gen_dsp_ip.py'];
+    build_cmd('dsp') = python_path + ' ' + jasper_python + ' '+ '-m ' + modelpath;
+    // create a build_cmd for the full project
     jasper_python = [getenv('MLIB_DEVEL_PATH')+'/jasper_library/exec_flow.py'];
-    python_path = 'python'
-    build_cmd = python_path + ' ' + jasper_python + ' '+ '-m ' + modelpath + ' --middleware --backend --software --vitis';
+    build_cmd('full') = python_path + ' ' + jasper_python + ' '+ '-m ' + modelpath + ' --middleware --backend --software --vitis';
 
 endfunction

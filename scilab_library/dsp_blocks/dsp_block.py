@@ -1,11 +1,12 @@
 import os, json
+from glob import glob
 mlib_devel_path = os.getenv('MLIB_DEVEL_PATH')
 
 import sys
 # add the jasper_library to the path
-sys.path.append('../../jasper_library')
-sys.path.append('../../jasper_library/yellow_blocks')
-
+sys.path.append('jasper_library')
+sys.path.append('jasper_library/yellow_blocks')
+print(os.getcwd())
 import collections
 from yellow_block import YellowBlock
 
@@ -76,3 +77,4 @@ class DSPBlock(YellowBlock):
         for link in self.parent_ports['out']:
             top.add_port(link['dst_port_name'], width=link['dst_port_width'], dir='out')
             top.assign_signal(link['src_port_name'], link['dst_port_name'])
+    
