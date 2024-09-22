@@ -15,7 +15,7 @@ class adder(DSPBlock):
         # TODO: add parameters
         # add ports
         # we need to check if the port is in parent_ports
-        inst.add_port('clk', 'clk', parent_port=True, dir='in')
+        inst.add_port('clk', 'user_clk', dir='in')
         inst.add_port('in0', self.fullname+'_in0', parent_port=False, width=32, dir='in')
         inst.add_port('in1', self.fullname+'_in1', parent_port=False, width=32, dir='in')
         inst.add_port('out0', self.fullname+'_out0', parent_port=False, width=32, dir='out')

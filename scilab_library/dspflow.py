@@ -59,6 +59,7 @@ class DSPflow(Toolflow):
         with open(self.dsp_file, 'r') as fh:
             yaml_dict = yaml.load(fh, Loader=yaml.Loader)
         self.dsp_modules = yaml_dict['dsp_blocks']
+        self.user_modules = yaml_dict['user_modules']
 
     def gen_dsp_objs(self):
         """
@@ -114,6 +115,11 @@ class DSPflow(Toolflow):
             self.top = verilog.VerilogModule(name='%s_core'%(self.top_module_name), topfile=self.topfile)
         else:
             self.top = verilog.VerilogModule(name='%s_core'%(self.top_module_name))
+        # the IP core used in the full proj has the port clk, 
+        # but it's user_clk used in the dsp proj
+        # TODO: we may need to move the following code to somewhere else
+        self.top.assign_signal('user_clk', 'clk')
+        self.top.add_port('clk', width=1, dir='in')
     
     def _instantiate_periphs(self):
         """
@@ -131,7 +137,7 @@ class DSPflow(Toolflow):
             obj.modify_top(self.top)
             self.sources += obj.sources
             self.ips += obj.ips
-    
+                    
     def regenerate_top(self):
         """
         Generate the verilog for the modified top

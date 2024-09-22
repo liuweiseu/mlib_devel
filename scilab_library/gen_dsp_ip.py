@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     # create the build directory, and log file
     os.system('mkdir -p %s' % builddir)
-    logger = logging.getLogger('jasper_dsp')
+    logger = logging.getLogger('jasper')
     logger.setLevel(logging.DEBUG)
     handler = logging.FileHandler('%s/jasper-dsp.log' % builddir, mode='w')
     handler.setLevel(logging.DEBUG)

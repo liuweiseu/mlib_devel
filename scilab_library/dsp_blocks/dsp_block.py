@@ -76,5 +76,5 @@ class DSPBlock(YellowBlock):
              top.assign_signal(link['dst_port_name'], link['src_port_name']) 
         for link in self.parent_ports['out']:
             top.add_port(link['dst_port_name'], width=link['dst_port_width'], dir='out')
-            top.assign_signal(link['src_port_name'], link['dst_port_name'])
+            top.assign_signal(link['dst_port_name'], link['src_port_name'])
     
