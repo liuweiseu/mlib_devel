@@ -57,7 +57,9 @@ xps_user_modules = {}
 for link in link_info:
     if link['link_type'] == 'xps_xps':
         gen_glue_module(link, file_dir=filepath+'/glues')
-        module_name = link['link_type'] + '_' + link['src_blk_name'] + '_' + link['dst_blk_name']
+        module_name = link['link_type'] + '_' + link['src_blk_name'] + '_' \
+            + 'out%d_'%(link['src_port_id'] - 1) + link['dst_blk_name'] + '_' \
+            + 'in%d'%(link['dst_port_id'] - 1)
         xps_user_modules[module_name] = {}
         xps_user_modules[module_name]['clock'] = 'clk'
         # add ports
@@ -101,7 +103,9 @@ dsp_user_modules = {}
 for link in link_info:
     if link['link_type'] == 'dsp_dsp':
         gen_glue_module(link, file_dir=filepath+'/glues')
-        module_name = link['link_type'] + '_' + link['src_blk_name'] + '_' + link['dst_blk_name']
+        module_name = link['link_type'] + '_' + link['src_blk_name'] + '_' \
+            + 'out%d_'%(link['src_port_id'] - 1) + link['dst_blk_name'] + '_' \
+            + 'in%d'%(link['dst_port_id'] - 1)
         dsp_user_modules[module_name] = {}
         dsp_user_modules[module_name]['clock'] = 'clk'
         # add ports
