@@ -33,6 +33,11 @@ function [build_cmd] = jasper_frontend(fn)
         // check the obj type
         // if it's a link obj, we used generate port name based on this obj
         if typeof(obj) == 'Link' then
+            // check if the link is connected to a sim block
+            [src_tag, dst_tag] = check_block_type(scs_m.objs, obj);
+            if src_tag == 'sim' | dst_tag == 'sim' then
+                continue;
+            end
             [blk_port_info] = gen_port_info(name, scs_m.objs, obj);
             src_blk_id = blk_port_info('src_blk_id');
             src_port_name = blk_port_info('src_port_name');
@@ -60,10 +65,15 @@ function [build_cmd] = jasper_frontend(fn)
      blkid = 1;
      linkid = 1;
      for i = 1:n_objs
-         obj = scs_m.objs(i);
-         // check the obj type
-         // if it's a block, get the block info
-         if typeof(obj) == 'Block' then
+        //
+        obj = scs_m.objs(i);
+        // if it's a block, get the block info
+        if typeof(obj) == 'Block' then
+            // check the obj type
+            tag = obj.graphics.id;
+            if tag == 'sim' then
+                continue;
+            end
              // if it's a split_f block, we don't need to get the info
              if obj.gui == 'SPLIT_f' then
                  // this is a special block, we don't need to get the info

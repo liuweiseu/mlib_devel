@@ -53,5 +53,21 @@
         "a_bitwidth": 32,
         "b_bitwidth": 32,
         "c_bitwidth": 32
+    },
+    "constant":
+    {
+        "name": "constant",
+        "fullpath": "",
+        "tag": "sim:constant",
+        "const_val": 0,
+        "const_bitwidth": 32,
+        "const_bin_pt": 0
+    },
+    "scope":
+    {
+        "name": "scope",
+        "fullpath": "",
+        "tag": "sim:scope",
+        "channels": 1
     }
 }

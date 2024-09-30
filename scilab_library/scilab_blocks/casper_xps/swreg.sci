@@ -32,15 +32,20 @@
       if ok then
         // TODO: figure out how to set string in the model
         if io_direction == 'From Processor' then
-          model.in = [];
-          model.in2 = [];
+          model.in = 1;
+          model.in2 = 1;
           model.out = 1;
           model.out2 = 1;
+          graphics.out_label = ['out'];
+          graphics.in_label = ['sim_in'];
+          graphics.style = 'shape=rectangle;fillColor=yellow'
         elseif io_direction == 'To Processor' then
           model.in = 1;
           model.in2 = 1;
-          model.out = [];
-          model.out2 = [];
+          model.out = 1;
+          model.out2 = 1;
+          graphics.out_label = ['sim_out'];
+          graphics.in_label = ['in'];
         end
         // generate rpar
         //rpar = [io_delay, init_val, sample_period, bitfield_name_r, bitfield_width, bitfield_bp, bitfield_types];
@@ -77,12 +82,17 @@
       // TODO: do we have to set out2??
       model.out = 1;
       model.out2 = 1;
+      model.in = 1;
+      model.in2 = 1;
       // Type : column vector of strings.
       exprs = ['swreg'; 'From Processor';'0'; '0'; '1'; 'reg'; '1'; '0'; '2'];
       gr_i = [];
       //set the block tag
       model.label = "xps";
-      x=standard_define([4 2],model,exprs,gr_i)
+      x=standard_define([5 1.4],model,exprs,gr_i)
+      x.graphics.out_label = ['out'];
+      x.graphics.in_label = ['sim_in'];
+      x.graphics.style = 'shape=rectangle;fillColor=yellow';
       disp('swreg block loaded...')
   end
   endfunction
