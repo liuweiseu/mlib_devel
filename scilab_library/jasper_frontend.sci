@@ -70,8 +70,12 @@ function [build_cmd] = jasper_frontend(fn)
         // if it's a block, get the block info
         if typeof(obj) == 'Block' then
             // check the obj type
-            tag = obj.graphics.id;
-            if tag == 'sim' then
+            // tag = obj.graphics.id;
+            // if tag == 'sim' then
+            //    continue;
+            // end
+            type = obj.model.label;
+            if type == 'sim' then
                 continue;
             end
              // if it's a split_f block, we don't need to get the info
@@ -84,7 +88,6 @@ function [build_cmd] = jasper_frontend(fn)
              // we need graphics.exprs
              val = obj.graphics.exprs;
              id = obj.model.rpar;
-             type = obj.model.label;
              // then we need to create a struct for the info
              st('blk.'+string(blkid))= struct('type', type, 'tag', obj.gui, 'blkid', i, 'id', id, 'val', val);
              blkid = blkid + 1;

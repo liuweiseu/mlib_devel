@@ -1,6 +1,6 @@
 // this function returns the port witdh of the block
 function [port_width] = get_port_width(blk_obj, port_id, port_dir)
-    // check the block type
+    // check the block tag
     blk_tag = blk_obj.gui;
     if blk_tag == 'swreg' then
         // for the swreg block, the port width is the 7th exprs
@@ -17,6 +17,12 @@ function [port_width] = get_port_width(blk_obj, port_id, port_dir)
             // for the adder block, the port width is the 3rd exprs
             port_width = strtod(blk_obj.graphics.exprs(port_id + 3));
         end
+    elseif blk_tag == 'constant' then
+        // for the constant block, the port width is the 3rd exprs
+        port_width = strtod(blk_obj.graphics.exprs(3));
+    elseif blk_tag == 'scope' then
+        // for the scope block, the port width is always 1
+        port_width = 1;
     else
         // TODO: add more port width
         break;
