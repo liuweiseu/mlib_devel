@@ -234,6 +234,9 @@ then
       export LD_PRELOAD=""
       # scilab -f scilab_library/scilab_blocks/load_casper_lib.sci
       ${FRONTEND} -f scilab_library/scilab_blocks/load_casper_lib.sci
+  elif [[ ${FRONTEND} == gnuradio ]]
+  then
+      gnuradio-companion
   else
       echo "Frontend should be model_composer or modeler"
   fi
