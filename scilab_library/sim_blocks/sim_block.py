@@ -28,7 +28,7 @@ def _expand_vals(val, tick, nsamples):
     last_v = val[0][1]
     tmp[0] = last_v
     if len(val) == 1:
-        tmp[1:] = dout[0]
+        tmp[1:] = tmp[0]
     else:
         for d in val[1:]:
             cur_i = d[0]//tick
