@@ -27,6 +27,12 @@ class DSPBlock(YellowBlock):
         # 5. link_info_file
         # The __init__ method of the DSPBlock class initializes
         self.model_info_file = model_info_file
+        # For some of the dsp modules, 
+        # there are specific compile order for the sub modules.
+        self.compile_order = {
+            'vhdl': [],
+            'verilog': []
+        }
         with open(self.model_info_file) as f:
             blkinfo = json.load(f)
             self.link_info = blkinfo['link_info']
