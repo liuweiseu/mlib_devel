@@ -588,3 +588,305 @@ end rTwoSDFPkg;
         """
         with open(self.hdl_wrapper_dir + "/rTwoSDFPkg.vhd", "w", encoding="utf-8") as file:
             file.write(vhdl_template)
+
+    def generate_compile_order(self):
+        """
+        For the wbfft core, the VHDL modules should be compiled in a correct order.
+        There are three keys in each compile order:
+        * 'lib': it shows the library name;
+        * 'modules': it shows which modules belong to this library;
+        * 'fullpath': True  - The module path is already the fullpath;
+                      False - The module path is not the fullpath.
+                              We need to add `self.hdl_root` to get the fullpath 
+        """
+        fullpath = self.hdl_root + '/'
+        # compile order 1
+        co = {
+            'lib' : 'common_pkg_lib',
+            'modules' : [
+                'casper_dspdevel/common_pkg/fixed_float_types_c.vhd',
+                'casper_dspdevel/common_pkg/fixed_pkg_c.vhd',
+                'casper_dspdevel/common_pkg/common_pkg.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 2
+        co = {
+            'lib' : 'casper_wb_fft_lib',
+            'modules': [
+                f'{self.hdl_wrapper_dir}/fft_gnrcs_intrfcs_pkg.vhd'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 3
+        co = {
+            'lib': 'r2sdf_fft_lib',
+            'modules': [
+                f'{self.hdl_wrapper_dir}/rTwoSDFPkg.vhd'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 4
+        co = {
+            'lib': 'casper_ram_lib',
+            'modules': [
+                'casper_dspdevel/casper_ram/common_ram_pkg.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 5
+        co = {
+            'lib': 'casper_counter_lib',
+            'modules': [
+                'casper_dspdevel/casper_counter/common_counter.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 6
+        co = {
+            'lib': 'technology_lib',
+            'modules': [
+                'casper_dspdevel/technology/technology_select_pkg.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 7
+        co = {
+            'lib': 'casper_ram_lib',
+            'modules': [
+                'casper_dspdevel/casper_ram/tech_memory_component_pkg.vhd',
+                'casper_dspdevel/casper_ram/tech_memory_ram_cr_cw.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 8
+        co = {
+            'lib': 'common_components_lib',
+            'modules': [
+                'casper_dspdevel/common_components/common_delay.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 9
+        co = {
+            'lib': 'r2sdf_fft_lib',
+            'modules': [
+                'casper_dspdevel/r2sdf_fft/rTwoBF.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 10
+        co = {
+            'lib': 'common_components_lib',
+            'modules': [
+                'casper_dspdevel/common_components/common_bit_delay.vhd',
+                'casper_dspdevel/common_components/common_pipeline.vhd',
+                'casper_dspdevel/common_components/common_pipeline_sl.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 11
+        co = {
+            'lib': 'r2sdf_fft_lib',
+            'modules': [
+                'casper_dspdevel/r2sdf_fft/rTwoBFStage.vhd',
+                'casper_dspdevel/r2sdf_fft/twiddlesPkg.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 12
+        co = {
+            'lib': 'r2sdf_fft_lib',
+            'modules': [
+                'casper_dspdevel/r2sdf_fft/rTwoWeights.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 13
+        co = {
+            'lib': 'casper_multiplier_lib',
+            'modules': [
+                'casper_dspdevel/casper_multiplier/tech_mult_component.vhd',
+                'casper_dspdevel/casper_multiplier/tech_agilex_versal_cmult.vhd',
+                'casper_dspdevel/casper_multiplier/tech_complex_mult.vhd',
+                'casper_dspdevel/casper_multiplier/common_complex_mult.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 14
+        co = {
+            'lib': 'r2sdf_fft_lib',
+            'modules': [
+                'casper_dspdevel/r2sdf_fft/rTwoWMul.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 15
+        co = {
+            'lib': 'casper_requantize_lib',
+            'modules': [
+                'casper_dspdevel/casper_requantize/r_shift_requantize.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 16
+        co = {
+            'lib': 'r2sdf_fft_lib',
+            'modules': [
+                'casper_dspdevel/r2sdf_fft/rTwoSDFStage.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 17
+        co = {
+            'lib': 'casper_ram_lib',
+            'modules': [
+                'casper_dspdevel/casper_ram/tech_memory_ram_crw_crw.vhd',
+                'casper_dspdevel/casper_ram/common_ram_crw_crw.vhd',
+                'casper_dspdevel/casper_ram/common_paged_ram_crw_crw.vhd',
+                'casper_dspdevel/casper_ram/common_paged_ram_rw_rw.vhd',
+                'casper_dspdevel/casper_ram/common_paged_ram_r_w.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 18
+        co = {
+            'lib': 'casper_adder_lib',
+            'modules': [
+                'casper_dspdevel/casper_adder/common_add_sub.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 19
+        co = {
+            'lib': 'casper_requantize_lib',
+            'modules': [
+                'casper_dspdevel/casper_requantize/common_round.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 20
+        co = {
+            'lib': 'casper_wb_fft_lib',
+            'modules': [
+                'casper_dspdevel/casper_wb_fft/fft_sepa.vhd',
+                'casper_dspdevel/casper_wb_fft/fft_reorder_sepa_pipe.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 21
+        co = {
+            'lib': 'casper_requantize_lib',
+            'modules': [
+                'casper_dspdevel/casper_requantize/common_resize.vhd',
+                'casper_dspdevel/casper_requantize/common_requantize.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 22
+        co = {
+            'lib': 'casper_wb_fft_lib',
+            'modules': [
+                'casper_dspdevel/casper_wb_fft/fft_r2_pipe.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 23
+        co = {
+            'lib': 'common_pkg_lib',
+            'modules': [
+                'casper_dspdevel/common_pkg/common_str_pkg.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 24
+        co = {
+            'lib': 'casper_wb_fft_lib',
+            'modules': [
+                'casper_dspdevel/casper_wb_fft/fft_r2_bf_par.vhd',
+                'casper_dspdevel/casper_wb_fft/fft_r2_par.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 25
+        co = {
+            'lib': 'casper_multiplexer_lib',
+            'modules': [
+                'casper_dspdevel/casper_multiplexer/common_zip.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 26
+        co = {
+            'lib': 'casper_wb_fft_lib',
+            'modules': [
+                'casper_dspdevel/casper_wb_fft/fft_sepa_wide.vhd',
+                'casper_dspdevel/casper_wb_fft/fft_r2_wide.vhd',
+                'casper_dspdevel/casper_wb_fft/fft_wide_unit_control.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 27
+        co = {
+            'lib': 'xil_defaultlib',
+            'modules': [
+                self.hdl_wrapper_dir + "/casper_wideband_fft.vhd"
+            ],
+            'fullpath': True
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 28
+        co = {
+            'lib': 'ip_xpm_mult_lib',
+            'modules': [
+                'casper_dspdevel/ip_xpm/mult/ip_cmult_rtl_3dsp.vhd',
+                'casper_dspdevel/ip_xpm/mult/ip_cmult_rtl_4dsp.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 29
+        co = {
+            'lib': 'ip_xpm_ram_lib',
+            'modules': [
+                'casper_dspdevel/ip_xpm/ram/ip_xpm_ram_cr_cw.vhd',
+                'casper_dspdevel/ip_xpm/ram/ip_xpm_ram_crw_crw.vhd',
+                'casper_dspdevel/ip_xpm/ram/ip_xpm_rom_r.vhd',
+                'casper_dspdevel/ip_xpm/ram/ip_xpm_rom_r_r.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
+        # Full path for each module is necessary.
+        # So, we will make full path here.
+        for t in self.compile_order.keys():
+            for co in self.compile_order[t]:
+                if co['fullpath'] == False:
+                    for i in range(len(co['modules'])):
+                        co['moduls'][i] = fullpath + '/' + co['moduls'][i]
