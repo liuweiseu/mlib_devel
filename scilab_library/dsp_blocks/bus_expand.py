@@ -87,3 +87,13 @@ end ARCHITECTURE;
     """
         with open(hdl_wrapper_dir +"/bus_expand_arbitrary.vhd", "w", encoding="utf-8") as file:
             file.write(vhdl_template)
+    
+    def generate_compile_order(self):
+        co = {
+            'lib': 'xil_defaultlib',
+            'modules': [
+                self.hdl_wrapper_dir + '/bus_expand_arbitrary.vhd'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['vhdl'].append(co)
