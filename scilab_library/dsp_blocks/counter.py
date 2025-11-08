@@ -21,3 +21,14 @@ class counter(DSPBlock):
         inst.add_port('en', self.fullname+'_en', parent_port=False, width=1, dir='in')
         inst.add_port('out', self.fullname+'_out', parent_port=False, width=self.bit_width, dir='out')
 
+    def generate_compile_order(self):
+        fullpath = self.hdl_root + '/'
+        co = {
+            'lib': 'xil_defaultlib',
+            'modules': [
+                fullpath + 'counter/counter.v'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['verilog'].append(co)
+

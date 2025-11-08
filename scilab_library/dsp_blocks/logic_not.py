@@ -21,4 +21,15 @@ class logic_not(DSPBlock):
         inst.add_port('clk', 'user_clk', dir='in')
         inst.add_port('din', self.fullname+'_in', parent_port=False, width=self.bitwidth, dir='in')
         inst.add_port('dout', self.fullname+'_out', parent_port=False, width=self.bitwidth, dir='out')
+    
+    def generate_compile_order(self):
+        fullpath = self.hdl_root + '/'
+        co = {
+            'lib': 'xil_defaultlib',
+            'modules': [
+                fullpath + 'logic_not/logic_not.v'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['verilog'].append(co)
 

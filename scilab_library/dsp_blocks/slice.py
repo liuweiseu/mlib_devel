@@ -22,3 +22,13 @@ class slice(DSPBlock):
         inst.add_port('in', self.fullname+'_in', parent_port=False, width=self.input_width, dir='in')
         inst.add_port('out', self.fullname+'_out', parent_port=False, width=self.output_width, dir='out')
 
+    def generate_compile_order(self):
+        fullpath = self.hdl_root + '/'
+        co = {
+            'lib': 'xil_defaultlib',
+            'modules': [
+                fullpath + 'slice/slice.v'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['verilog'].append(co)

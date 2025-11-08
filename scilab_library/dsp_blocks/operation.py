@@ -21,3 +21,13 @@ class operation(DSPBlock):
         inst.add_port('in1', self.fullname+'_in1', parent_port=False, width=1, dir='in')
         inst.add_port('out', self.fullname+'_out', parent_port=False, width=1, dir='out')
 
+    def generate_compile_order(self):
+        fullpath = self.hdl_root + '/'
+        co = {
+            'lib': 'xil_defaultlib',
+            'modules': [
+                fullpath + 'operation/operation.v'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['verilog'].append(co)

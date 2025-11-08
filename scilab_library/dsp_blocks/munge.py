@@ -40,3 +40,14 @@ class munge(DSPBlock):
         # tcl_cmds.append('set_property FILE_TYPE {VHDL 2008} [get_files *.vhd]')
         # return {'pre_synth': tcl_cmds}
         return {}
+
+    def generate_compile_order(self):
+        fullpath = self.hdl_root + '/'
+        co = {
+            'lib': 'xil_defaultlib',
+            'modules': [
+                fullpath + 'munge/munge.v'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['verilog'].append(co)

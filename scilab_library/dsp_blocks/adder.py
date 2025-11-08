@@ -19,4 +19,15 @@ class adder(DSPBlock):
         inst.add_port('in0', self.fullname+'_in0', parent_port=False, width=32, dir='in')
         inst.add_port('in1', self.fullname+'_in1', parent_port=False, width=32, dir='in')
         inst.add_port('out0', self.fullname+'_out0', parent_port=False, width=32, dir='out')
+    
+    def generate_compile_order(self):
+        fullpath = self.hdl_root + '/'
+        co = {
+            'lib': 'xil_defaultlib',
+            'modules': [
+                fullpath + 'adder/adder.v'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['verilog'].append(co)
 

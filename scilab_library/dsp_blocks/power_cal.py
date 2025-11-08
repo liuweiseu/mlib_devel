@@ -21,3 +21,13 @@ class power_cal(DSPBlock):
         inst.add_port('im', self.fullname+'_im', parent_port=False, width=self.bitwidth, dir='in')
         inst.add_port('pwr', self.fullname+'_pwr', parent_port=False, width=self.bitwidth*2+1, dir='out')
 
+    def generate_compile_order(self):
+        fullpath = self.hdl_root + '/'
+        co = {
+            'lib': 'xil_defaultlib',
+            'modules': [
+                fullpath + 'power_cal/power_cal.v'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['verilog'].append(co)
