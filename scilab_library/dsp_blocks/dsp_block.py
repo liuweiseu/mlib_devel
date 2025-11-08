@@ -47,6 +47,9 @@ class DSPBlock(YellowBlock):
     def modify(self, design, top_module):
         pass
     
+    def generate_compile_order(self):
+        pass
+    
     def create_hdl_dir(self):
         # the self.hdl_wrapper_dir will be used in self.initialize,
         # but self.unique_name is defined in super.__init__.
