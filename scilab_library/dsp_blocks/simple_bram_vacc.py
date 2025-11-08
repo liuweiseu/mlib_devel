@@ -70,12 +70,6 @@ class simple_bram_vacc(DSPBlock):
         self.add_source('casper_dspdevel/misc/pulse_ext.vhd')
         module_libs['casper_misc_lib'].append('casper_dspdevel/misc/pulse_ext.vhd')
 
-        self.add_source('casper_dspdevel/common_components/common_pipeline.vhd')
-        module_libs['common_components_lib'].append('casper_dspdevel/common_components/common_pipeline.vhd')
-
-        self.add_source('casper_dspdevel/casper_adder/common_add_sub.vhd')
-        module_libs['casper_adder_lib'].append('casper_dspdevel/casper_adder/common_add_sub.vhd')
-
         self.add_source('casper_dspdevel/casper_ram/common_ram_pkg.vhd')
         module_libs['casper_ram_lib'].append('casper_dspdevel/casper_ram/common_ram_pkg.vhd')
 
@@ -137,4 +131,158 @@ class simple_bram_vacc(DSPBlock):
                 f_parts = f.split('/')
                 tcl_cmds.append('set_property LIBRARY %s [get_files %s/dspproj/dspproj.srcs/sources_1/imports/%s/%s]\n'%(k, self.builddir, f_parts[-2], f_parts[-1]))
         return {'pre_synth': tcl_cmds}
+
+    def generate_compile_order(self):
+        fullpath = self.hdl_root + '/'
+        # compile order 1
+        co = {
+            'lib': 'common_pkg_lib',
+            'modules': [
+                fullpath + 'casper_dspdevel/common_pkg/fixed_pkg_c.vhd',
+                fullpath + 'casper_dspdevel/common_pkg/fixed_float_types_c.vhd',
+                fullpath + 'casper_dspdevel/common_pkg/common_pkg.vhd'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 4
+        co = {
+            'lib': 'casper_ram_lib',
+            'modules': [
+                fullpath + 'casper_dspdevel/casper_ram/common_ram_pkg.vhd'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 5
+        co = {
+            'lib': 'casper_counter_lib',
+            'modules': [
+                fullpath + 'casper_dspdevel/casper_counter/common_counter.vhd'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 6
+        co = {
+            'lib': 'technology_lib',
+            'modules': [
+                fullpath + 'casper_dspdevel/technology/technology_select_pkg.vhd'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 7
+        co = {
+            'lib': 'casper_ram_lib',
+            'modules': [
+                fullpath + 'casper_dspdevel/casper_ram/tech_memory_component_pkg.vhd',
+                fullpath + 'casper_dspdevel/casper_ram/tech_memory_ram_cr_cw.vhd'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 8
+        co = {
+            'lib': 'common_components_lib',
+            'modules': [
+                fullpath + 'casper_dspdevel/common_components/common_delay.vhd'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 10
+        co = {
+            'lib': 'common_components_lib',
+            'modules': [
+                fullpath + 'casper_dspdevel/common_components/common_pipeline.vhd',
+                fullpath + 'casper_dspdevel/common_components/common_bit_delay.vhd'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 17
+        co = {
+            'lib': 'casper_ram_lib',
+            'modules': [
+                fullpath + 'casper_dspdevel/casper_ram/tech_memory_ram_crw_crw.vhd',
+                fullpath + 'casper_dspdevel/casper_ram/common_ram_crw_crw.vhd'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 18
+        co = {
+            'lib': 'casper_adder_lib',
+            'modules': [
+                fullpath + 'casper_dspdevel/casper_adder/common_add_sub.vhd'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile ordr 27.1
+        co = {
+            'lib': 'casper_ram_lib',
+            'modules': [
+                fullpath + 'casper_dspdevel/casper_ram/common_ram_rw_rw.vhd',
+                fullpath + 'casper_dspdevel/casper_ram/common_ram_r_w.vhd'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 27.2
+        co = {
+            'lib': 'casper_delay_lib',
+            'modules': [
+                fullpath + 'casper_dspdevel/casper_delay/delay_bram.vhd'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 27.3
+        co = {
+            'lib': 'casper_misc_lib',
+            'modules': [
+                fullpath + 'casper_dspdevel/misc/edge_detect.vhd'
+            ],
+            'fullpath': True
+        }
+        # compile order 27.4
+        co = {
+            'lib': 'casper_counter_lib',
+            'modules': [
+                fullpath + 'casper_dspdevel/casper_counter/free_run_counter.vhd'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 29
+        co = {
+            'lib': 'ip_xpm_ram_lib',
+            'modules': [
+                fullpath + 'casper_dspdevel/ip_xpm/ram/ip_xpm_ram_cr_cw.vhd',
+                fullpath + 'casper_dspdevel/ip_xpm/ram/ip_xpm_ram_crw_crw.vhd'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 30
+        co = {
+            'lib': 'casper_misc_lib',
+            'modules': [
+                fullpath + 'casper_dspdevel/misc/pulse_ext.vhd'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 31
+        co = {
+            'lib': 'xil_defaultlib',
+            'modules': [
+                fullpath + 'casper_dspdevel/casper_accumulators/simple_bram_vacc.vhd'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['vhdl'].append(co)
+
 
