@@ -890,3 +890,4 @@ end rTwoSDFPkg;
                 if co['fullpath'] == False:
                     for i in range(len(co['modules'])):
                         co['moduls'][i] = fullpath + '/' + co['moduls'][i]
+                    co['fullpath'] = True
