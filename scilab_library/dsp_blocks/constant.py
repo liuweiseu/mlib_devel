@@ -18,4 +18,15 @@ class constant(DSPBlock):
         # add ports
         # we need to check if the port is in parent_ports
         inst.add_port('out', self.fullname+'_out', parent_port=False, width=self.bit_width, dir='out')
+    
+    def generate_compile_order(self):
+        fullpath = self.hdl_root + '/'
+        co = {
+            'lib': 'xil_defaultlib',
+            'modules': [
+                fullpath + 'constant/constant.v'
+            ],
+            'fullpath': True
+        }
+        self.compile_order['verilog'].append(co)
 
