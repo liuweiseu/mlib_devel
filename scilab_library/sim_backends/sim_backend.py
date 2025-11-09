@@ -32,12 +32,27 @@ class SimBackend(object):
         self.simco[type].append(co)
     
     def gen_co_file(self):
+        """
+        For each simulator, compile order files for VHDL and Verilog modules are necessary.
+        This method generate the compile order files.
+        """
         pass
 
     def gen_sim_script(self):
+        """
+        For each simulator, the script should be different for the following tasks:
+        1. compile the VHDL/Verilog moduels;
+        2. 'link' the modlues;
+        3. call the simulatoer to run simulation
+        This method generates the scripts for these tasks.
+        Note: The output file has to be a VCD file.
+        """
         pass
 
     def run_sim(self):
+        """
+        Call the script to run simulation.
+        """
         pass
 
 class VivadoSimulator(SimBackend):
