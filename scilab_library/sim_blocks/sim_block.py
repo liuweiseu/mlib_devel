@@ -135,6 +135,7 @@ class CasperGTKWave(SimDataGUI):
     
     def ShowSimData(self):
         cmd = 'gtkwave %s &'%self.filename
+        self.logger.debug(f'cmd: {cmd}')
         os.system(cmd)
 
 """
@@ -182,6 +183,7 @@ class CasperPyplot(CasperRawData):
         mlib_devel_path = os.getenv('MLIB_DEVEL_PATH')
         script_path = '%s/scilab_library/sim_guis/sim_pyplot.py'%mlib_devel_path
         cmd = 'python %s -f %s &'%(script_path, self.filename)
+        self.logger.debug(f'cmd: {cmd}')
         os.system(cmd)
 
 """
