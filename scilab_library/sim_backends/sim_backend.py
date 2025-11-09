@@ -31,7 +31,7 @@ class SimBackend(object):
             raise KeyError(f"File type '{type}' not supported.")
         self.compile_order[type].append(co)
     
-    def generate_compile_order(self):
+    def generate_co_file(self):
         pass
 
     def generate_sim_script(self):
@@ -44,14 +44,14 @@ class VivadoSimulator(SimBackend):
     """
     Use Vivado Simulator as the backend simulator.
     """
-    def __init__(self, simdir, simtop, simoutput):
+    def __init__(self, simdir, simtop, simlen, simoutput):
         super.__init__(simdir, simtop, simoutput)
         self.vhdl_cof = simdir + '/' + 'vhdl.prj'
         self.verilog_cof = simdir + '/' + 'vlog.prj'
         self.sim_script = simdir + '/' + 'caspersim.sh'
         self.cmdtcl = simdir + '/' + 'caspersim.tcl'
 
-    def generate_compile_order(self):
+    def generate_co_file(self):
         # generate vhdl compile order first
         with open(self.vhdl_cof, 'w') as f:
             for co in self.compile_order['vhdl']:
