@@ -705,6 +705,17 @@ end rTwoSDFPkg;
             'fullpath': False
         }
         self.compile_order['vhdl'].append(co)
+        # compile order 11.1
+        co = {
+            'lib': 'casper_ram_lib',
+            'modules': [
+                'casper_dspdevel/casper_ram/tech_memory_rom_r_r.vhd',
+                'casper_dspdevel/casper_ram/tech_memory_rom_r.vhd',
+                'casper_dspdevel/casper_ram/common_rom_r_r.vhd'
+            ],
+            'fullpath': False
+        }
+        self.compile_order['vhdl'].append(co)
         # compile order 12
         co = {
             'lib': 'r2sdf_fft_lib',
@@ -847,7 +858,7 @@ end rTwoSDFPkg;
             'modules': [
                 'casper_dspdevel/casper_wb_fft/fft_sepa_wide.vhd',
                 'casper_dspdevel/casper_wb_fft/fft_r2_wide.vhd',
-                'casper_dspdevel/casper_wb_fft/fft_wide_unit_control.vhd'
+                'casper_dspdevel/casper_wb_fft/fft_wide_unit.vhd'
             ],
             'fullpath': False
         }
@@ -859,6 +870,15 @@ end rTwoSDFPkg;
                 self.hdl_wrapper_dir + "/casper_wideband_fft.vhd"
             ],
             'fullpath': True
+        }
+        self.compile_order['vhdl'].append(co)
+        # compile order 27.3
+        co = {
+            'lib': 'casper_misc_lib',
+            'modules': [
+                'casper_dspdevel/misc/edge_detect.vhd'
+            ],
+            'fullpath': False
         }
         self.compile_order['vhdl'].append(co)
         # compile order 28
@@ -883,11 +903,19 @@ end rTwoSDFPkg;
             'fullpath': False
         }
         self.compile_order['vhdl'].append(co)
+        # compile order 30
+        co = {
+            'lib': 'casper_misc_lib',
+            'modules': [
+                'casper_dspdevel/misc/pulse_ext.vhd'
+            ],
+            'fullpath': False
+        }
         # Full path for each module is necessary.
         # So, we will make full path here.
         for t in self.compile_order.keys():
             for co in self.compile_order[t]:
                 if co['fullpath'] == False:
                     for i in range(len(co['modules'])):
-                        co['moduls'][i] = fullpath + '/' + co['moduls'][i]
+                        co['modules'][i] = fullpath + co['modules'][i]
                     co['fullpath'] = True

@@ -138,8 +138,8 @@ class simple_bram_vacc(DSPBlock):
         co = {
             'lib': 'common_pkg_lib',
             'modules': [
-                fullpath + 'casper_dspdevel/common_pkg/fixed_pkg_c.vhd',
                 fullpath + 'casper_dspdevel/common_pkg/fixed_float_types_c.vhd',
+                fullpath + 'casper_dspdevel/common_pkg/fixed_pkg_c.vhd',
                 fullpath + 'casper_dspdevel/common_pkg/common_pkg.vhd'
             ],
             'fullpath': True
@@ -247,6 +247,7 @@ class simple_bram_vacc(DSPBlock):
             ],
             'fullpath': True
         }
+        self.compile_order['vhdl'].append(co)
         # compile order 27.4
         co = {
             'lib': 'casper_counter_lib',
