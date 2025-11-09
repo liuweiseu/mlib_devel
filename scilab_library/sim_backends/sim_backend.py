@@ -37,7 +37,7 @@ class SimBackend(object):
     def gen_sim_script(self):
         pass
 
-    def run_simulation(self):
+    def run_sim(self):
         pass
 
 class VivadoSimulator(SimBackend):
@@ -50,6 +50,9 @@ class VivadoSimulator(SimBackend):
         self.verilog_cof = simdir + '/' + 'vlog.prj'
         self.sim_script = simdir + '/' + 'caspersim.sh'
         self.cmdtcl = simdir + '/' + 'caspersim.tcl'
+        # copy glbl.v to the simdir, which is necessary
+        XILINX_PATH = os.getenv('XILINX_PATH')
+        os.system(f'cp {XILINX_PATH}/data/verilog/src/glbl.v {self.simdir}')
 
     def gen_co_file(self):
         # generate vhdl compile order first
@@ -123,5 +126,5 @@ class VivadoSimulator(SimBackend):
             for t in tcls:
                 f.write(t)
     
-    def run_simulation(self):
-        return os.system(f'sh {self.sim_script}')
+    def run_sim(self):
+        return os.system(f'sh {self.sim_script} > {self.simdir}/caspersim.log')

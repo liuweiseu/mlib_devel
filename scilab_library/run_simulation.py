@@ -32,7 +32,14 @@ ch = logging.StreamHandler()
 ch.setLevel(logging.INFO)
 logger.addHandler(ch)
 logger.info('Starting Simulation')
-
+# create simulation dir, if it doesn't exist
+simdir = builddir + '/simulation'
+if not os.path.exists(simdir):
+    os.makedirs(simdir)
+    logger.info('Created the simulation directory.')
+else:
+    logger.info('The simulation directory is already created.')
+    logger.info(f'Simdir: {simdir}')
 # we have to change the HDL_ROOT first, as dspflow will use a different HDL_ROOT
 # in the YellowBlock classs, self.initialize() is called in the __init__ method
 # this method will use the HDL_ROOT to get the hdl files.
@@ -51,12 +58,11 @@ sim.gen_sim_objs()
 sim.gen_sim_data()
 sim.gen_testbench()
 sim.gen_sim_proj()
-"""
 if opts.use_vivado:
-    sim.run_sim()
+    sim.simbackend.run_sim()
 sim.get_sim_data()
 sim.show_sim_data(opts.gui)
-"""
+
 # After finishing the simulation, 
 # we need t0 set the HDL_ROOT back to the original value
 os.environ['HDL_ROOT'] = jasper_hdl_root
