@@ -1,4 +1,4 @@
-
+import os
 class SimBackend(object):
     """
     A simulation backend object generates the scripts for simlation based on different simulaters.
@@ -9,9 +9,11 @@ class SimBackend(object):
     2. generate_sim_script:
         generate a script for running simulation in the background.
     """
-    def __init__(self, simdir, simtop):
+    def __init__(self, simdir, simtop, simlen, simoutput):
         self.simdir = simdir
         self.simtop = simtop
+        self.simlen = simlen
+        self.simoutput = simoutput
         self.compile_order = {
             'vhdl': [],
             'verilog': []
@@ -35,12 +37,15 @@ class SimBackend(object):
     def generate_sim_script(self):
         pass
 
+    def run_simulation(self):
+        pass
+
 class VivadoSimulator(SimBackend):
     """
     Use Vivado Simulator as the backend simulator.
     """
-    def __init__(self, simdir, simtop):
-        super.__init__(simdir, simtop)
+    def __init__(self, simdir, simtop, simoutput):
+        super.__init__(simdir, simtop, simoutput)
         self.vhdl_cof = simdir + '/' + 'vhdl.prj'
         self.verilog_cof = simdir + '/' + 'vlog.prj'
         self.sim_script = simdir + '/' + 'caspersim.sh'
@@ -93,6 +98,22 @@ class VivadoSimulator(SimBackend):
         scripts.append('-L unisims_ver -L unimacro_ver -L secureip -L xpm ')
         scripts.append(f'--snapshot {self.simtop} ')
         scripts.append(f'xil_defaultlib.{self.simtop} ')
-        scripts.append('xil_defaultlib.glbl -log elaborate.log')
-        scripts.append(f'xsim {self.simtop} -key {{Behavioral:sim_1:Functional:{self.simtop}}} -tclbatch {self.cmdtcl} -log simulate.log')
-        
+        scripts.append('xil_defaultlib.glbl -log elaborate.log\n\n')
+        scripts.append('# Sim\n')
+        scripts.append(f'xsim {self.simtop} -key {{Behavioral:sim_1:Functional:{self.simtop}}} -tclbatch {self.cmdtcl} -log simulate.log\n\n')
+        with open(self.sim_script, 'w') as f:
+            for s in scripts:
+                f.write(s)
+        # generate cmd.tcl for getting the vcd file
+        tcls = []
+        tcls.append(f'open_vcd {self.simoutput}\n')
+        tcls.append('log_vcd *')
+        tcls.append(f'run {float(self.simlen)} ns')
+        tcls.append('close_vcd')
+        tcls.append('quit')
+        with open(self.cmdtcl, 'w') as f:
+            for t in tcls:
+                f.write(t)
+    
+    def run_simulation(self):
+        return os.system(f'sh {self.sim_script}')
