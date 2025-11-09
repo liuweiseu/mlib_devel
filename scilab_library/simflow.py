@@ -2,9 +2,11 @@ import json
 import logging
 from sim_blocks.sim_block import SimBlock
 from sim_blocks.sim_block import CasperGTKWave, CasperRawData, CasperPyplot
+from dspflow import DSPflow
 from sim_backends.sim_backend import VivadoSimulator
 import numpy as np
 import os, math
+from glob import glob
 
 """
 This class generates a simulation object,
@@ -19,20 +21,41 @@ class SIMflow(object):
         """
         self.logger = logging.getLogger('jasper-sim.simflow')
         self.builddir = builddir
+        self.model_info = json.load(open(builddir+'/'+model_info_file))
+        self.ip_core_name = self.model_info['project']['filename'].split('/')[-1].split('.')[0] + '_core'
+        # simdir, simtop, simoutput, simco and simlen are 
+        # the necessary parameters for the backend obj, 
+        # which will be created in gen_sim_proj
         # The simdir name is a hard-coded string.
         # It should be fine for now, but we may need to change it, 
         # when we want to support more than one simulation backends.
         self.simdir = builddir + '/' + 'simulation'
-        self.simtop = self.simdir + '/' + self.ip_core['name'] + '_tb.v'
-        self.simoutput = builddir + '/' + 'simulation.vcd'
+        self.simtop = self.ip_core_name + '_tb.v'
+        self.simoutput = self.simdir + '/' + 'simulation.vcd'
+        # let's get the glue file to the co first
+        glues = glob(f'{self.builddir}/glues/*.v')
+        glues_co = {
+            'lib': 'xil_defaultlib',
+            'modules': glues
+        }
+        self.simco = {
+            'vhdl': [],
+            'verilog': [glues_co]
+        }
         # clock period is 1.0 ns.
         # TODO: we may need to make `clock_period` as var?
         clock_period = 1.0
         self.simlen = SimBlock.sim_length * clock_period
-        # create the backend object
+        # create the backend object based on the initial string
         if simbackend == 'vivado_simulator':
-            self.simbackend = VivadoSimulator(self.simdir, self.simtop, self.simlen, self.simoutput)
-        self.model_info = json.load(open(builddir+'/'+model_info_file))
+            self.simbackend = VivadoSimulator(self.simdir, 
+                                              self.simtop, 
+                                              self.simlen, 
+                                              self.simco,
+                                              self.simoutput)
+        else:
+            # TODO: we will support more simulator backends later
+            raise NotImplemented
         self.ip_core={}
         self.sim_blocks=[]
         self.sim_objs=[]
@@ -40,6 +63,14 @@ class SIMflow(object):
         # get the xilinx dir.
         # we will copy simulation files from this dir.
         self.xildir = os.getenv('XILINX_PATH')
+        # we can use dspflow to get the dpsobjs
+        # TODO: set jobs to 1 is fine here, as we just need gen_dsp_objs
+        df = DSPflow(builddir, 1)
+        df.gen_dsp_objs()
+        df.build_top()
+        df.generate_hdl()
+        self.dsp_objs = df.dsp_objs
+        
                          
     def _get_sim_blk_by_name(self, blkname):
         """
@@ -124,7 +155,8 @@ class SIMflow(object):
         """
         self.logger.info('Getting IP core information')
         # get the ip core name
-        self.ip_core['name'] = self.model_info['project']['filename'].split('/')[-1].split('.')[0] + '_core'
+        #self.ip_core['name'] = self.model_info['project']['filename'].split('/')[-1].split('.')[0] + '_core'
+        self.ip_core['name'] = self.ip_core_name
         # log it
         self.logger.info('IP Core Name: %s' % self.ip_core['name'])
         # get the input ports and output ports info
@@ -380,17 +412,17 @@ class SIMflow(object):
     #             f.write(line + '\n')
     def gen_sim_proj(self):
         # generate compile order for each block first
-        for obj in self.sim_objs:
+        for obj in self.dsp_objs:
             obj.generate_compile_order()
         # get the compile order to the simbackend obj
-        for obj in self.sim_objs:
-            for k in obj.compile_order:
+        for obj in self.dsp_objs:
+            for k in obj.compile_order.keys():
                 for co in obj.compile_order[k]:
-                    self.simbackend.compile_order[k].append(co)
+                    self.simbackend.add_compile_order(co, k)
         # write the compile order to files
-        self.simbackend.generate_co_file()
+        self.simbackend.gen_co_file()
         # generate sim scripts
-        self.simbackend.generate_sim_script()
+        self.simbackend.gen_sim_scripts()
 
     def run_sim(self):
         """
