@@ -4,10 +4,12 @@ class SimBackend(object):
     A simulation backend object generates the scripts for simlation based on different simulaters.
 
     There are sever methods are required at least:
-    1. generate_compile_order: 
+    1. gen_co_file: 
         For each VHDL/Verilog module, a specific compile order might be needed.
-    2. generate_sim_script:
-        generate a script for running simulation in the background.
+    2. gen_sim_script:
+        Generate a script for running simulation in the background.
+    3. run_sim:
+        Call the script to run simulation.
     """
     def __init__(self, simdir, simtop, simlen, simco, simoutput):
         self.simdir = simdir

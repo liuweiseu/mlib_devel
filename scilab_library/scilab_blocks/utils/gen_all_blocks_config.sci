@@ -7,7 +7,7 @@
 function [] = gen_all_blocks_config(fn)
     // get the 
     [path, projname, ext] = fileparts(fn);
-    configdir = path + '/' + projname + '/bconfigs';
+    configdir = path + projname + '/bconfigs';
     if ~isdir(configdir) then
         mkdir(configdir);
     end
