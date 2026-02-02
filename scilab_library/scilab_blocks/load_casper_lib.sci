@@ -18,6 +18,7 @@ exec('scilab_library/scilab_blocks/utils/update_block_config.sci');
 exec('scilab_library/scilab_blocks/utils/get_block_vals.sci');
 exec('scilab_library/scilab_blocks/utils/get_block_vindex.sci');
 exec('scilab_library/scilab_blocks/utils/search_block_by_name.sci');
+exec('scilab_library/scilab_blocks/utils/update_scilab_block.sci');
 exec('scilab_library/scilab_blocks/jasper.sci');
 exec('scilab_library/scilab_blocks/jasper_frontend.sci');
 exec('scilab_library/scilab_blocks/jasper_simulation.sci');
