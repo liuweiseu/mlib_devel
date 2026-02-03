@@ -3,8 +3,16 @@ function [] = jasper_block_config(fn, blkname)
     disp('Configuring Block: '+ blkname);
     // generate block config files first
     gen_all_blocks_config(fn);
-    // there is an env var set in gen_all_blocks_config,
-    // we can use it directly.
+    // get the block index
+    index = search_block_by_name(fn, blkname);
+    // open the xcos file
+    scs_m = xcosDiagramToScilab(fn);
+    // get the obj
+    obj = scs_m.objs(index);
+    // collect the specific block info
+    // this will update the bconfig file
+    [path, projname, ext] = fileparts(fn);
+    collect_one_block_info(projname, obj);
     configdir = getenv('CONFIG_DIR');
     // with the configdir and the blk, we can get the blk config file
     blk_config_file = configdir + '/' + blkname + '.json';
@@ -22,10 +30,6 @@ function [] = jasper_block_config(fn, blkname)
     debug_info('Block Config Cmd: ' + cmd);
     unix_w(cmd);
     /****** Next, we need to update the xcos block. ******/
-    // get the block index
-    index = search_block_by_name(fn, blkname);
-    // open the xcos file
-    scs_m = xcosDiagramToScilab(fn);
     // get val index
     vindex = get_block_vindex(scs_m.objs(index));
     // open bconfig.json, which was updated before
@@ -45,7 +49,10 @@ function [] = jasper_block_config(fn, blkname)
     // xcosUpdateBlock doesn't work.
     // So we have to close the xcos file to update the block. Weird...
     // TODO: This might need to be update.
+    obj = scs_m.objs(index);
+    execstr('[obj, x, y] = ' + obj.gui + '(''set'', obj)');
     close xcos!;
+    scs_m.objs(index) = obj;
     xcosDiagramToScilab(fn, scs_m);
     // ok, re-open the file.
     xcos(fn);

@@ -3,6 +3,7 @@ loadXcosLibs;
 // load the scilab functions
 exec('scilab_library/scilab_blocks/utils/debug_info.sci');
 exec('scilab_library/scilab_blocks/utils/collect_block_info.sci');
+exec('scilab_library/scilab_blocks/utils/collect_one_block_info.sci');
 exec('scilab_library/scilab_blocks/utils/get_block_tag.sci');
 exec('scilab_library/scilab_blocks/utils/get_block_type.sci');
 exec('scilab_library/scilab_blocks/utils/get_block_name.sci');

@@ -28,7 +28,7 @@ function [] = collect_block_info(fn)
         // if it's a block, get the block info
         if typeof(obj) == 'Block' then
             tag = get_block_tag(obj);
-            type = get_block_type(obj);
+            btype = get_block_type(obj);
             name = get_block_name(obj);
             // if it's a split_f block, we don't need to get the info
             if tag == 'SPLIT_f' then
@@ -38,7 +38,7 @@ function [] = collect_block_info(fn)
             // the type should be on of "xps", "dsp", "sim"
             // the tag is the "swreg", "gpio", etc.
             // each block has a config, which contains the paramters info and input/output ports info
-            block_config = get_block_config(name, type, tag);
+            block_config = get_block_config(name, btype, tag);
             // create a new struct for the block info
             keys = block_config('parameters')('keys');
             vals = block_config('parameters')('values');
@@ -62,13 +62,13 @@ function [] = collect_block_info(fn)
             // update the block config in the user defined config file
             update_block_config(block_info, block_info('name'));
             // write the block info to the struct
-            if type == 'xps' then
+            if btype == 'xps' then
                 st('xps_blocks')(xps_blocks_id) = block_info;
                 xps_blocks_id = xps_blocks_id + 1;
-            elseif type == 'dsp' then
+            elseif btype == 'dsp' then
                 st('dsp_blocks')(dsp_blocks_id) = block_info;
                 dsp_blocks_id = dsp_blocks_id + 1;
-            elseif type == 'sim' then
+            elseif btype == 'sim' then
                 st('sim_blocks')(sim_blocks_id) = block_info;
                 sim_blocks_id = sim_blocks_id + 1;
             end
