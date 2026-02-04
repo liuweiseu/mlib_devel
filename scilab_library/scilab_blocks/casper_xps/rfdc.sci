@@ -2,7 +2,6 @@
 function [x, y, typ]= rfdc(job, arg1, arg2)
     x=[];y=[];typ=[];
     blkname = 'rfdc';
-    sampling_rate = 0;
     select job
       case 'set' then
         x=arg1;
@@ -10,11 +9,10 @@ function [x, y, typ]= rfdc(job, arg1, arg2)
         exprs = graphics.exprs;
         model = arg1.model;
         
-        txt = [ 'Block Name (any string)';...
-                'Sampling Rate(MSps)';];
-        [ok, blkname, sampling_rate, exprs] = scicos_getvalue("Set RFDC block parameters",...
+        txt = [ 'Block Name (any string)';];
+        [ok, blkname, exprs] = scicos_getvalue("Set RFDC block parameters",...
                           txt,...
-                          list("str", 1, "str",1),...
+                          list("str", 1),...
                           exprs);
         if ok then
             model.out = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -40,7 +38,7 @@ function [x, y, typ]= rfdc(job, arg1, arg2)
         model.out = [1, 2, 3, 4, 5, 6, 7, 8];
         model.out2 = [128, 128, 128, 128, 128, 128, 128, 128];
         // Type : column vector of strings.
-        exprs = ['rfdc', '3932.16'];
+        exprs = ['rfdc'];
         gr_i = [];
         // set block tag
         model.label = "xps";
