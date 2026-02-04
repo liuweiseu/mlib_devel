@@ -43,14 +43,14 @@ function [] = jasper_block_config(fn, blkname)
         id = vindex(i) + 1;
         key = bconfig_template('parameters')('keys')(id)
         val = bconfig('parameters')(key)
-        // update_scilab_block(scs_m.objs(index), id, val);
         scs_m.objs(index).graphics.exprs(i) = val;
     end
     // xcosUpdateBlock doesn't work.
     // So we have to close the xcos file to update the block. Weird...
     // TODO: This might need to be update.
     obj = scs_m.objs(index);
-    execstr('[obj, x, y] = ' + obj.gui + '(''set'', obj)');
+    // execstr('[obj, x, y] = ' + obj.gui + '(''set'', obj)');
+    execstr('[obj] = ' + obj.gui + '_update_ports' + '(obj)');
     close xcos!;
     scs_m.objs(index) = obj;
     xcosDiagramToScilab(fn, scs_m);
