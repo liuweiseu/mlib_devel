@@ -50,7 +50,12 @@ function [] = jasper_block_config(fn, blkname)
     // TODO: This might need to be update.
     obj = scs_m.objs(index);
     // execstr('[obj, x, y] = ' + obj.gui + '(''set'', obj)');
-    execstr('[obj] = ' + obj.gui + '_update_ports' + '(obj)');
+    port_update_func = obj.gui + '_update_ports';
+    if(exists(port_update_func))
+        exe = sprintf("[obj] = %s(obj, ''%s'')", port_update_func, blk_config_file);
+        disp(exe);
+        execstr(exe);
+    end
     close xcos!;
     scs_m.objs(index) = obj;
     xcosDiagramToScilab(fn, scs_m);
