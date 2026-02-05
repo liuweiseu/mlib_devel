@@ -1071,7 +1071,7 @@ class RFDCOperations(object):
                     key = c['key']
                     getfunc = c['get']
                     config['parameters'][f't{tile}_DT_adc{adc}_{key}'] = str(getattr(self, getfunc)(tile, adc))
-        with open(self.dst_config, 'w', encoding='utf-8') as f:
+        with open(self.target_config, 'w', encoding='utf-8') as f:
             json.dump(config, f, ensure_ascii=False, indent=4)
     
     # function for loading default config info
