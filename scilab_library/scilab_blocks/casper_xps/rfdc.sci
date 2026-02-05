@@ -8,12 +8,7 @@ function [x, y, typ]= rfdc(job, arg1, arg2)
         graphics = arg1.graphics;
         exprs = graphics.exprs;
         model = arg1.model;
-        
-        txt = [ 'Block Name (any string)';];
-        [ok, blkname, exprs] = scicos_getvalue("Set RFDC block parameters",...
-                          txt,...
-                          list("str", 1),...
-                          exprs);
+        run_mask(x);
         if ok then
             model.out = [1, 2, 3, 4, 5, 6, 7, 8];
             model.out2 = [128, 128, 128, 128, 128, 128, 128, 128];

@@ -1,14 +1,17 @@
-import sys
+import sys, os
 import logging
 import json
 from argparse import ArgumentParser
+from pathlib import Path
+import shutil
+
 from PyQt6.QtWidgets import QApplication, QMainWindow
 from PyQt6.QtGui import QIcon
 from rfdc_ui import Ui_MainWindow
-import os
+
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from utils.utils import make_rich_logger
+from utils.utils import make_rich_logger, flat_config
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -117,7 +120,7 @@ ADC_TILE_SEPARATE_CONFIG = [
 ]
 DAC_TILES = [228, 229, 230, 231]
 class RFDCOperations(object):
-    def __init__(self, winobj, src_config='rfdc.json', dst_config='rfdc.json', logdir='.', debug=False):
+    def __init__(self, winobj, template_config='rfdc.json', target_config='rfdc.json', logdir='.', debug=False):
         if debug:
             self.logger = make_rich_logger('rfdc.log', logging.DEBUG, mode='a', logdir=logdir)
         else:
@@ -126,14 +129,20 @@ class RFDCOperations(object):
         self.logger.info('*************************************************')
         self.logger.info('RFDC Mask started.')
         self.logger.info('*************************************************')
-        self.logger.info(f'Source config file is {src_config}.')
-        self.logger.info(f'Dest config file is {dst_config}.')
-        self.src_config = src_config
-        self.dst_config = dst_config
+        self.logger.info(f'Template config file is {template_config}.')
+        self.logger.info(f'Target config file is {target_config}.')
+        self.template_config = template_config
+        self.target_config = target_config
+        p = Path(self.target_config)
+        # create the dir in case it doesn't exist
+        p.parent.mkdir(parents=True, exist_ok=True)
+        if not p.is_file():
+            self.logger.info(f"Target Config ({self.target_config}) doesn't exist.")
+            self.logger.info(f"Copy from ({self.template_config}) doesn't exist.")
+            flat_config(self.template_config, self.target_config)
         self.winobj = winobj
         self.ui = winobj.ui
-        if self.src_config is not None:
-            self.load_config()
+        self.load_config()
         self.setup_signal_functions()
 
     def _get_qt_obj(self, tile, name, adc=None, DQ=None):
@@ -353,7 +362,7 @@ class RFDCOperations(object):
         """
         self.logger.debug(f'ADC clock out of Tile{tile} is {val}.')
         obj = self._get_qt_obj(tile, 'clk_out')
-        obj.setCurrentText(val)
+        obj.setCurrentText(str(val))
 
     def get_dt_adc_status(self, tile, adc):
         """
@@ -435,7 +444,7 @@ class RFDCOperations(object):
         # also set the other status for sync
         for t in targets:
             obj = self._get_qt_obj(tile, t, adc, 'DT')
-            obj.setCurrentText(val)
+            obj.setCurrentText(str(val))
         return val
     
     def set_dt_adc_digital_output(self, tile, adc, val):
@@ -453,7 +462,7 @@ class RFDCOperations(object):
                    'digital_output_iq_coarse']
         for t in targets:
             obj = self._get_qt_obj(tile, t, adc, 'DT')
-            obj.setCurrentText(val)
+            obj.setCurrentText(str(val))
 
     def get_dt_adc_dec_mode(self, tile, adc):
         """
@@ -516,7 +525,7 @@ class RFDCOperations(object):
         # also set the other value for sync
         for t in targets:
             obj = self._get_qt_obj(tile, t, adc, 'DT')
-            obj.setCurrentText(decmode)
+            obj.setCurrentText(str(decmode))
         return decmode
 
     def set_dt_adc_dec_mode(self, tile, adc, decmode):
@@ -536,7 +545,7 @@ class RFDCOperations(object):
             if isinstance(decmode, int):
                 obj.setCurrentIndex(decmode)
             elif isinstance(decmode, str):
-                obj.setCurrentText(decmode)
+                obj.setCurrentText(str(decmode))
             else:
                 self.logger.error(f'decmode({decmode}) is not supported.')
     
@@ -568,7 +577,7 @@ class RFDCOperations(object):
         self.logger.debug(f'Tile{tile}.ADC{adc} (Dual Tile) samples per cycle is {spc}.')
         for t in targets:
             obj = self._get_qt_obj(tile, t, adc, 'DT')
-            obj.setCurrentText(spc)
+            obj.setCurrentText(str(spc))
         return int(spc)
     
     def set_dt_adc_samples_per_cycle(self, tile, adc, spc):
@@ -585,7 +594,7 @@ class RFDCOperations(object):
                    'sample_per_cycle_iq_coarse']
         for t in targets:
             obj = self._get_qt_obj(tile, t, adc, 'DT')
-        obj.setCurrentText(spc)
+        obj.setCurrentText(str(spc))
 
     def get_dt_adc_req_axis_clk(self, tile, adc):
         """
@@ -661,7 +670,7 @@ class RFDCOperations(object):
         self.logger.debug(f'Tile{tile}.ADC{adc} (Dual Tile) Mixer Type is {mixertype}.')
         for t in targets:
             obj = self._get_qt_obj(tile, t, adc, 'DT')
-            obj.setCurrentText(mixertype)
+            obj.setCurrentText(str(mixertype))
         return mixertype
 
     def set_dt_adc_mixer_type(self, tile, adc, mixertype):
@@ -684,7 +693,7 @@ class RFDCOperations(object):
             raise ValueError(f'mixtertype{mixertype} is not supported.')
         for t in targets:
             obj = self._get_qt_obj(tile, t, adc, 'DT')
-            obj.setCurrentText(mixertype)
+            obj.setCurrentText(str(mixertype))
 
     def get_dt_adc_mixer_mode(self, tile, adc):
         """
@@ -713,7 +722,7 @@ class RFDCOperations(object):
         self.logger.debug(f'Tile{tile}.ADC{adc} (Dual Tile) Mixer Type is {mixermode}.')
         for t in targets:
             obj = self._get_qt_obj(tile, t, adc, 'DT')
-            obj.setCurrentText(mixermode)
+            obj.setCurrentText(str(mixermode))
         return mixermode
     
     def set_dt_adc_mixer_mode(self, tile, adc, mixermode):
@@ -737,7 +746,7 @@ class RFDCOperations(object):
             raise ValueError(f'mixermode{mixermode} is not supported.')
         for t in targets:
             obj = self._get_qt_obj(tile, t, adc, 'DT')
-            obj.setCurrentText(mixermode)
+            obj.setCurrentText(str(mixermode))
         
     def get_dt_adc_nco_freq(self, tile, adc):
         """
@@ -809,7 +818,7 @@ class RFDCOperations(object):
         """
         self.logger.debug(f'Set Tile{tile}.ADC{adc} Coarse Frequency to {freq}.')
         obj = self._get_qt_obj(tile, 'coarse_freq', adc, 'DT')
-        obj.setCurrentText(freq)
+        obj.setCurrentText(str(freq))
 
     def get_dt_adc_nyquist_zone(self, tile, adc):
         """
@@ -839,7 +848,7 @@ class RFDCOperations(object):
         self.logger.debug(f'Tile{tile}.ADC{adc} (Dual Tile) Nyquist Zone is {nzone}.')
         for t in targets:
             obj = self._get_qt_obj(tile, t, adc, 'DT')
-            obj.setCurrentText(nzone)
+            obj.setCurrentText(str(nzone))
         return nzone
 
     def set_dt_adc_nyquist_zone(self, tile, adc, nzone):
@@ -859,7 +868,7 @@ class RFDCOperations(object):
                    'nyquist_zone_iq_coarse']
         for t in targets:
             obj = self._get_qt_obj(tile, t, adc, 'DT')
-            obj.setCurrentText(nzone)
+            obj.setCurrentText(str(nzone))
 
     def get_dt_adc_cal_mode(self, tile, adc):
         """
@@ -889,7 +898,7 @@ class RFDCOperations(object):
         self.logger.debug(f'Tile{tile}.ADC{adc} (Dual Tile) Calibration Mode is {calmode}.')
         for t in targets:
             obj = self._get_qt_obj(tile, t, adc, 'DT')
-            obj.setCurrentText(calmode)
+            obj.setCurrentText(str(calmode))
         return calmode
 
     def set_dt_adc_cal_mode(self, tile, adc, calmode):
@@ -909,7 +918,7 @@ class RFDCOperations(object):
                    'cal_mode_iq_coarse']
         for t in targets:
             obj = self._get_qt_obj(tile, t, adc, 'DT')
-            obj.setCurrentText(calmode)
+            obj.setCurrentText(str(calmode))
         
     def get_dt_adc_stack_page(self, tile, adc):
         """
@@ -1042,7 +1051,7 @@ class RFDCOperations(object):
     # function for collecting config info
     def collect_config(self):
         try:
-            with open(self.dst_config, 'r', encoding='utf-8') as f:
+            with open(self.target_config, 'r', encoding='utf-8') as f:
                 config = json.load(f)
         except:
             config = {}
@@ -1068,9 +1077,9 @@ class RFDCOperations(object):
     # function for loading default config info
     def load_config(self):
         self.logger.info('-------------------------------------------------')
-        self.logger.info(f'Loading default config from {self.src_config}...')
+        self.logger.info(f'Loading config from {self.target_config}...')
         self.logger.info('-------------------------------------------------')
-        with open(self.src_config, 'r', encoding='utf-8') as f:
+        with open(self.target_config, 'r', encoding='utf-8') as f:
             config = json.load(f)
         parameters = config['parameters']
         for tile in ADC_TILES:
@@ -1159,8 +1168,8 @@ class RFDCOperations(object):
 
 if __name__ == "__main__":
     parser = ArgumentParser(description="Usage for RFDC Mask.")
-    parser.add_argument('-s','--src', type=str, dest='src', default=None, help='Source config file.')
-    parser.add_argument('-d','--dst', type=str, dest='dst', default='rfdc.json',help='Dest config file.')
+    parser.add_argument('--template', type=str, dest='template', default=None, help='template config file.')
+    parser.add_argument('--target', type=str, dest='target', default='rfdc.json',help='target config file.')
     parser.add_argument('-l', '--log', type=str, dest='log', default='.', help='The directory for log files.')
     parser.add_argument('-v', '--verbose', dest='debug', action='store_true', default=False, help='Turn on verbose.')
     opts = parser.parse_args()
@@ -1170,6 +1179,6 @@ if __name__ == "__main__":
     curdir = os.path.dirname(script_path)
     app.setWindowIcon(QIcon(f"{curdir}/icon/casper_icon.png"))
     win = MainWindow()
-    op = RFDCOperations(win, opts.src, opts.dst, opts.log, opts.debug)
+    op = RFDCOperations(win, opts.template, opts.target, opts.log, opts.debug)
     win.show()
     sys.exit(app.exec())
