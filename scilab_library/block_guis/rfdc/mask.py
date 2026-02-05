@@ -11,7 +11,7 @@ from rfdc_ui import Ui_MainWindow
 
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from utils.utils import make_rich_logger, flat_config
+from utils.utils import make_rich_logger, gen_bconfig
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -125,7 +125,6 @@ class RFDCOperations(object):
             self.logger = make_rich_logger('rfdc.log', logging.DEBUG, mode='a', logdir=logdir)
         else:
             self.logger = make_rich_logger('rfdc.log', logging.ERROR, mode='a', logdir=logdir)
-    
         self.logger.info('*************************************************')
         self.logger.info('RFDC Mask started.')
         self.logger.info('*************************************************')
@@ -133,13 +132,6 @@ class RFDCOperations(object):
         self.logger.info(f'Target config file is {target_config}.')
         self.template_config = template_config
         self.target_config = target_config
-        p = Path(self.target_config)
-        # create the dir in case it doesn't exist
-        p.parent.mkdir(parents=True, exist_ok=True)
-        if not p.is_file():
-            self.logger.info(f"Target Config ({self.target_config}) doesn't exist.")
-            self.logger.info(f"Copy from ({self.template_config}) doesn't exist.")
-            flat_config(self.template_config, self.target_config)
         self.winobj = winobj
         self.ui = winobj.ui
         self.load_config()
@@ -1173,6 +1165,8 @@ if __name__ == "__main__":
     parser.add_argument('-l', '--log', type=str, dest='log', default='.', help='The directory for log files.')
     parser.add_argument('-v', '--verbose', dest='debug', action='store_true', default=False, help='Turn on verbose.')
     opts = parser.parse_args()
+    # generate the bconfig file
+    gen_bconfig(opts.template, opts.target)
 
     app = QApplication(sys.argv)
     script_path = os.path.realpath(__file__)

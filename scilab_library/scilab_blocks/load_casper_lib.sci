@@ -69,7 +69,6 @@ exec('scilab_library/scilab_blocks/casper_dsp/pulse_ext.sci');
 exec('scilab_library/scilab_blocks/casper_dsp/slice.sci');
 exec('scilab_library/scilab_blocks/casper_dsp/munge.sci');
 exec('scilab_library/scilab_blocks/casper_dsp/wbfft.sci');
-exec('scilab_library/scilab_blocks/casper_dsp/wbfft_update_ports.sci');
 exec('scilab_library/scilab_blocks/casper_dsp/bus_expand.sci');
 exec('scilab_library/scilab_blocks/casper_dsp/dsp_constant.sci');
 exec('scilab_library/scilab_blocks/casper_dsp/delay.sci');

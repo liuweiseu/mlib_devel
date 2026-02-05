@@ -9,7 +9,7 @@ from wideband_fft_ui import Ui_MainWindow
 import os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from utils.utils import make_rich_logger
+from utils.utils import make_rich_logger, gen_bconfig
 
 WBFFT_CONFIG = {
         'use_separate':
@@ -126,7 +126,7 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
 class WBFFTOperations(object):
-    def __init__(self, winobj, src_config='wb_fft.json', dst_config='wb_fft.json', logdir='.', debug=False):
+    def __init__(self, winobj, template_config='wb_fft.json', target_config='wb_fft.json', logdir='.', debug=False):
         if debug:
             self.logger = make_rich_logger('wbfft.log', logging.DEBUG, mode='a', logdir=logdir)
         else:
@@ -134,14 +134,13 @@ class WBFFTOperations(object):
         self.logger.info('*************************************************')
         self.logger.info('Wideband FFT Mask started.')
         self.logger.info('*************************************************')
-        self.logger.info(f'Source config file is {src_config}.')
-        self.logger.info(f'Dest config file is {dst_config}.')
-        self.src_config = src_config
-        self.dst_config = dst_config
+        self.logger.info(f'Source config file is {template_config}.')
+        self.logger.info(f'Dest config file is {target_config}.')
+        self.template_config = template_config
+        self.target_config = target_config
         self.winobj = winobj
         self.ui = winobj.ui
-        if self.src_config is not None:
-            self.load_config()
+        self.load_config()
         self.setup_signal_functions()
 
     def _cv(self, v):
@@ -411,9 +410,9 @@ class WBFFTOperations(object):
     # *******************************************************************
     def load_config(self):
         self.logger.info('-------------------------------------------------')
-        self.logger.info(f'Loading default config from {self.src_config}...')
+        self.logger.info(f'Loading config from {self.target_config}...')
         self.logger.info('-------------------------------------------------')
-        with open(self.src_config, 'r', encoding='utf-8') as f:
+        with open(self.template_config, 'r', encoding='utf-8') as f:
             config = json.load(f)
         parameters = config['parameters']
         for k,v in parameters.items():
@@ -427,11 +426,11 @@ class WBFFTOperations(object):
 
     def collect_config(self):
         self.logger.info('-------------------------------------------------')
-        self.logger.info(f'Writing config data to {self.dst_config}...')
+        self.logger.info(f'Writing config data to {self.target_config}...')
         self.logger.info('-------------------------------------------------')
         # try to open the config file if it exists
         try:
-            with open(self.dst_config, 'r', encoding='utf-8') as f:
+            with open(self.target_config, 'r', encoding='utf-8') as f:
                 config = json.load(f)
         except:
             config = {}
@@ -443,22 +442,24 @@ class WBFFTOperations(object):
             key = k
             getfunc = v['get']
             config['parameters'][f'{key}'] = str(getattr(self, getfunc)())
-        with open(self.dst_config, 'w', encoding='utf-8') as f:
+        with open(self.target_config, 'w', encoding='utf-8') as f:
             json.dump(config, f, ensure_ascii=False, indent=4)
 
 if __name__ == "__main__":
     parser = ArgumentParser(description="Usage for RFDC Mask.")
-    parser.add_argument('-s','--src', type=str, dest='src', default=None, help='Source config file.')
-    parser.add_argument('-d','--dst', type=str, dest='dst', default='wbfft.json',help='Dest config file.')
+    parser.add_argument('--template', type=str, dest='template', default=None, help='template config file.')
+    parser.add_argument('--target', type=str, dest='target', default='rfdc.json',help='target config file.')
     parser.add_argument('-l', '--log', type=str, dest='log', default='.', help='The directory for log files.')
     parser.add_argument('-v', '--verbose', dest='debug', action='store_true', default=False, help='Turn on verbose.')
     opts = parser.parse_args()
+    # generate the bconfig file
+    gen_bconfig(opts.template, opts.target)
 
     app = QApplication(sys.argv)
     script_path = os.path.realpath(__file__)
     curdir = os.path.dirname(script_path)
     app.setWindowIcon(QIcon(f"{curdir}/icon/casper_icon.png"))
     win = MainWindow()
-    op = WBFFTOperations(win, opts.src, opts.dst, opts.log, opts.debug)
+    op = WBFFTOperations(win, opts.template, opts.target, opts.log, opts.debug)
     win.show()
     sys.exit(app.exec())

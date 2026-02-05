@@ -76,3 +76,10 @@ def flat_config(template, target):
             indent=4,          
             ensure_ascii=False
         )
+
+def gen_bconfig(template, target):
+    p = Path(target)
+    # create the dir in case it doesn't exist
+    p.parent.mkdir(parents=True, exist_ok=True)
+    if not p.is_file():
+        flat_config(template, target)

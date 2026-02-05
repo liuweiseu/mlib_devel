@@ -1,7 +1,6 @@
 //Create a simple custom block.
 function [x, y, typ]= rfdc(job, arg1, arg2)
     x=[];y=[];typ=[];
-    blkname = 'rfdc';
     select job
       case 'set' then
         x = arg1;
