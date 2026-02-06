@@ -4,9 +4,13 @@ function [x, y, typ]= rfdc(job, arg1, arg2)
     select job
       case 'set' then
         x = arg1;
+        export_exprs_to_tmpdir(x);
         bconfig = run_mask(x);
+        x = update_exprs_from_tmpdir(x);
         x = rfdc_update_ports(x, bconfig);
       case 'define' then
+        btype = 'xps';
+        tag = 'rfdc';
         model = scicos_model();
         model.sim = list('rfdc',4);
         model.blocktype = 'c';
@@ -17,20 +21,19 @@ function [x, y, typ]= rfdc(job, arg1, arg2)
         model.in2 = [128, 128, 128, 128, 128, 128, 128, 128];
         model.out = [1, 2, 3, 4, 5, 6, 7, 8];
         model.out2 = [128, 128, 128, 128, 128, 128, 128, 128];
-        // Type : column vector of strings.
-        exprs = ['rfdc'];
         gr_i = [];
-        // set block tag
-        model.label = "xps";
+        exprs = [];
+        model.label = btype;
         x=standard_define([14 14],model,exprs,gr_i)
         x.graphics.out_label = ['m00_axis_tdata', 'm02_axis_tdata', 'm10_axis_tdata', 'm12_axis_tdata', 'm20_axis_tdata', 'm22_axis_tdata', 'm30_axis_tdata', 'm32_axis_tdata'];
         x.graphics.in_label = ['m00_axis_tdata_sim', 'm02_axis_tdata_sim', 'm10_axis_tdata_sim', 'm12_axis_tdata_sim', 'm20_axis_tdata_sim', 'm22_axis_tdata_sim', 'm30_axis_tdata_sim', 'm32_axis_tdata_sim'];
         x.graphics.style = 'shape=rectangle;fillColor=yellow'
+        x = init_exprs(x);
         debug_info('rfdc block loaded...')
     end
   endfunction
   
-  
+
 function [x] = rfdc_update_ports(obj, bconfigfn)
     bconfig = fromJSON(bconfigfn, 'file');
     // TODO: add support for QT

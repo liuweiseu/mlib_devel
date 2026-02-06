@@ -26,8 +26,15 @@ exec('scilab_library/scilab_blocks/jasper_frontend.sci');
 exec('scilab_library/scilab_blocks/jasper_simulation.sci');
 exec('scilab_library/scilab_blocks/run_simulation.sci');
 exec('scilab_library/scilab_blocks/utils/check_block_names.sci');
-exec('scilab_library/scilab_blocks/jasper_block_config.sci');
-
+exec('scilab_library/scilab_blocks/utils/getenv_default.sci');
+exec('scilab_library/scilab_blocks/utils/update_bconfig.sci');
+exec('scilab_library/scilab_blocks/utils/gen_block_name.sci');
+exec('scilab_library/scilab_blocks/utils/get_blocks_by_uids.sci');
+exec('scilab_library/scilab_blocks/utils/init_exprs.sci');
+exec('scilab_library/scilab_blocks/utils/export_exprs.sci');
+exec('scilab_library/scilab_blocks/utils/export_exprs_to_tmpdir.sci');
+exec('scilab_library/scilab_blocks/utils/update_exprs.sci');
+exec('scilab_library/scilab_blocks/utils/update_exprs_from_tmpdir.sci');
 // TODO: load the xps and dsp blocks automatically
 // all of the blocks in the scilab_library/casper_xps and 
 // scilab_library/casper_dsp directories should be loaded autocaically
