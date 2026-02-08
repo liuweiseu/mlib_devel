@@ -412,7 +412,7 @@ class WBFFTOperations(object):
         self.logger.info('-------------------------------------------------')
         self.logger.info(f'Loading config from {self.target_config}...')
         self.logger.info('-------------------------------------------------')
-        with open(self.template_config, 'r', encoding='utf-8') as f:
+        with open(self.target_config, 'r', encoding='utf-8') as f:
             config = json.load(f)
         parameters = config['parameters']
         for k,v in parameters.items():

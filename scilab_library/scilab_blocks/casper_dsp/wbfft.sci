@@ -4,35 +4,32 @@ function [x, y, typ]= wbfft(job, arg1, arg2)
     select job
     case 'set' then
         x = arg1;
+        export_exprs_to_tmpdir(x);
         bconfig = run_mask(x);
-        x = wbfft_update_ports(x, bconfig); 
+        x = update_exprs_from_tmpdir(x);
+        x = wbfft_update_ports(x, bconfig);
     case 'define' then
+        btype = 'dsp';
+        tag = 'wbfft';
         model = scicos_model();
-        model.sim = list('wbfft',4);
+        model.sim = list(tag,4);
         model.blocktype = 'c';
-        // Type : column vector of real numbers.
-        model.rpar = [0, 9, 10, 7, 8];
-        // Type : column vector of strings.
-        exprs = ['wbfft'; '16'; '18'; '1'; '128'];
+        model.rpar = [];
+        exprs = [];
         gr_i = [];
-        [iports_index, iports_label] = wbfft_create_iports(8);
+        [iports_index, iports_label] = wbfft_create_iports(1);
         model.in = iports_index;
         model.in2 = [1, 1, 7, 16, 16];
-        [oports_index, oports_label] = wbfft_create_oports(8);
+        [oports_index, oports_label] = wbfft_create_oports(1);
         model.out = oports_index;
         model.out2 = [1, 1, 7, 18, 18];
-        // we use model.label as the block tag.
-        // the best place to set the tag should be graphics.gr_i/id.
-        // However, I can't set graphics.gr_i/id...not sure why.
-        // I tracked the code of standard_define until sciscicos_new().
-        // Everything looks good, but gr_i/id is not set successfully.
-        // scicos_new() looks implemented in c++, so I stopped tracking it.
-        // TODO: track the source code of scicos_new() in c++.
-        model.label = "dsp";
+        model.label = btype;
         x=standard_define([14 14],model,exprs,gr_i)
         x.graphics.in_label = iports_label;
         x.graphics.out_label = oports_label;
         x.graphics.style = 'shape=rectangle;fillColor=green';
+        /* init exprs */
+        x = init_exprs(x);
         debug_info('wbfft loaded...')
     end
 endfunction
