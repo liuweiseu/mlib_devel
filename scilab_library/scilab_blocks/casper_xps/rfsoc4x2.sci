@@ -41,30 +41,21 @@ function [x, y, typ]= rfsoc4x2(job, arg1, arg2)
         x.model = model;
       end
     case 'define' then
-      model = scicos_model();
-      model.sim = list('rfsoc',4);
-      model.blocktype = 'c';
-      // we put the index of the related item in block_info.json into rpar
-      // model.rpar = [0,0,256,128,1];
-      //   "RFSoC4x2":{
-      //     "name": "RFSoC4x2",      
-      //     "fullpath": "",
-      //     "tag": "xps:xsg",
-      //     "hw_sys": "rfsoc4x2:xczu48dr",   -- 3
-      //     "clk_src": "adc_clk",            -- 4
-      //     "clk_rate": 245.76,              -- 5
-      //     "pl_clk_rate": 122.88,           -- 6
-      //     "sample_period": 1,              -- 7
-      //     "synthesis_tool": "XST"
-      // }
-      // Type : column vector of real numbers.
-      model.rpar = [0, 3, 4, 5, 6, 7];
-      // Type : column vector of strings.
-      exprs = ['RFSoC4x2';'rfsoc4x2:xczu48dr'; 'adc_clk'; '245.76'; '122.88'; '1'];
-      gr_i = [];
-      // set block tag
-      model.label = "xps";
-      x=standard_define([4 4],model,exprs,gr_i)
-      debug_info('rfsoc4x2 block loaded...')
+        /* the block init code is here */
+        btype = 'xps';
+        tag = 'rfsoc4x2';
+        /* create model data structure */
+        /* 1. fixed part */
+        model = scicos_model();
+        model.sim = list(tag,4);
+        model.blocktype = 'c';
+        model.label = btype;
+        model.rpar = [];
+        /* create the block data structure */
+        exprs = [];
+        gr_i = [];
+        x=standard_define([4 4],model,exprs,gr_i);
+        x = init_exprs(x);
+        debug_info('rfsoc4x2 block loaded...');
   end
 endfunction

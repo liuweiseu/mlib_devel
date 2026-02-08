@@ -1,7 +1,7 @@
 /* generate the block name automatically */
 /* store the name in a json file under builddir */
-function [name] = gen_block_name(builddir, obj)
-    blistfn = sprintf("%s/block_list.json", builddir);
+function [name] = gen_block_name(bconfigdir, obj)
+    blistfn = sprintf("%s/block_list.json", bconfigdir);
     // check if block list exists
     if isfile(blistfn) then
         blist = fromJSON(blistfn, 'file');
@@ -17,12 +17,24 @@ function [name] = gen_block_name(builddir, obj)
         nobjs = 0;
     end
     // let's create the block name!
-    name = sprintf("%s_%d", tag, nobjs);
-    nobjs = nobjs + 1;
     uid = gen_uid(obj);
-    // write the info back to the blist
-    blist(tag)('nobjs') = nobjs;
-    blist(tag)(uid) = name;
-    toJSON(blist, blistfn, 4);
+    if ~isfield(blist(tag), uid) then
+        /* 
+        if the block uid is not in the block list,
+        add the name for the block.
+        */
+        name = sprintf("%s_%d", tag, nobjs);
+        nobjs = nobjs + 1;
+        // write the info back to the blist
+        blist(tag)('nobjs') = nobjs;
+        blist(tag)(uid) = name;
+        toJSON(blist, blistfn, 4);
+    else
+        /* 
+        if the uid exists in the block list,
+        get the name directly.
+        */
+        name = blist(tag)(uid);
+    end
     debug_info('New Block Collected: ' + name);
 endfunction

@@ -3,13 +3,10 @@ loadXcosLibs;
 // load the scilab functions
 exec('scilab_library/scilab_blocks/utils/debug_info.sci');
 exec('scilab_library/scilab_blocks/utils/collect_block_info.sci');
-exec('scilab_library/scilab_blocks/utils/collect_one_block_info.sci');
 exec('scilab_library/scilab_blocks/utils/get_block_tag.sci');
 exec('scilab_library/scilab_blocks/utils/get_block_type.sci');
 exec('scilab_library/scilab_blocks/utils/get_block_name.sci');
 exec('scilab_library/scilab_blocks/utils/get_port_width.sci');
-exec('scilab_library/scilab_blocks/utils/get_block_config.sci');
-exec('scilab_library/scilab_blocks/utils/gen_all_blocks_config.sci');
 exec('scilab_library/scilab_blocks/utils/gen_block_config.sci');
 exec('scilab_library/scilab_blocks/utils/get_link_info_by_link_obj.sci');
 exec('scilab_library/scilab_blocks/utils/search_for_real_src_blk.sci');
@@ -25,7 +22,6 @@ exec('scilab_library/scilab_blocks/jasper.sci');
 exec('scilab_library/scilab_blocks/jasper_frontend.sci');
 exec('scilab_library/scilab_blocks/jasper_simulation.sci');
 exec('scilab_library/scilab_blocks/run_simulation.sci');
-exec('scilab_library/scilab_blocks/utils/check_block_names.sci');
 exec('scilab_library/scilab_blocks/utils/getenv_default.sci');
 exec('scilab_library/scilab_blocks/utils/update_bconfig.sci');
 exec('scilab_library/scilab_blocks/utils/gen_block_name.sci');
@@ -35,6 +31,7 @@ exec('scilab_library/scilab_blocks/utils/export_exprs.sci');
 exec('scilab_library/scilab_blocks/utils/export_exprs_to_tmpdir.sci');
 exec('scilab_library/scilab_blocks/utils/update_exprs.sci');
 exec('scilab_library/scilab_blocks/utils/update_exprs_from_tmpdir.sci');
+exec('scilab_library/scilab_blocks/utils/validate_design.sci');
 // TODO: load the xps and dsp blocks automatically
 // all of the blocks in the scilab_library/casper_xps and 
 // scilab_library/casper_dsp directories should be loaded autocaically
