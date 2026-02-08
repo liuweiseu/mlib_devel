@@ -22,7 +22,6 @@ exec('scilab_library/scilab_blocks/jasper.sci');
 exec('scilab_library/scilab_blocks/jasper_frontend.sci');
 exec('scilab_library/scilab_blocks/jasper_simulation.sci');
 exec('scilab_library/scilab_blocks/run_simulation.sci');
-exec('scilab_library/scilab_blocks/utils/getenv_default.sci');
 exec('scilab_library/scilab_blocks/utils/update_bconfig.sci');
 exec('scilab_library/scilab_blocks/utils/gen_block_name.sci');
 exec('scilab_library/scilab_blocks/utils/get_blocks_by_uids.sci');

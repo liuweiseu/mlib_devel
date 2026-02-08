@@ -9,7 +9,7 @@ function [] = get_blocks_by_uids(fn)
         rmdir(builddir, 's');
         mkdir(builddir);
     end
-    tmpdir = getenv_default('BCONFIG_TMPDIR', '/tmp/casper_bconfigs');
+    tmpdir = getenv('BCONFIG_TMPDIR', '/tmp/casper_bconfigs');
     scs_m = xcosDiagramToScilab(fn);
     n_objs = length(scs_m.objs);
     for i = 1:n_objs

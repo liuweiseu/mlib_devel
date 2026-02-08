@@ -6,9 +6,10 @@ function [target] = run_mask(obj)
     debug_info('mask: ' + mask);
     template = sprintf("%s/scilab_library/scilab_blocks/casper_%s/%s.json", mlib_devel_path, obj.model.label, obj.gui);
     debug_info('template: ' + template);
-    tmpdir = getenv_default('BCONFIG_TMPDIR', '/tmp/casper_bconfigs');
+    tmpdir = getenv('BCONFIG_TMPDIR', '/tmp/casper_bconfigs');
     target = sprintf("%s/%s.json", tmpdir, uid);
-    cmd = sprintf("python %s --template %s --target %s --log %s", mask, template, target, tmpdir);
+    python = getenv('PYTHON_GUI', 'python');
+    cmd = sprintf("%s %s --template %s --target %s --log %s", python, mask, template, target, tmpdir);
     debug_info('cmd: ' + cmd);
     unix_w(cmd);
 endfunction
