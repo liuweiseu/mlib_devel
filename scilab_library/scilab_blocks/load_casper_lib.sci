@@ -32,6 +32,7 @@ exec('scilab_library/scilab_blocks/utils/export_exprs_to_tmpdir.sci');
 exec('scilab_library/scilab_blocks/utils/update_exprs.sci');
 exec('scilab_library/scilab_blocks/utils/update_exprs_from_tmpdir.sci');
 exec('scilab_library/scilab_blocks/utils/validate_design.sci');
+exec('scilab_library/scilab_blocks/utils/remove_tmpdir.sci');
 // TODO: load the xps and dsp blocks automatically
 // all of the blocks in the scilab_library/casper_xps and 
 // scilab_library/casper_dsp directories should be loaded autocaically

@@ -4,6 +4,14 @@ function [] = collect_block_info(fn)
     if ~isdir(builddir) then
         mkdir(builddir);
     end
+
+    /* remove the bconfig dir, as we will re-create it in this function */
+    bconfigdir = sprintf("%s/bconfigs", builddir);
+    if isdir(bconfigdir) then
+        rmdir(bconfigdir, 's');
+        mkdir(bconfigdir);
+    end
+
     /* load the diagram file */
     scs_m = xcosDiagramToScilab(fn);
     /* get the number of objs */
@@ -53,7 +61,6 @@ function [] = collect_block_info(fn)
     st('link_info') = list();
     link_info = struct();
     link_info_id = 1;
-    bconfigdir = sprintf("%s/bconfigs", builddir);
     for i = 1:n_objs
         obj = scs_m.objs(i);
         // check the obj type

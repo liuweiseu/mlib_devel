@@ -15,6 +15,10 @@ function [build_cmd] = jasper_frontend(fn)
     /* set the modelpath */
     modelpath = fn;
     
+    /* bconfig tmp dir needs to be removed. */
+    /* in case more and more tmp files are created. */
+    remove_tmpdir();
+    
     /* collect the block info, and generate the jasper.json file */
     collect_block_info(fn);
     
