@@ -48,7 +48,7 @@
         <item row="2" column="0" colspan="3">
          <widget class="QLabel" name="label_3">
           <property name="text">
-           <string>Defines a 32-bit software register used to pass arbitrary bit-fields between the FPGA fabric and the embedded/host processor.</string>
+           <string>Defines a 32-bit software register used to pass arbitrary bit-fields between the FPGA fabric and the embedded/host processor. List fields from msb to lsb, e.g. names = [a b], bitwidths = [8 24]. The total width must not exceed 32 bits.</string>
           </property>
           <property name="wordWrap">
            <bool>true</bool>
@@ -82,27 +82,18 @@
            <item row="1" column="0">
             <widget class="QLabel" name="label_5">
              <property name="text">
-              <string>Mode</string>
+              <string>Initial value (init_val)</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="1">
-            <widget class="QComboBox" name="mode">
-             <item>
-              <property name="text">
-               <string>one value</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>fields of equal size</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>fields of arbitrary size</string>
-              </property>
-             </item>
+           <item row="1" column="1" colspan="2">
+            <widget class="QLineEdit" name="init_val">
+             <property name="toolTip">
+              <string>Reset value of the register (decimal, 0 ~ 4294967295). Only used when io_dir is From Processor.</string>
+             </property>
+             <property name="text">
+              <string>0</string>
+             </property>
             </widget>
            </item>
            <item row="2" column="0">
@@ -115,21 +106,21 @@
            <item row="2" column="1" colspan="2">
             <widget class="QLineEdit" name="names">
              <property name="text">
-              <string>['reg']</string>
+              <string>reg</string>
              </property>
             </widget>
            </item>
            <item row="3" column="0">
             <widget class="QLabel" name="label_7">
              <property name="text">
-              <string>Bitwidths [msb...lsb]</string>
+              <string>Bitwidths [msb...lsb] (one value or one per name)</string>
              </property>
             </widget>
            </item>
            <item row="3" column="1" colspan="2">
             <widget class="QLineEdit" name="bitwidths">
              <property name="text">
-              <string>[32]</string>
+              <string>1</string>
              </property>
             </widget>
            </item>
@@ -143,7 +134,7 @@
            <item row="4" column="1" colspan="2">
             <widget class="QLineEdit" name="bin_pts">
              <property name="text">
-              <string>[0]</string>
+              <string>0</string>
              </property>
             </widget>
            </item>
@@ -157,7 +148,7 @@
            <item row="5" column="1" colspan="2">
             <widget class="QLineEdit" name="arith_types">
              <property name="text">
-              <string>[0]</string>
+              <string>2</string>
              </property>
             </widget>
            </item>
@@ -177,7 +168,7 @@
               <number>64</number>
              </property>
              <property name="value">
-              <number>1</number>
+              <number>0</number>
              </property>
             </widget>
            </item>
