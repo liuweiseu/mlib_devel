@@ -99,7 +99,7 @@ operation_inst = operation("define");
 logic_not_inst = logic_not("define");
 cur_dir = pwd();
 dsp_fig_dir = cur_dir + '/scilab_library/scilab_blocks/casper_dsp/figures/';
-pal = xcosPal("CASPER DSP");
+pal = xcosPal("General");
 pal = xcosPalAddBlock(pal, adder_inst);
 pal = xcosPalAddBlock(pal, pulse_ext_inst);
 pal = xcosPalAddBlock(pal, edge_detect_inst);
@@ -108,14 +108,23 @@ pal = xcosPalAddBlock(pal, slice_inst);
 pal = xcosPalAddBlock(pal, munge_inst);
 pal = xcosPalAddBlock(pal, wbfft_inst);
 pal = xcosPalAddBlock(pal, bus_expand_inst);
-pal = xcosPalAddBlock(pal, bus_create_inst);
 pal = xcosPalAddBlock(pal, dsp_constant_inst);
 pal = xcosPalAddBlock(pal, delay_inst);
 pal = xcosPalAddBlock(pal, simple_bram_vacc_inst);
 pal = xcosPalAddBlock(pal, power_cal_inst);
 pal = xcosPalAddBlock(pal, operation_inst);
 pal = xcosPalAddBlock(pal, logic_not_inst);
-xcosPalAdd(pal);
+xcosPalAdd(pal, "CASPER DSP");
+// "pal" above is now named "General" (not "CASPER DSP") and registered
+// under category "CASPER DSP" rather than at the tree root: xcosPalAdd's
+// category argument creates/reuses a Category folder by name, and any
+// xcosPal registered under the SAME category string merges into that same
+// folder as a sibling leaf -- reusing the exact string "CASPER DSP" for
+// both xcosPalAdd calls below is what keeps them merged into one folder
+// instead of creating two separate top-level "CASPER DSP" entries.
+pal_bus = xcosPal("Bus");
+pal_bus = xcosPalAddBlock(pal_bus, bus_create_inst);
+xcosPalAdd(pal_bus, "CASPER DSP");
 debug_info('------ CASPER DSP loaded --------');
 
 // add casper sim blocks
