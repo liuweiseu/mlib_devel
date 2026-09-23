@@ -103,11 +103,8 @@ cur_dir = pwd();
 dsp_fig_dir = cur_dir + '/scilab_library/scilab_blocks/casper_dsp/figures/';
 pal = xcosPal("General");
 pal = xcosPalAddBlock(pal, adder_inst);
-pal = xcosPalAddBlock(pal, pulse_ext_inst);
-pal = xcosPalAddBlock(pal, edge_detect_inst);
 pal = xcosPalAddBlock(pal, counter_inst);
 pal = xcosPalAddBlock(pal, slice_inst);
-pal = xcosPalAddBlock(pal, munge_inst);
 pal = xcosPalAddBlock(pal, wbfft_inst);
 pal = xcosPalAddBlock(pal, dsp_constant_inst);
 pal = xcosPalAddBlock(pal, delay_inst);
@@ -129,17 +126,20 @@ xcosPalAdd(pal, "CASPER DSP");
 // this up) -- NOT a guess from the block's name. bus_create really lives in
 // casper_library_flow_control.slx, which the browser tree files under
 // "Flow_Control", so that's the sub-palette name here (not "Bus").
-// bus_expand lives in the very same casper_library_flow_control.slx file
-// (confirmed by opening it directly: bus_create/bus_expand/munge all sit
-// at its system root with no further nesting), so it belongs here too.
+// bus_expand and munge live in the very same casper_library_flow_control.slx
+// file (confirmed by opening it directly: bus_create/bus_expand/munge all
+// sit at its system root with no further nesting), so they belong here too.
 pal_flow_control = xcosPal("Flow_Control");
 pal_flow_control = xcosPalAddBlock(pal_flow_control, bus_create_inst);
 pal_flow_control = xcosPalAddBlock(pal_flow_control, bus_expand_inst);
+pal_flow_control = xcosPalAddBlock(pal_flow_control, munge_inst);
 xcosPalAdd(pal_flow_control, "CASPER DSP");
-// armed_trigger's mask lives in casper_library_misc.slx, which the browser
-// tree files under "Misc".
+// armed_trigger/pulse_ext/edge_detect's masks all live in casper_library_misc.slx,
+// which the browser tree files under "Misc".
 pal_misc = xcosPal("Misc");
 pal_misc = xcosPalAddBlock(pal_misc, armed_trigger_inst);
+pal_misc = xcosPalAddBlock(pal_misc, pulse_ext_inst);
+pal_misc = xcosPalAddBlock(pal_misc, edge_detect_inst);
 xcosPalAdd(pal_misc, "CASPER DSP");
 debug_info('------ CASPER DSP loaded --------');
 

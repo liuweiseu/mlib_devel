@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Munge</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_total_bits">
+     <property name="text"><string>Total Bits (input/output bus width)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="total_bits"/>
+       <widget class="QLabel" name="label_divisions">
+     <property name="text"><string>Number of Divisions</string></property>
+    </widget>
+       <widget class="QSpinBox" name="divisions"/>
+       <widget class="QLabel" name="label_size_bits">
+     <property name="text"><string>Division Size (bits, equal for every division)</string></property>
+    </widget>
+       <widget class="QSpinBox" name="size_bits"/>
+       <widget class="QLabel" name="label_packing_order">
+     <property name="text"><string>Packing Order (division indices, e.g. {3,2,1,0})</string></property>
+    </widget>
+       <widget class="QLineEdit" name="packing_order"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
