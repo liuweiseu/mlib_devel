@@ -50,14 +50,11 @@ function [x, y, typ]= adder(job, arg1, arg2)
       // Type : column vector of strings.
       exprs = ['adder'; '32'; '32'; '32'];
       gr_i = [];
-      // we use model.label as the block tag.
-      // the best place to set the tag should be graphics.gr_i/id.
-      // However, I can't set graphics.gr_i/id...not sure why.
-      // I tracked the code of standard_define until sciscicos_new().
-      // Everything looks good, but gr_i/id is not set successfully.
-      // scicos_new() looks implemented in c++, so I stopped tracking it.
-      // TODO: track the source code of scicos_new() in c++.
-      model.label = "dsp";
+      // model.label doubles as the on-diagram display text (Scicos
+      // aliases it with graphics.id); category is derived separately
+      // by get_block_type.sci via file-probe, so this is free to be
+      // the block's own name.
+      model.label = blkname;
       x=standard_define([4 8],model,exprs,gr_i)
       x.graphics.style = 'shape=rectangle;fillColor=green';
       x.graphics.in_label = ['in0', 'in1'];

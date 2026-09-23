@@ -9,7 +9,6 @@ function [x, y, typ]= wbfft(job, arg1, arg2)
         x = update_exprs_from_tmpdir(x);
         x = wbfft_update_ports(x, bconfig);
     case 'define' then
-        btype = 'dsp';
         tag = 'wbfft';
         model = scicos_model();
         model.sim = list(tag,4);
@@ -23,7 +22,10 @@ function [x, y, typ]= wbfft(job, arg1, arg2)
         [oports_index, oports_label] = wbfft_create_oports(1);
         model.out = oports_index;
         model.out2 = [1, 1, 7, 18, 18];
-        model.label = btype;
+        // model.label doubles as the on-diagram display text (Scicos aliases
+        // it with graphics.id); category is derived separately by
+        // get_block_type.sci via file-probe, so this is free to be the name.
+        model.label = tag;
         x=standard_define([14 14],model,exprs,gr_i)
         x.graphics.in_label = iports_label;
         x.graphics.out_label = oports_label;

@@ -88,7 +88,11 @@ function [x, y, typ]= gpio(job, arg1, arg2)
       exprs = ['gpio'; 'custom'; '0'; 'out'; 'boolean'; '1'; '0'; '0'; '1'];
       gr_i = [];
       // set block tag
-      model.label = "xps";
+      // model.label doubles as the on-diagram display text (Scicos
+      // aliases it with graphics.id); category is derived separately
+      // by get_block_type.sci via file-probe, so this is free to be
+      // the block's own name.
+      model.label = blkname;
       x=standard_define([4 2],model,exprs,gr_i)
       x.graphics.in_label = ['gateway'];
       x.graphics.style = 'shape=rectangle;fillColor=yellow'

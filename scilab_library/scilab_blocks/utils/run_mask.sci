@@ -4,7 +4,7 @@ function [target] = run_mask(obj)
     uid = gen_uid(obj);
     mask = sprintf("%s/scilab_library/block_guis/%s/mask.py", mlib_devel_path, obj.gui); 
     debug_info('mask: ' + mask);
-    template = sprintf("%s/scilab_library/scilab_blocks/casper_%s/%s.json", mlib_devel_path, obj.model.label, obj.gui);
+    template = sprintf("%s/scilab_library/scilab_blocks/casper_%s/%s.json", mlib_devel_path, get_block_type(obj), obj.gui);
     debug_info('template: ' + template);
     tmpdir = getenv('BCONFIG_TMPDIR', '/tmp/casper_bconfigs');
     target = sprintf("%s/%s.json", tmpdir, uid);

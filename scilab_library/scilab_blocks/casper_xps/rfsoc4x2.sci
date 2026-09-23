@@ -42,14 +42,16 @@ function [x, y, typ]= rfsoc4x2(job, arg1, arg2)
       end
     case 'define' then
         /* the block init code is here */
-        btype = 'xps';
         tag = 'rfsoc4x2';
         /* create model data structure */
         /* 1. fixed part */
         model = scicos_model();
         model.sim = list(tag,4);
         model.blocktype = 'c';
-        model.label = btype;
+        // model.label doubles as the on-diagram display text (Scicos aliases
+        // it with graphics.id); category is derived separately by
+        // get_block_type.sci via file-probe, so this is free to be the name.
+        model.label = blkname;
         model.rpar = [];
         /* create the block data structure */
         exprs = [];

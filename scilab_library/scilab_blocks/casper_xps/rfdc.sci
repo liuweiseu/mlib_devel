@@ -10,14 +10,16 @@ function [x, y, typ]= rfdc(job, arg1, arg2)
         x = rfdc_update_ports(x, bconfig);
       case 'define' then
         /* the block init code is here */
-        btype = 'xps';
         tag = 'rfdc';
         /* create model data structure */
         /* 1. fixed part */
         model = scicos_model();
         model.sim = list(tag,4);
         model.blocktype = 'c';
-        model.label = btype;
+        // model.label doubles as the on-diagram display text (Scicos aliases
+        // it with graphics.id); category is derived separately by
+        // get_block_type.sci via file-probe, so this is free to be the name.
+        model.label = tag;
         model.rpar = [];
         /* 2. port definiation */
         model.in = [1, 2, 3, 4, 5, 6, 7, 8];

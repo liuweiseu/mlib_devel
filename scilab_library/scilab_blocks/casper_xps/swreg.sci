@@ -11,12 +11,14 @@
       x = update_exprs_from_tmpdir(x);
       x = swreg_update_ports(x, bconfig);
     case 'define' then
-      btype = 'xps';
       model = scicos_model();
       // what does this sim mean??
       model.sim = list('swreg_out',4);
       model.blocktype = 'c';
-      model.label = btype;
+      // model.label doubles as the on-diagram display text (Scicos aliases
+      // it with graphics.id); category is derived separately by
+      // get_block_type.sci via file-probe, so this is free to be the name.
+      model.label = 'swreg';
       model.rpar = [];
       /* the port width is the total width of the bitfields */
       model.out = [1];

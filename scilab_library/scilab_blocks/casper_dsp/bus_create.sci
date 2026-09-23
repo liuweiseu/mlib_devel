@@ -11,7 +11,6 @@ function [x, y, typ] = bus_create(job, arg1, arg2)
         x = update_exprs_from_tmpdir(x);
         x = bus_create_update_ports(x, bconfig);
     case 'define' then
-        btype = 'dsp';
         tag = 'bus_create';
         model = scicos_model();
         model.sim = list(tag, 4);
@@ -27,11 +26,16 @@ function [x, y, typ] = bus_create(job, arg1, arg2)
         model.out = oports_index;
         // output bus width is the sum of all input widths (concatenation)
         model.out2 = [sum(evstr('[8,8]'))];
-        model.label = btype;
-        x=standard_define([14 14],model,exprs,gr_i)
+        // model.label doubles as the on-diagram display text (Scicos aliases
+        // it with graphics.id); category is derived separately by
+        // get_block_type.sci via file-probe, so this is free to be the name.
+        model.label = tag;
+        // icon size [5 7] scaled directly from bus_create's own
+        // casper_library icon (50x78 px) -- see SKILL.md Step 3b
+        x=standard_define([5 7],model,exprs,gr_i)
         x.graphics.in_label = iports_label;
         x.graphics.out_label = oports_label;
-        x.graphics.style = 'shape=rectangle;fillColor=green';
+        x.graphics.style = 'shape=rectangle;fillColor=#90EE90';
         /* init exprs */
         x = init_exprs(x);
         debug_info('bus_create block loaded...')
@@ -81,7 +85,7 @@ function [x] = bus_create_update_ports(obj, bconfigfn)
     model.out2 = [sum(evstr(p('bit_widths')))];
     graphics.in_label = iports_label;
     graphics.out_label = oports_label;
-    graphics.style = 'shape=rectangle;fillColor=green';
+    graphics.style = 'shape=rectangle;fillColor=#90EE90';
     graphics.exprs = exprs;
     x.graphics = graphics;
     x.model = model;

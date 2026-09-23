@@ -81,6 +81,7 @@ exec('scilab_library/scilab_blocks/casper_dsp/simple_bram_vacc.sci');
 exec('scilab_library/scilab_blocks/casper_dsp/power_cal.sci');
 exec('scilab_library/scilab_blocks/casper_dsp/operation.sci');
 exec('scilab_library/scilab_blocks/casper_dsp/logic_not.sci');
+exec('scilab_library/scilab_blocks/casper_dsp/armed_trigger.sci');
 // create the blocks
 adder_inst = adder("define");
 edge_detect_inst = edge_detect("define");
@@ -97,6 +98,7 @@ simple_bram_vacc_inst = simple_bram_vacc("define");
 power_cal_inst = power_cal("define");
 operation_inst = operation("define");
 logic_not_inst = logic_not("define");
+armed_trigger_inst = armed_trigger("define");
 cur_dir = pwd();
 dsp_fig_dir = cur_dir + '/scilab_library/scilab_blocks/casper_dsp/figures/';
 pal = xcosPal("General");
@@ -107,7 +109,6 @@ pal = xcosPalAddBlock(pal, counter_inst);
 pal = xcosPalAddBlock(pal, slice_inst);
 pal = xcosPalAddBlock(pal, munge_inst);
 pal = xcosPalAddBlock(pal, wbfft_inst);
-pal = xcosPalAddBlock(pal, bus_expand_inst);
 pal = xcosPalAddBlock(pal, dsp_constant_inst);
 pal = xcosPalAddBlock(pal, delay_inst);
 pal = xcosPalAddBlock(pal, simple_bram_vacc_inst);
@@ -120,11 +121,26 @@ xcosPalAdd(pal, "CASPER DSP");
 // category argument creates/reuses a Category folder by name, and any
 // xcosPal registered under the SAME category string merges into that same
 // folder as a sibling leaf -- reusing the exact string "CASPER DSP" for
-// both xcosPalAdd calls below is what keeps them merged into one folder
-// instead of creating two separate top-level "CASPER DSP" entries.
-pal_bus = xcosPal("Bus");
-pal_bus = xcosPalAddBlock(pal_bus, bus_create_inst);
-xcosPalAdd(pal_bus, "CASPER DSP");
+// every xcosPalAdd call below is what keeps them merged into one folder
+// instead of each spawning its own duplicate top-level "CASPER DSP" entry.
+//
+// Sub-palette names mirror casper_library's own Simulink Library Browser
+// category for the block (see casper_dsp/SKILL.md Step 3c for how to look
+// this up) -- NOT a guess from the block's name. bus_create really lives in
+// casper_library_flow_control.slx, which the browser tree files under
+// "Flow_Control", so that's the sub-palette name here (not "Bus").
+// bus_expand lives in the very same casper_library_flow_control.slx file
+// (confirmed by opening it directly: bus_create/bus_expand/munge all sit
+// at its system root with no further nesting), so it belongs here too.
+pal_flow_control = xcosPal("Flow_Control");
+pal_flow_control = xcosPalAddBlock(pal_flow_control, bus_create_inst);
+pal_flow_control = xcosPalAddBlock(pal_flow_control, bus_expand_inst);
+xcosPalAdd(pal_flow_control, "CASPER DSP");
+// armed_trigger's mask lives in casper_library_misc.slx, which the browser
+// tree files under "Misc".
+pal_misc = xcosPal("Misc");
+pal_misc = xcosPalAddBlock(pal_misc, armed_trigger_inst);
+xcosPalAdd(pal_misc, "CASPER DSP");
 debug_info('------ CASPER DSP loaded --------');
 
 // add casper sim blocks
