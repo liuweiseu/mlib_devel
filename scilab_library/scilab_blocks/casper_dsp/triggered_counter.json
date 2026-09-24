@@ -11,8 +11,8 @@
             "triggered_counter",
             "",
             "dsp:triggered_counter",
-            1024,
-            32
+            "1024",
+            "32"
         ]
     }
 }

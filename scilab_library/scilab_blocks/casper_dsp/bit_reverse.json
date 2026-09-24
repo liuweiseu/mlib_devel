@@ -10,7 +10,7 @@
             "bit_reverse",
             "",
             "dsp:bit_reverse",
-            8
+            "8"
         ]
     }
 }

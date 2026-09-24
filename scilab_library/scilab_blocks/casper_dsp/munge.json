@@ -1,8 +1,6 @@
 {
-    "parameters":
-    {
-        "keys":
-        [
+    "parameters": {
+        "keys": [
             "name",
             "fullpath",
             "tag",
@@ -11,14 +9,13 @@
             "size_bits",
             "packing_order"
         ],
-        "values":
-        [
+        "values": [
             "munge",
             "",
             "dsp:munge",
-            128,
-            4,
-            32,
+            "128",
+            "4",
+            "32",
             "{3,2,1,0}"
         ]
     }

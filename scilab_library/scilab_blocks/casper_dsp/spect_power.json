@@ -14,11 +14,11 @@
             "spect_power",
             "",
             "dsp:spect_power",
-            18,
-            1,
-            2,
+            "18",
+            "1",
+            "2",
             "accumulate",
-            1
+            "1"
         ]
     }
 }

@@ -29,7 +29,7 @@ function [x, y, typ] = gpio_bidir(job, arg1, arg2)
         x=standard_define([7 5],model,exprs,gr_i)
         x.graphics.in_label = ['gpio_out'];
         x.graphics.out_label = ['gpio_in'];
-        x.graphics.style = 'shape=rectangle;fillColor=#90EE90';
+        x.graphics.style = 'shape=rectangle;fillColor=yellow';
         /* init exprs */
         x = init_exprs(x);
         debug_info('gpio_bidir block loaded...')
@@ -50,7 +50,7 @@ function [x] = gpio_bidir_update_ports(obj, bconfigfn)
     model.out2 = [strtod(p('bitwidth'))];
     graphics.in_label = ['gpio_out'];
     graphics.out_label = ['gpio_in'];
-    graphics.style = 'shape=rectangle;fillColor=#90EE90';
+    graphics.style = 'shape=rectangle;fillColor=yellow';
     x.graphics = graphics;
     x.model = model;
 endfunction

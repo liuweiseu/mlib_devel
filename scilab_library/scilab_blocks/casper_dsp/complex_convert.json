@@ -16,13 +16,13 @@
             "complex_convert",
             "",
             "dsp:complex_convert",
-            18,
-            17,
-            18,
-            17,
+            "18",
+            "17",
+            "18",
+            "17",
             "Truncate",
             "Wrap",
-            1
+            "1"
         ]
     }
 }

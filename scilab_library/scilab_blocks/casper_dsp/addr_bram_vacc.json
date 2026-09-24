@@ -15,8 +15,8 @@
             "dsp:addr_bram_vacc",
             "16",
             "Signed",
-            32,
-            0
+            "32",
+            "0"
         ]
     }
 }

@@ -15,8 +15,8 @@
             "dsp:simple_bram_vacc",
             "8",
             "Signed",
-            32,
-            0
+            "32",
+            "0"
         ]
     }
 }

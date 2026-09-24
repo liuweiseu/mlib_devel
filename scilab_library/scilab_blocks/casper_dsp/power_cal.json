@@ -1,19 +1,16 @@
 {
-    "parameters":
-    {
-        "keys":
-        [
+    "parameters": {
+        "keys": [
             "name",
             "fullpath",
             "tag",
             "bitwidth"
         ],
-        "values":
-        [
+        "values": [
             "power_cal",
             "",
             "dsp:power_cal",
-            16
+            "16"
         ]
     }
 }

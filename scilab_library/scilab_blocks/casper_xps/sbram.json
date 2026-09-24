@@ -1,5 +1,5 @@
 {
-    "parameters":{
+    "parameters": {
         "keys": [
             "name",
             "fullpath",
@@ -18,8 +18,8 @@
             "",
             "xps:bram",
             "Unsigned",
-            10,
-            128,
+            "10",
+            "128",
             "off",
             "off",
             "Minimum_Area",

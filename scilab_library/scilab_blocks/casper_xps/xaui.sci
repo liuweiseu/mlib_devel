@@ -29,7 +29,7 @@ function [x, y, typ] = xaui(job, arg1, arg2)
         x=standard_define([13 15],model,exprs,gr_i)
         x.graphics.in_label = ['tx_data', 'tx_valid', 'tx_eof'];
         x.graphics.out_label = ['rx_data', 'rx_valid', 'rx_eof'];
-        x.graphics.style = 'shape=rectangle;fillColor=#90EE90';
+        x.graphics.style = 'shape=rectangle;fillColor=yellow';
         /* init exprs */
         x = init_exprs(x);
         debug_info('xaui block loaded...')
@@ -50,7 +50,7 @@ function [x] = xaui_update_ports(obj, bconfigfn)
     model.out2 = [strtod(p('data_width')), 1, 1];
     graphics.in_label = ['tx_data', 'tx_valid', 'tx_eof'];
     graphics.out_label = ['rx_data', 'rx_valid', 'rx_eof'];
-    graphics.style = 'shape=rectangle;fillColor=#90EE90';
+    graphics.style = 'shape=rectangle;fillColor=yellow';
     x.graphics = graphics;
     x.model = model;
 endfunction

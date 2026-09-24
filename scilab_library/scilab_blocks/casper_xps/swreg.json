@@ -1,5 +1,5 @@
 {
-    "parameters":{
+    "parameters": {
         "keys": [
             "name",
             "fullpath",
@@ -20,13 +20,13 @@
             "",
             "xps:sw_reg",
             "From Processor",
-            0,
-            0,
-            1,
+            "0",
+            "0",
+            "1",
             "reg",
-            1,
-            0,
-            2,
+            "1",
+            "0",
+            "2",
             "on",
             "on"
         ]

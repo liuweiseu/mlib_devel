@@ -34,7 +34,7 @@ function [x, y, typ] = gpio(job, arg1, arg2)
         x=standard_define([9 3],model,exprs,gr_i)
         x.graphics.in_label = ['gpio_out'];
         x.graphics.out_label = ['sim_out'];
-        x.graphics.style = 'shape=rectangle;fillColor=#90EE90';
+        x.graphics.style = 'shape=rectangle;fillColor=yellow';
         x = init_exprs(x);
         debug_info('gpio block loaded...')
     end
@@ -58,7 +58,7 @@ function [x] = gpio_update_ports(obj, bconfigfn)
         graphics.in_label = ['gpio_out'];
         graphics.out_label = ['sim_out'];
     end
-    graphics.style = 'shape=rectangle;fillColor=#90EE90';
+    graphics.style = 'shape=rectangle;fillColor=yellow';
     x.graphics = graphics;
     x.model = model;
 endfunction

@@ -1,19 +1,16 @@
 {
-    "parameters":
-    {
-        "keys":
-        [
+    "parameters": {
+        "keys": [
             "name",
             "fullpath",
             "tag",
             "bit_width"
         ],
-        "values":
-        [
+        "values": [
             "counter",
             "",
             "dsp:counter",
-            10
+            "10"
         ]
     }
 }

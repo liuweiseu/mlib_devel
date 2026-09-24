@@ -10,7 +10,7 @@
             "negedge_delay",
             "",
             "dsp:negedge_delay",
-            4
+            "4"
         ]
     }
 }

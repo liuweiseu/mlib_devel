@@ -29,7 +29,7 @@ function [x, y, typ] = i2c_interface(job, arg1, arg2)
         x=standard_define([4 4],model,exprs,gr_i)
         x.graphics.in_label = [];
         x.graphics.out_label = [];
-        x.graphics.style = 'shape=rectangle;fillColor=#90EE90';
+        x.graphics.style = 'shape=rectangle;fillColor=yellow';
         /* init exprs */
         x = init_exprs(x);
         debug_info('i2c_interface block loaded...')
@@ -50,7 +50,7 @@ function [x] = i2c_interface_update_ports(obj, bconfigfn)
     model.out2 = [];
     graphics.in_label = [];
     graphics.out_label = [];
-    graphics.style = 'shape=rectangle;fillColor=#90EE90';
+    graphics.style = 'shape=rectangle;fillColor=yellow';
     x.graphics = graphics;
     x.model = model;
 endfunction

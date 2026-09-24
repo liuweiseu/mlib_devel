@@ -11,8 +11,8 @@
             "shifter_unit",
             "",
             "dsp:shifter_unit",
-            16,
-            0
+            "16",
+            "0"
         ]
     }
 }

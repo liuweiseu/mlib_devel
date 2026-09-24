@@ -1,8 +1,6 @@
 {
-    "parameters":
-    {
-        "keys":
-        [
+    "parameters": {
+        "keys": [
             "name",
             "fullpath",
             "tag",
@@ -10,14 +8,13 @@
             "output_width",
             "slice_start"
         ],
-        "values":
-        [
+        "values": [
             "slice",
             "",
             "dsp:slice",
-            32,
-            1,
-            0
+            "32",
+            "1",
+            "0"
         ]
     }
 }

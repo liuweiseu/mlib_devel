@@ -11,8 +11,8 @@
             "parallel_to_serial_converter",
             "",
             "dsp:parallel_to_serial_converter",
-            128,
-            16
+            "128",
+            "16"
         ]
     }
 }

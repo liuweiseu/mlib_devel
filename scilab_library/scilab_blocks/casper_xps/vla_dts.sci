@@ -29,7 +29,7 @@ function [x, y, typ] = vla_dts(job, arg1, arg2)
         x=standard_define([13 28],model,exprs,gr_i)
         x.graphics.in_label = [];
         x.graphics.out_label = ['data_out', 'valid', 'sync'];
-        x.graphics.style = 'shape=rectangle;fillColor=#90EE90';
+        x.graphics.style = 'shape=rectangle;fillColor=yellow';
         /* init exprs */
         x = init_exprs(x);
         debug_info('vla_dts block loaded...')
@@ -50,7 +50,7 @@ function [x] = vla_dts_update_ports(obj, bconfigfn)
     model.out2 = [strtod(p('data_width')), 1, 1];
     graphics.in_label = [];
     graphics.out_label = ['data_out', 'valid', 'sync'];
-    graphics.style = 'shape=rectangle;fillColor=#90EE90';
+    graphics.style = 'shape=rectangle;fillColor=yellow';
     x.graphics = graphics;
     x.model = model;
 endfunction

@@ -11,7 +11,7 @@
             "bus_create",
             "",
             "dsp:bus_create",
-            2,
+            "2",
             "[8,8]"
         ]
     }

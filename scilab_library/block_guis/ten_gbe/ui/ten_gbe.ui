@@ -7,6 +7,7 @@
    <!-- NOTE: this is a simplified structural mirror of the generated
         <module>_ui.py, not a full round-trip Designer file. Regenerate
         both from the same spec if you need to edit layout by hand. -->
+       <!-- tab: Core -->
        <widget class="QLabel" name="label_flavour">
      <property name="text"><string>Mezzanine card flavour</string></property>
     </widget>
@@ -199,6 +200,7 @@
      <property name="text"><string>Promiscuous mode</string></property>
     </widget>
        <widget class="QCheckBox" name="promisc_mode"/>
+       <!-- tab: Debug counters -->
        <widget class="QLabel" name="label_debug_ctr_width">
      <property name="text"><string>Debug counter width</string></property>
     </widget>
