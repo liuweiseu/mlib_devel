@@ -69,7 +69,7 @@
     },
     "casper_xps": {
         "rfsoc4x2": { "enabled": true, "category": "General", "icon": "rfsoc4x2.png" },
-        "gpio": { "enabled": true, "category": "General" },
+        "gpio": { "enabled": true, "category": "IO" },
         "swreg": { "enabled": true, "category": "General" },
         "rfdc": { "enabled": true, "category": "General" },
         "sbram": { "enabled": true, "category": "General" }
