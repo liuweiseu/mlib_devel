@@ -102,7 +102,7 @@
         "generic_adc": { "enabled": true, "category": "ADCs" },
         "katadc": { "enabled": true, "category": "ADCs" },
         "asiaa_adc5g": { "enabled": true, "category": "ADCs" },
-        "rfsoc4x2": { "enabled": true, "category": "Platforms", "icon": "rfsoc4x2.png" },
+        "rfsoc4x2": { "enabled": true, "category": "Platforms" },
         "rfsoc2x2": { "enabled": true, "category": "Platforms" },
         "skarab": { "enabled": true, "category": "Platforms" },
         "snap": { "enabled": true, "category": "Platforms" },
