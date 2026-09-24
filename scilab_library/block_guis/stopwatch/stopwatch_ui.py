@@ -10,7 +10,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(560, 240)
+        MainWindow.resize(741, 240)
         self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -32,8 +32,11 @@ class Ui_MainWindow(object):
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout.setObjectName("gridLayout")
+        self.gridLayout.setColumnStretch(1, 1)
         self.label_count_width = QtWidgets.QLabel(parent=self.scrollAreaWidgetContents)
         self.label_count_width.setObjectName("label_count_width")
+        self.label_count_width.setWordWrap(True)
+        self.label_count_width.setMaximumWidth(451)
         self.gridLayout.addWidget(self.label_count_width, 1, 0, 1, 1)
         self.count_width = QtWidgets.QSpinBox(parent=self.scrollAreaWidgetContents)
         self.count_width.setObjectName("count_width")
