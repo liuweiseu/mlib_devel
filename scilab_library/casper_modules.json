@@ -1,0 +1,33 @@
+{
+    "casper_dsp": {
+        "adder": { "enabled": true, "category": "General" },
+        "counter": { "enabled": true, "category": "General" },
+        "slice": { "enabled": true, "category": "General" },
+        "wbfft": { "enabled": true, "category": "General" },
+        "dsp_constant": { "enabled": true, "category": "General" },
+        "delay": { "enabled": true, "category": "General" },
+        "simple_bram_vacc": { "enabled": true, "category": "General" },
+        "power_cal": { "enabled": true, "category": "General" },
+        "operation": { "enabled": true, "category": "General" },
+        "logic_not": { "enabled": true, "category": "General" },
+        "bus_create": { "enabled": true, "category": "Flow_Control" },
+        "bus_expand": { "enabled": true, "category": "Flow_Control" },
+        "munge": { "enabled": true, "category": "Flow_Control" },
+        "armed_trigger": { "enabled": true, "category": "Misc" },
+        "pulse_ext": { "enabled": true, "category": "Misc" },
+        "edge_detect": { "enabled": true, "category": "Misc" }
+    },
+    "casper_xps": {
+        "rfsoc4x2": { "enabled": true, "category": "General", "icon": "rfsoc4x2.png" },
+        "gpio": { "enabled": true, "category": "General" },
+        "swreg": { "enabled": true, "category": "General" },
+        "rfdc": { "enabled": true, "category": "General" },
+        "sbram": { "enabled": true, "category": "General" }
+    },
+    "casper_sim": {
+        "sim_constant": { "enabled": true, "category": "General", "icon": "constant.png" },
+        "scope": { "enabled": true, "category": "General", "icon": "scope.png" },
+        "sim": { "enabled": true, "category": "General", "icon": "sim.png" },
+        "sine": { "enabled": true, "category": "General", "icon": "sine.png" }
+    }
+}
