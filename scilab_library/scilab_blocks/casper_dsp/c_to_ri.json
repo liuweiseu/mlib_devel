@@ -4,19 +4,15 @@
             "name",
             "fullpath",
             "tag",
-            "vec_len",
-            "arith_type",
             "n_bits",
             "bin_pt"
         ],
         "values": [
-            "simple_bram_vacc",
+            "c_to_ri",
             "",
-            "dsp:simple_bram_vacc",
-            "8",
-            "Signed",
-            32,
-            0
+            "dsp:c_to_ri",
+            18,
+            17
         ]
     }
 }

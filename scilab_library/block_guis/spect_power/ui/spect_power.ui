@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>Spectrum Power</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_bitwidth">
+     <property name="text"><string>Bit Width</string></property>
+    </widget>
+       <widget class="QSpinBox" name="bitwidth"/>
+       <widget class="QLabel" name="label_add_latency">
+     <property name="text"><string>Adder Latency</string></property>
+    </widget>
+       <widget class="QSpinBox" name="add_latency"/>
+       <widget class="QLabel" name="label_mult_latency">
+     <property name="text"><string>Mult Latency</string></property>
+    </widget>
+       <widget class="QSpinBox" name="mult_latency"/>
+       <widget class="QLabel" name="label_mode">
+     <property name="text"><string>Mode</string></property>
+    </widget>
+       <widget class="QComboBox" name="mode">
+     <item><property name="text"><string>accumulate</string></property></item>
+     <item><property name="text"><string>single shot</string></property></item>
+    </widget>
+       <widget class="QLabel" name="label_n_inputs">
+     <property name="text"><string>Number of Inputs</string></property>
+    </widget>
+       <widget class="QSpinBox" name="n_inputs"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
