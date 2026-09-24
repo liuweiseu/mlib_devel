@@ -70,6 +70,14 @@
     "casper_xps": {
         "rfsoc4x2": { "enabled": true, "category": "General", "icon": "rfsoc4x2.png" },
         "gpio": { "enabled": true, "category": "IO" },
+        "gpio_bidir": { "enabled": true, "category": "IO" },
+        "i2c_interface": { "enabled": true, "category": "IO" },
+        "one_gbe": { "enabled": true, "category": "IO" },
+        "vla_dts": { "enabled": true, "category": "IO" },
+        "xaui": { "enabled": true, "category": "IO" },
+        "forty_gbe": { "enabled": true, "category": "IO" },
+        "onehundred_gbe": { "enabled": true, "category": "IO" },
+        "ten_gbe": { "enabled": true, "category": "IO" },
         "swreg": { "enabled": true, "category": "General" },
         "rfdc": { "enabled": true, "category": "General" },
         "sbram": { "enabled": true, "category": "General" }

@@ -1,0 +1,22 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "sda_gpio",
+            "sda_gpio_index",
+            "scl_gpio",
+            "scl_gpio_index"
+        ],
+        "values": [
+            "i2c_interface",
+            "",
+            "xps:i2c_interface",
+            "",
+            0,
+            "",
+            0
+        ]
+    }
+}

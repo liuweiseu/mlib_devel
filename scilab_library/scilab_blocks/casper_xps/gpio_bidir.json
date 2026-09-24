@@ -1,0 +1,20 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "io_group",
+            "bitwidth",
+            "bit_index"
+        ],
+        "values": [
+            "gpio_bidir",
+            "",
+            "xps:gpio_bidir",
+            "gpio",
+            4,
+            "[0, 1, 2, 3]"
+        ]
+    }
+}
