@@ -36,7 +36,7 @@ class Ui_MainWindow(object):
         self.label_vector_len = QtWidgets.QLabel(parent=self.scrollAreaWidgetContents)
         self.label_vector_len.setObjectName("label_vector_len")
         self.label_vector_len.setWordWrap(True)
-        self.label_vector_len.setMaximumWidth(192)
+        self.label_vector_len.setFixedWidth(192)
         self.gridLayout.addWidget(self.label_vector_len, 1, 0, 1, 1)
         self.vector_len = QtWidgets.QLineEdit(parent=self.scrollAreaWidgetContents)
         self.vector_len.setObjectName("vector_len")

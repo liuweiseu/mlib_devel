@@ -36,7 +36,7 @@ class Ui_MainWindow(object):
         self.label_count_width = QtWidgets.QLabel(parent=self.scrollAreaWidgetContents)
         self.label_count_width.setObjectName("label_count_width")
         self.label_count_width.setWordWrap(True)
-        self.label_count_width.setMaximumWidth(451)
+        self.label_count_width.setFixedWidth(451)
         self.gridLayout.addWidget(self.label_count_width, 1, 0, 1, 1)
         self.count_width = QtWidgets.QSpinBox(parent=self.scrollAreaWidgetContents)
         self.count_width.setObjectName("count_width")

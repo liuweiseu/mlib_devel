@@ -36,7 +36,7 @@ class Ui_MainWindow(object):
         self.label_info = QtWidgets.QLabel(parent=self.scrollAreaWidgetContents)
         self.label_info.setObjectName("label_info")
         self.label_info.setWordWrap(True)
-        self.label_info.setMaximumWidth(59)
+        self.label_info.setFixedWidth(59)
         self.gridLayout.addWidget(self.label_info, 1, 0, 1, 1)
         self.info = QtWidgets.QLineEdit(parent=self.scrollAreaWidgetContents)
         self.info.setObjectName("info")

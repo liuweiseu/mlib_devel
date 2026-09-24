@@ -36,7 +36,7 @@ class Ui_MainWindow(object):
         self.label_n_bits = QtWidgets.QLabel(parent=self.scrollAreaWidgetContents)
         self.label_n_bits.setObjectName("label_n_bits")
         self.label_n_bits.setWordWrap(True)
-        self.label_n_bits.setMaximumWidth(437)
+        self.label_n_bits.setFixedWidth(437)
         self.gridLayout.addWidget(self.label_n_bits, 1, 0, 1, 1)
         self.n_bits = QtWidgets.QSpinBox(parent=self.scrollAreaWidgetContents)
         self.n_bits.setObjectName("n_bits")

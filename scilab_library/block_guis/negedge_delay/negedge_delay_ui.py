@@ -36,7 +36,7 @@ class Ui_MainWindow(object):
         self.label_pulse_len = QtWidgets.QLabel(parent=self.scrollAreaWidgetContents)
         self.label_pulse_len.setObjectName("label_pulse_len")
         self.label_pulse_len.setWordWrap(True)
-        self.label_pulse_len.setMaximumWidth(129)
+        self.label_pulse_len.setFixedWidth(129)
         self.gridLayout.addWidget(self.label_pulse_len, 1, 0, 1, 1)
         self.pulse_len = QtWidgets.QSpinBox(parent=self.scrollAreaWidgetContents)
         self.pulse_len.setObjectName("pulse_len")
