@@ -1,5 +1,6 @@
 // get the block type (category).
-// we have three types of blocks: xps, dsp, sim
+// we have three types of blocks: xps, dsp, sim -- plus 'scilab' for a
+// block that isn't one of ours at all (see below).
 //
 // This is derived by probing for which casper_<category>/<tag>.json
 // parameter template exists on disk, NOT from obj.model.label: Scicos
@@ -18,5 +19,15 @@ function [type] = get_block_type(obj)
             return;
         end
     end
-    error(sprintf("get_block_type: no casper_<dsp|xps|sim>/%s.json found for block ""%s"".", tag, tag));
+    // Not a registered casper_<dsp|xps|sim> module -- in this toolflow
+    // the only other kind of block an Xcos diagram can contain is a
+    // built-in Scicos/Xcos block (SPLIT_f from a fanned-out wire being
+    // the most common, but also links, superblocks, annotations, ...).
+    // Callers that walk a whole diagram (validate_design.sci,
+    // collect_block_info.sci) need to tell these apart from a genuine
+    // casper module without crashing, so this is a real return value,
+    // not an error -- every other caller here only ever operates on an
+    // object it already knows is one of its own casper blocks, so this
+    // branch should never realistically be hit there.
+    type = 'scilab-block';
 endfunction
