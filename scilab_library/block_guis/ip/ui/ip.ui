@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowTitle"><string>IP</string></property>
+  <widget class="QWidget" name="centralwidget">
+   <!-- NOTE: this is a simplified structural mirror of the generated
+        <module>_ui.py, not a full round-trip Designer file. Regenerate
+        both from the same spec if you need to edit layout by hand. -->
+       <widget class="QLabel" name="label_lib_path">
+     <property name="text"><string>Path to sysgen build directory (the directory containing ip/)</string></property>
+    </widget>
+       <widget class="QLineEdit" name="lib_path"/>
+       <widget class="QLabel" name="label_ip_name">
+     <property name="text"><string>Name of IP in this library</string></property>
+    </widget>
+       <widget class="QLineEdit" name="ip_name"/>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
