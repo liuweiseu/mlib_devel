@@ -26,7 +26,7 @@ function [x, y, typ]= wbfft(job, arg1, arg2)
         // it with graphics.id); category is derived separately by
         // get_block_type.sci via file-probe, so this is free to be the name.
         model.label = tag;
-        x=standard_define([14 14],model,exprs,gr_i)
+        x=standard_define([16.8 16.8],model,exprs,gr_i)
         x.graphics.in_label = iports_label;
         x.graphics.out_label = oports_label;
         x.graphics.style = 'shape=rectangle;fillColor=green';

@@ -53,7 +53,7 @@ function [x, y, typ] = sbram(job, arg1, arg2)
       // by get_block_type.sci via file-probe, so this is free to be
       // the block's own name.
       model.label = blkname;
-      x=standard_define([8 5.5],model,exprs,gr_i)
+      x=standard_define([9.6 6.6],model,exprs,gr_i)
       x.graphics.in_label = ['addr', 'data_in', 'we'];
       x.graphics.out_label = ['data_out'];
       x.graphics.style = 'shape=rectangle;fillColor=yellow';

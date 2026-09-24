@@ -35,7 +35,7 @@ function [x, y, typ] = vacc_async(job, arg1, arg2)
         // aliases it with graphics.id); category is derived separately by
         // get_block_type.sci via file-probe, so this is free to be the name.
         model.label = tag;
-        x=standard_define([10 8],model,exprs,gr_i)
+        x=standard_define([12 9.6],model,exprs,gr_i)
         x.graphics.in_label = ['din', 'valid_in', 'new_acc'];
         x.graphics.out_label = ['dout', 'valid_out', 'sync_out'];
         x.graphics.style = 'shape=rectangle;fillColor=#90EE90';

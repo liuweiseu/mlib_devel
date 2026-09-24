@@ -29,7 +29,7 @@ function [x, y, typ] = bus_constant(job, arg1, arg2)
         model.out = [1];
         model.out2 = [8];
         model.label = tag;
-        x=standard_define([9 6],model,exprs,gr_i)
+        x=standard_define([10.8 7.2],model,exprs,gr_i)
         x.graphics.in_label = [];
         x.graphics.out_label = ['dout'];
         x.graphics.style = 'shape=rectangle;fillColor=#90EE90';

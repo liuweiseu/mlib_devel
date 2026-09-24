@@ -41,7 +41,7 @@ function [x, y, typ] = vacc_tvg(job, arg1, arg2)
         // aliases it with graphics.id); category is derived separately by
         // get_block_type.sci via file-probe, so this is free to be the name.
         model.label = tag;
-        x=standard_define([10 7],model,exprs,gr_i)
+        x=standard_define([12 8.4],model,exprs,gr_i)
         x.graphics.in_label = ['tvg_sel', 'sync_in', 'data_in', 'valid_in'];
         x.graphics.out_label = ['sync_out', 'data_out', 'valid_out'];
         x.graphics.style = 'shape=rectangle;fillColor=#90EE90';

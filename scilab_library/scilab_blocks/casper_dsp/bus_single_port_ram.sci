@@ -29,7 +29,7 @@ function [x, y, typ] = bus_single_port_ram(job, arg1, arg2)
         model.out = [1, 2, 3];
         model.out2 = [8, 1, 1];
         model.label = tag;
-        x=standard_define([10 10],model,exprs,gr_i)
+        x=standard_define([12 12],model,exprs,gr_i)
         x.graphics.in_label = ['addr', 'din', 'we', 'en', 'misci'];
         x.graphics.out_label = ['dout', 'dvalid', 'misco'];
         x.graphics.style = 'shape=rectangle;fillColor=#90EE90';

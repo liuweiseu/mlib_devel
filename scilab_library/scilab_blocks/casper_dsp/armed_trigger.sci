@@ -28,7 +28,7 @@ function [x, y, typ] = armed_trigger(job, arg1, arg2)
         model.label = tag;
         // icon size [5 4] scaled directly from armed_trigger's own
         // casper_library icon (50x38 px) -- see SKILL.md Step 3b
-        x=standard_define([5 4],model,exprs,gr_i)
+        x=standard_define([6 4.8],model,exprs,gr_i)
         x.graphics.in_label = ['arm', 'trig_in'];
         x.graphics.out_label = ['trig_out'];
         x.graphics.style = 'shape=rectangle;fillColor=#90EE90';

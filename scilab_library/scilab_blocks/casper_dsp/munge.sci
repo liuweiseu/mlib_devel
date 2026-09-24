@@ -28,7 +28,7 @@ function [x, y, typ] = munge(job, arg1, arg2)
         model.label = tag;
         // icon size [4 4] scaled directly from munge's own
         // casper_library icon (40x36 px) -- see SKILL.md Step 3b
-        x=standard_define([4 4],model,exprs,gr_i)
+        x=standard_define([4.8 4.8],model,exprs,gr_i)
         x.graphics.in_label = ['in'];
         x.graphics.out_label = ['out'];
         x.graphics.style = 'shape=rectangle;fillColor=#90EE90';

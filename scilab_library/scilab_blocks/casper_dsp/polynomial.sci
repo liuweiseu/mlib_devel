@@ -31,7 +31,7 @@ function [x, y, typ] = polynomial(job, arg1, arg2)
         model.out = oports_index;
         model.out2 = [1, 18];
         model.label = tag;
-        x=standard_define([7 7],model,exprs,gr_i)
+        x=standard_define([8.4 8.4],model,exprs,gr_i)
         x.graphics.in_label = iports_label;
         x.graphics.out_label = oports_label;
         x.graphics.style = 'shape=rectangle;fillColor=#90EE90';

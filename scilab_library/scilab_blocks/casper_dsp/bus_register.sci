@@ -29,7 +29,7 @@ function [x, y, typ] = bus_register(job, arg1, arg2)
         model.out = [1, 2];
         model.out2 = [8, 1];
         model.label = tag;
-        x=standard_define([8 6],model,exprs,gr_i)
+        x=standard_define([9.6 7.2],model,exprs,gr_i)
         x.graphics.in_label = ['din', 'rst', 'en', 'misci'];
         x.graphics.out_label = ['dout', 'misco'];
         x.graphics.style = 'shape=rectangle;fillColor=#90EE90';

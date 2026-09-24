@@ -28,7 +28,7 @@ function [x, y, typ] = bus_dual_port_ram(job, arg1, arg2)
         model.out = [1, 2, 3, 4, 5];
         model.out2 = [8, 8, 1, 1, 1];
         model.label = tag;
-        x=standard_define([12 12],model,exprs,gr_i)
+        x=standard_define([14.4 14.4],model,exprs,gr_i)
         x.graphics.in_label = ['addra', 'dina', 'wea', 'ena', 'addrb', 'dinb', 'web', 'enb', 'misci'];
         x.graphics.out_label = ['A', 'B', 'dvalida', 'dvalidb', 'misco'];
         x.graphics.style = 'shape=rectangle;fillColor=#90EE90';

@@ -31,7 +31,7 @@ function [x, y, typ] = gpio(job, arg1, arg2)
         model.out = [1];
         model.out2 = [1];
         model.label = tag;
-        x=standard_define([9 3],model,exprs,gr_i)
+        x=standard_define([10.8 3.6],model,exprs,gr_i)
         x.graphics.in_label = ['gpio_out'];
         x.graphics.out_label = ['sim_out'];
         x.graphics.style = 'shape=rectangle;fillColor=yellow';

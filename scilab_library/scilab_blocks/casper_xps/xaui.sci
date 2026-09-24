@@ -25,7 +25,7 @@ function [x, y, typ] = xaui(job, arg1, arg2)
         model.out = [1, 2, 3, 4, 5, 6, 7];
         model.out2 = [8, 1, 1, 1, 1, 1, 1];
         model.label = tag;
-        x=standard_define([14 17],model,exprs,gr_i)
+        x=standard_define([16.8 20.4],model,exprs,gr_i)
         x.graphics.in_label = ['rx_get', 'rx_reset', 'tx_data', 'tx_outofband', 'tx_valid'];
         x.graphics.out_label = ['rx_data', 'rx_outofband', 'rx_empty', 'rx_valid', 'rx_linkdown', 'tx_full', 'rx_almost_full'];
         x.graphics.style = 'shape=rectangle;fillColor=yellow';

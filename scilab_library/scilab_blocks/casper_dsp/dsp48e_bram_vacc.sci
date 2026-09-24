@@ -26,7 +26,7 @@ function [x, y, typ] = dsp48e_bram_vacc(job, arg1, arg2)
         // aliases it with graphics.id); category is derived separately by
         // get_block_type.sci via file-probe, so this is free to be the name.
         model.label = tag;
-        x=standard_define([9 4],model,exprs,gr_i)
+        x=standard_define([10.8 4.8],model,exprs,gr_i)
         x.graphics.in_label = ['new_acc', 'din'];
         x.graphics.out_label = ['valid', 'dout'];
         x.graphics.style = 'shape=rectangle;fillColor=#90EE90';

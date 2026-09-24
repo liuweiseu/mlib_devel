@@ -48,7 +48,7 @@ function [x, y, typ]= operation(job, arg1, arg2)
         // by get_block_type.sci via file-probe, so this is free to be
         // the block's own name.
         model.label = blkname;
-        x=standard_define([3 3],model,exprs,gr_i)
+        x=standard_define([3.6 3.6],model,exprs,gr_i)
         x.graphics.out_label = ['out'];
         x.graphics.in_label = ['in0', 'in1'];
         x.graphics.style = 'shape=rectangle;fillColor=green';

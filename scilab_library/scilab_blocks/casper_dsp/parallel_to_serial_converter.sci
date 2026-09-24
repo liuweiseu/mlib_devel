@@ -26,7 +26,7 @@ function [x, y, typ] = parallel_to_serial_converter(job, arg1, arg2)
         // aliases it with graphics.id); category is derived separately by
         // get_block_type.sci via file-probe, so this is free to be the name.
         model.label = tag;
-        x=standard_define([5 4],model,exprs,gr_i)
+        x=standard_define([6 4.8],model,exprs,gr_i)
         x.graphics.in_label = ['ld', 'shift', 'pin'];
         x.graphics.out_label = ['sout'];
         x.graphics.style = 'shape=rectangle;fillColor=#90EE90';

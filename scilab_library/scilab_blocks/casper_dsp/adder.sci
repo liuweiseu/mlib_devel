@@ -55,7 +55,7 @@ function [x, y, typ]= adder(job, arg1, arg2)
       // by get_block_type.sci via file-probe, so this is free to be
       // the block's own name.
       model.label = blkname;
-      x=standard_define([4 8],model,exprs,gr_i)
+      x=standard_define([4.8 9.6],model,exprs,gr_i)
       x.graphics.style = 'shape=rectangle;fillColor=green';
       x.graphics.in_label = ['in0', 'in1'];
       x.graphics.out_label = ['out0'];

@@ -40,7 +40,7 @@ function [x, y, typ] = qdr_vacc(job, arg1, arg2)
         // aliases it with graphics.id); category is derived separately by
         // get_block_type.sci via file-probe, so this is free to be the name.
         model.label = tag;
-        x=standard_define([15 15],model,exprs,gr_i)
+        x=standard_define([18 18],model,exprs,gr_i)
         x.graphics.in_label = ['n_acum', 'sync', 'data_in', 'oob_data_in', 'we', 're'];
         x.graphics.out_label = ['new_acc_async', 'data_out', 'oob_data_out', 'valid', 'error', 'RB_done', 'fifo_afull'];
         x.graphics.style = 'shape=rectangle;fillColor=#90EE90';

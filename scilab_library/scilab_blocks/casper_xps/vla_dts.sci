@@ -25,7 +25,7 @@ function [x, y, typ] = vla_dts(job, arg1, arg2)
         model.out = [1, 2, 3, 4, 5, 6];
         model.out2 = [64, 8, 1, 1, 1, 1];
         model.label = tag;
-        x=standard_define([15 31],model,exprs,gr_i)
+        x=standard_define([18 37.2],model,exprs,gr_i)
         x.graphics.in_label = ['rst'];
         x.graphics.out_label = ['frame_out', 'index', 'one_sec', 'ten_sec', 'locked', 'sync'];
         x.graphics.style = 'shape=rectangle;fillColor=yellow';

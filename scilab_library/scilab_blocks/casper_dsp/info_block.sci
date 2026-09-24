@@ -26,7 +26,7 @@ function [x, y, typ] = info_block(job, arg1, arg2)
         // aliases it with graphics.id); category is derived separately by
         // get_block_type.sci via file-probe, so this is free to be the name.
         model.label = tag;
-        x=standard_define([17 4],model,exprs,gr_i)
+        x=standard_define([20.4 4.8],model,exprs,gr_i)
         x.graphics.in_label = [];
         x.graphics.out_label = [];
         x.graphics.style = 'shape=rectangle;fillColor=#90EE90';

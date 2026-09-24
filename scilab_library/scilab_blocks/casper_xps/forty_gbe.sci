@@ -25,7 +25,7 @@ function [x, y, typ] = forty_gbe(job, arg1, arg2)
         model.out = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
         model.out2 = [1, 1, 1, 1, 1, 256, 1, 32, 16, 1, 1, 1, 32, 16];
         model.label = tag;
-        x=standard_define([9 20],model,exprs,gr_i)
+        x=standard_define([10.8 24],model,exprs,gr_i)
         x.graphics.in_label = ['rst', 'tx_data', 'tx_valid', 'tx_dest_ip', 'tx_dest_port', 'tx_end_of_frame', 'rx_ack', 'rx_overrun_ack', 'debug_rst'];
         x.graphics.out_label = ['led_up', 'led_rx', 'led_tx', 'tx_afull', 'tx_overflow', 'rx_data', 'rx_valid', 'rx_source_ip', 'rx_source_port', 'rx_end_of_frame', 'rx_bad_frame', 'rx_overrun', 'rx_dest_ip', 'rx_dest_port'];
         x.graphics.style = 'shape=rectangle;fillColor=yellow';

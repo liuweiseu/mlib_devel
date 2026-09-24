@@ -29,7 +29,7 @@ function [x, y, typ] = bus_addsub(job, arg1, arg2)
         model.out = [1, 2, 3];
         model.out2 = [8, 1, 1];
         model.label = tag;
-        x=standard_define([8 8],model,exprs,gr_i)
+        x=standard_define([9.6 9.6],model,exprs,gr_i)
         x.graphics.in_label = ['a', 'b', 'en', 'misci'];
         x.graphics.out_label = ['dout', 'misco', 'dvalid'];
         x.graphics.style = 'shape=rectangle;fillColor=#90EE90';

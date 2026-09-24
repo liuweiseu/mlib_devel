@@ -54,7 +54,7 @@ function [x, y, typ]= slice(job, arg1, arg2)
         // by get_block_type.sci via file-probe, so this is free to be
         // the block's own name.
         model.label = blkname;
-        x=standard_define([5 1],model,exprs,gr_i)
+        x=standard_define([6 1.2],model,exprs,gr_i)
         x.graphics.out_label = ['out'];
         x.graphics.in_label = ['in'];
         x.graphics.style = 'shape=rectangle;fillColor=grey';

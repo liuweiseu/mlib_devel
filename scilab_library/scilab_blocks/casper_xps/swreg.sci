@@ -27,7 +27,7 @@
       model.in2 = [1];
       exprs = [];
       gr_i = [];
-      x=standard_define([10 1.4],model,exprs,gr_i)
+      x=standard_define([12 1.7],model,exprs,gr_i)
       x.graphics.out_label = ['user_data_out'];
       x.graphics.in_label = ['sim_in'];
       x.graphics.style = 'shape=rectangle;fillColor=yellow';

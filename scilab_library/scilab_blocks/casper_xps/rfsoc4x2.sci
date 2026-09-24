@@ -56,7 +56,7 @@ function [x, y, typ]= rfsoc4x2(job, arg1, arg2)
         /* create the block data structure */
         exprs = [];
         gr_i = [];
-        x=standard_define([4 4],model,exprs,gr_i);
+        x=standard_define([4.8 4.8],model,exprs,gr_i);
         x = init_exprs(x);
         debug_info('rfsoc4x2 block loaded...');
   end

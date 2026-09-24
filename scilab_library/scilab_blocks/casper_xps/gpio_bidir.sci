@@ -25,7 +25,7 @@ function [x, y, typ] = gpio_bidir(job, arg1, arg2)
         model.out = [1];
         model.out2 = [4];
         model.label = tag;
-        x=standard_define([8 5],model,exprs,gr_i)
+        x=standard_define([9.6 6],model,exprs,gr_i)
         x.graphics.in_label = ['din', 'in_not_out'];
         x.graphics.out_label = ['dout'];
         x.graphics.style = 'shape=rectangle;fillColor=yellow';

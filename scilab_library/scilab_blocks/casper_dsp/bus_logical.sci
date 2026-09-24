@@ -29,7 +29,7 @@ function [x, y, typ] = bus_logical(job, arg1, arg2)
         model.out = [1, 2];
         model.out2 = [8, 1];
         model.label = tag;
-        x=standard_define([9 9],model,exprs,gr_i)
+        x=standard_define([10.8 10.8],model,exprs,gr_i)
         x.graphics.in_label = ['a', 'b', 'en', 'misci'];
         x.graphics.out_label = ['dout', 'misco'];
         x.graphics.style = 'shape=rectangle;fillColor=#90EE90';

@@ -50,7 +50,7 @@ function [x, y, typ]= delay(job, arg1, arg2)
       // by get_block_type.sci via file-probe, so this is free to be
       // the block's own name.
       model.label = blkname;
-      x=standard_define([2 1],model,exprs,gr_i)
+      x=standard_define([2.4 1.2],model,exprs,gr_i)
       x.graphics.style = 'shape=rectangle;fillColor=green';
       x.graphics.in_label = ['in'];
       x.graphics.out_label = ['out'];

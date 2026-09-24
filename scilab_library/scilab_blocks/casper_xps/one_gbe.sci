@@ -25,7 +25,7 @@ function [x, y, typ] = one_gbe(job, arg1, arg2)
         model.out = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
         model.out2 = [1, 1, 8, 1, 32, 16, 1, 1, 1, 8, 1];
         model.label = tag;
-        x=standard_define([13 26],model,exprs,gr_i)
+        x=standard_define([15.6 31.2],model,exprs,gr_i)
         x.graphics.in_label = ['tx_rst', 'rx_rst', 'tx_data', 'tx_val', 'tx_destip', 'tx_destport', 'tx_eof', 'rx_ack'];
         x.graphics.out_label = ['tx_afull', 'tx_overrun', 'rx_data', 'rx_val', 'rx_srcip', 'rx_srcport', 'rx_eof', 'rx_badframe', 'rx_overrun', 'dbg_data', 'dbg_data_val'];
         x.graphics.style = 'shape=rectangle;fillColor=yellow';

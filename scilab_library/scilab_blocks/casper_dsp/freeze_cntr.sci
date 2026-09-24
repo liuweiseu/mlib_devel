@@ -32,7 +32,7 @@ function [x, y, typ] = freeze_cntr(job, arg1, arg2)
         // aliases it with graphics.id); category is derived separately by
         // get_block_type.sci via file-probe, so this is free to be the name.
         model.label = tag;
-        x=standard_define([7 7],model,exprs,gr_i)
+        x=standard_define([8.4 8.4],model,exprs,gr_i)
         x.graphics.in_label = ['en', 'rst'];
         x.graphics.out_label = ['addr', 'we', 'done'];
         x.graphics.style = 'shape=rectangle;fillColor=#90EE90';
