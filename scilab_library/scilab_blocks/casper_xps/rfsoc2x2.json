@@ -1,0 +1,26 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "hw_sys",
+            "clk_src",
+            "clk_rate",
+            "pl_clk_rate",
+            "sample_period",
+            "synthesis_tool"
+        ],
+        "values": [
+            "rfsoc2x2",
+            "",
+            "xps:rfsoc2x2",
+            "rfsoc2x2:xczu28dr",
+            "adc_clk",
+            "245.76",
+            "122.88",
+            "1",
+            "XST"
+        ]
+    }
+}

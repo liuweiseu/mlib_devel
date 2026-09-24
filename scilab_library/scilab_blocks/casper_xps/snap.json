@@ -1,0 +1,26 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "hw_sys",
+            "clk_src",
+            "clk_rate",
+            "use_microblaze",
+            "sample_period",
+            "synthesis_tool"
+        ],
+        "values": [
+            "snap",
+            "",
+            "xps:snap",
+            "SNAP:xc7k160t",
+            "sys_clk",
+            "100",
+            "False",
+            "1",
+            "XST"
+        ]
+    }
+}

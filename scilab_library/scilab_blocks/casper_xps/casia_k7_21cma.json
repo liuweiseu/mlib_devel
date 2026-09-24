@@ -1,0 +1,26 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "hw_sys",
+            "clk_src",
+            "clk_rate",
+            "use_microblaze",
+            "sample_period",
+            "synthesis_tool"
+        ],
+        "values": [
+            "casia_k7_21cma",
+            "",
+            "xps:casia_k7_21cma",
+            "CASIA_K7_21CMA:xc7k325t",
+            "sys_clk",
+            "100",
+            "True",
+            "1",
+            "XST"
+        ]
+    }
+}

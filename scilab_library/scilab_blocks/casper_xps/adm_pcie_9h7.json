@@ -1,0 +1,30 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "hw_sys",
+            "clk_src",
+            "clk_rate",
+            "use_microblaze",
+            "use_pr",
+            "pr_template",
+            "sample_period",
+            "synthesis_tool"
+        ],
+        "values": [
+            "adm_pcie_9h7",
+            "",
+            "xps:adm_pcie_9h7",
+            "ADM_PCIE_9H7:xcvu37p",
+            "sys_clk",
+            "100",
+            "False",
+            "True",
+            "''",
+            "1",
+            "XST"
+        ]
+    }
+}

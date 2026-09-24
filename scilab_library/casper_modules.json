@@ -68,7 +68,6 @@
         "triggered_counter": { "enabled": true, "category": "Misc" }
     },
     "casper_xps": {
-        "rfsoc4x2": { "enabled": true, "category": "General", "icon": "rfsoc4x2.png" },
         "gpio": { "enabled": true, "category": "IO" },
         "gpio_bidir": { "enabled": true, "category": "IO" },
         "i2c_interface": { "enabled": true, "category": "IO" },
@@ -80,7 +79,28 @@
         "ten_gbe": { "enabled": true, "category": "IO" },
         "swreg": { "enabled": true, "category": "General" },
         "rfdc": { "enabled": true, "category": "General" },
-        "sbram": { "enabled": true, "category": "General" }
+        "sbram": { "enabled": true, "category": "General" },
+        "rfsoc4x2": { "enabled": true, "category": "Platforms", "icon": "rfsoc4x2.png" },
+        "rfsoc2x2": { "enabled": true, "category": "Platforms" },
+        "skarab": { "enabled": true, "category": "Platforms" },
+        "snap": { "enabled": true, "category": "Platforms" },
+        "snap2": { "enabled": true, "category": "Platforms" },
+        "adm_pcie_9h7": { "enabled": true, "category": "Platforms" },
+        "au280": { "enabled": true, "category": "Platforms" },
+        "au50": { "enabled": true, "category": "Platforms" },
+        "casia_k7": { "enabled": true, "category": "Platforms" },
+        "casia_k7_21cma": { "enabled": true, "category": "Platforms" },
+        "htg9200": { "enabled": true, "category": "Platforms" },
+        "htg940": { "enabled": true, "category": "Platforms" },
+        "htg_zrf16": { "enabled": true, "category": "Platforms" },
+        "mx175": { "enabled": true, "category": "Platforms" },
+        "red_pitaya": { "enabled": true, "category": "Platforms" },
+        "vcu118": { "enabled": true, "category": "Platforms" },
+        "vcu128": { "enabled": true, "category": "Platforms" },
+        "zcu111": { "enabled": true, "category": "Platforms" },
+        "zcu208": { "enabled": true, "category": "Platforms" },
+        "zcu216": { "enabled": true, "category": "Platforms" },
+        "zrf16": { "enabled": true, "category": "Platforms" }
     },
     "casper_sim": {
         "sim_constant": { "enabled": true, "category": "General", "icon": "constant.png" },

@@ -1,0 +1,26 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "hw_sys",
+            "clk_src",
+            "clk_rate",
+            "use_microblaze",
+            "sample_period",
+            "synthesis_tool"
+        ],
+        "values": [
+            "mx175",
+            "",
+            "xps:mx175",
+            "MX175:xc7vx690t",
+            "sys_clk",
+            "100",
+            "False",
+            "1",
+            "XST"
+        ]
+    }
+}

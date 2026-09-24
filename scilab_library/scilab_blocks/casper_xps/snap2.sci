@@ -1,4 +1,4 @@
-// rfsoc4x2: Xcos block definition, PyQt6-mask pattern. Hand-written
+// snap2: Xcos block definition, PyQt6-mask pattern. Hand-written
 // (not gen_sci_block.py) -- every xps_library Platforms-group board
 // config block (xps_xsg_*_conf_mask.m) is a pure design-wide settings
 // marker with mask parameters but no signal path at all: confirmed by
@@ -7,7 +7,7 @@
 // all 21 boards. Per casper_xps_from_simulink/SKILL.md's "zero ports"
 // case: model.in/model.out are simply never set, and the 'set' job's
 // update function only ever refreshes graphics, never port topology.
-function [x, y, typ] = rfsoc4x2(job, arg1, arg2)
+function [x, y, typ] = snap2(job, arg1, arg2)
     x=[];y=[];typ=[];
     select job
     case 'set' then
@@ -15,9 +15,9 @@ function [x, y, typ] = rfsoc4x2(job, arg1, arg2)
         export_exprs_to_tmpdir(x);
         bconfig = run_mask(x);
         x = update_exprs_from_tmpdir(x);
-        x = rfsoc4x2_refresh(x, bconfig);
+        x = snap2_refresh(x, bconfig);
     case 'define' then
-        tag = 'rfsoc4x2';
+        tag = 'snap2';
         model = scicos_model();
         model.sim = list(tag, 4);
         model.blocktype = 'c';
@@ -25,14 +25,14 @@ function [x, y, typ] = rfsoc4x2(job, arg1, arg2)
         model.rpar = [];
         gr_i = [];
         exprs = [];
-        x=standard_define([7.2 6],model,exprs,gr_i)
+        x=standard_define([6 4.8],model,exprs,gr_i)
         x.graphics.style = 'shape=rectangle;fillColor=yellow';
         x = init_exprs(x);
-        debug_info('rfsoc4x2 block loaded...')
+        debug_info('snap2 block loaded...')
     end
 endfunction
 
-function [x] = rfsoc4x2_refresh(obj, bconfigfn)
+function [x] = snap2_refresh(obj, bconfigfn)
     // zero-port block -- nothing to resize/rewire, just keep the fill
     // style consistent (mirrors every other casper_xps block's 'set' path).
     x = obj;
