@@ -18,7 +18,7 @@
             "HTG940:xcvu13p",
             "fmc_c_clk",
             "312.5",
-            "True",
+            "on",
             "1",
             "XST"
         ]

@@ -18,7 +18,7 @@
             "MX175:xc7vx690t",
             "sys_clk",
             "100",
-            "False",
+            "off",
             "1",
             "XST"
         ]

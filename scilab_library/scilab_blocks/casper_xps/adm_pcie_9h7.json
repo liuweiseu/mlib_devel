@@ -20,8 +20,8 @@
             "ADM_PCIE_9H7:xcvu37p",
             "sys_clk",
             "100",
-            "False",
-            "True",
+            "off",
+            "on",
             "''",
             "1",
             "XST"

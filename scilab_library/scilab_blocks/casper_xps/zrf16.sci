@@ -26,7 +26,11 @@ function [x, y, typ] = zrf16(job, arg1, arg2)
         gr_i = [];
         exprs = [];
         x=standard_define([7.2 6],model,exprs,gr_i)
-        x.graphics.style = 'shape=rectangle;fillColor=yellow';
+        // vector text drawn directly on the fill color via mxGraph's
+        // displayedLabel (see Xcos-style.xml / XcosDiagram.getCellStyle)
+        // instead of a fixed-pixel image -- reflows/recenters when the
+        // block is resized, rather than staying a fixed bitmap size.
+        x.graphics.style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;noLabel=0;displayedLabel=ZRF16;whiteSpace=wrap;html=1;';
         x = init_exprs(x);
         debug_info('zrf16 block loaded...')
     end
@@ -37,6 +41,6 @@ function [x] = zrf16_refresh(obj, bconfigfn)
     // style consistent (mirrors every other casper_xps block's 'set' path).
     x = obj;
     graphics = x.graphics;
-    graphics.style = 'shape=rectangle;fillColor=yellow';
+    graphics.style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;fontStyle=1;align=center;verticalAlign=middle;noLabel=0;displayedLabel=ZRF16;whiteSpace=wrap;html=1;';
     x.graphics = graphics;
 endfunction

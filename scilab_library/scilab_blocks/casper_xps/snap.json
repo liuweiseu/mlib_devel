@@ -18,7 +18,7 @@
             "SNAP:xc7k160t",
             "sys_clk",
             "100",
-            "False",
+            "off",
             "1",
             "XST"
         ]

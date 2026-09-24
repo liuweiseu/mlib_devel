@@ -18,7 +18,7 @@
             "SNAP2_v1:xcku115",
             "adc0_clk",
             "250",
-            "False",
+            "off",
             "1",
             "XST"
         ]

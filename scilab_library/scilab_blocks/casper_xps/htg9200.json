@@ -18,7 +18,7 @@
             "HTG9200:xcvu13p",
             "sys_clk",
             "100",
-            "True",
+            "on",
             "1",
             "XST"
         ]

@@ -18,7 +18,7 @@
             "VCU128:xcvu37p",
             "sys_clk",
             "100",
-            "True",
+            "on",
             "1",
             "XST"
         ]

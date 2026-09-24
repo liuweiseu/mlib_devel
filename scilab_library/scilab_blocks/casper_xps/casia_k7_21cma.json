@@ -18,7 +18,7 @@
             "CASIA_K7_21CMA:xc7k325t",
             "sys_clk",
             "100",
-            "True",
+            "on",
             "1",
             "XST"
         ]
