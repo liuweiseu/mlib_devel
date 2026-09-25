@@ -34,7 +34,7 @@
 // Known judgment call: for QUAD-tile architecture, the real mask gates
 // port creation on mixer_type ~= 'Off'. This port's mixer_type comboboxes
 // only ever expose 'Bypassed'/'Fine'/'Coarse' (confirmed against
-// block_guis/rfdc/rfdc_ui.py -- there is no literal 'Off' option anywhere
+// block_guis/casper_xps/rfdc/rfdc_ui.py -- there is no literal 'Off' option anywhere
 // in this GUI), so in practice every enabled QT slice always produces a
 // port. The 'Off' string comparison is kept anyway for exact fidelity to
 // the source algorithm in case that ever changes.

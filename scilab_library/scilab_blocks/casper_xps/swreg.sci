@@ -5,7 +5,7 @@
       x = arg1;
       /* diagrams saved with the old scicos_getvalue dialog have 9 exprs */
       x = swreg_upgrade_exprs(x);
-      /* configure the block with the pyqt GUI in block_guis/swreg */
+      /* configure the block with the pyqt GUI in block_guis/casper_xps/swreg */
       export_exprs_to_tmpdir(x);
       bconfig = run_mask(x);
       x = update_exprs_from_tmpdir(x);
