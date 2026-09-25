@@ -26,9 +26,21 @@ function [validation] = validate_design(fn)
             end
         end
     end
-    if nxsg == 1 then
+    /* check if any two blocks in the design share the same name. */
+    dup_msg = check_duplicate_names(fn);
+
+    if nxsg == 1 & dup_msg == '' then
         validation = 'ok';
     else
-        validation = 'Please use a platform block in the design.'
+        validation = ascii(10) + '**************Validation Failed**************';
+        if nxsg <> 1 then
+            validation = validation + ascii(10) + 'Please use a platform block in the design.';
+            validation = validation + ascii(10) + '*********************************************';
+        end
+        if dup_msg <> '' then
+            validation = validation + ascii(10) + dup_msg;
+            validation = validation + ascii(10) + '*********************************************';
+        end
+        validation = validation + ascii(10);
     end
 endfunction

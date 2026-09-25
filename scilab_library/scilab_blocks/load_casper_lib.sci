@@ -30,6 +30,7 @@ exec('scilab_library/scilab_blocks/utils/export_exprs.sci');
 exec('scilab_library/scilab_blocks/utils/export_exprs_to_tmpdir.sci');
 exec('scilab_library/scilab_blocks/utils/update_exprs.sci');
 exec('scilab_library/scilab_blocks/utils/update_exprs_from_tmpdir.sci');
+exec('scilab_library/scilab_blocks/utils/check_duplicate_names.sci');
 exec('scilab_library/scilab_blocks/utils/validate_design.sci');
 exec('scilab_library/scilab_blocks/utils/remove_tmpdir.sci');
 exec('scilab_library/scilab_blocks/utils/load_module_registry.sci');
