@@ -30,9 +30,18 @@
       x=standard_define([12 1.7],model,exprs,gr_i)
       x.graphics.out_label = ['user_data_out'];
       x.graphics.in_label = ['sim_in'];
-      x.graphics.style = 'shape=rectangle;fillColor=yellow';
-      /* the parameters are defined in swreg.json */
+      /* the parameters (including the default "name") are defined in
+         swreg.json -- populate exprs from it before building the style,
+         so the very first on-diagram label already shows the template's
+         default block name instead of the hardcoded tag. */
       x = init_exprs(x);
+      // block name drawn BELOW the fill color instead of centered on top
+      // of it (verticalAlign=top;verticalLabelPosition=bottom; instead of
+      // verticalAlign=middle;), showing the user-configurable "name"
+      // parameter (swreg.json key "name", exprs(1)) rather than a fixed
+      // literal -- per direct user request, to compare against the
+      // Platforms-group centered-fixed-label look.
+      x.graphics.style = swreg_build_style(x.graphics.exprs(1));
       debug_info('swreg block loaded...')
   end
   endfunction
@@ -53,6 +62,17 @@ function [x] = swreg_upgrade_exprs(obj)
         debug_info('upgrading the exprs of the old swreg block');
         x.graphics.exprs = [exprs(1); ''; 'xps:sw_reg'; matrix(exprs(2:9), -1, 1); 'on'; 'on'];
     end
+endfunction
+
+/* build the graphics.style string for a given user-configurable block
+   name, showing it below the yellow fill (see displayedLabel). Strips
+   ';' and '=' from the name since those are the mxGraph style string's
+   own delimiter characters -- an unescaped one would corrupt every key
+   after it in the style string, not just truncate the label. */
+function [style] = swreg_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
 /* convert a list string, e.g. "[a, b]" or "8 24", to a column of strings */
@@ -103,7 +123,7 @@ function [x] = swreg_update_ports(obj, bconfigfn)
         graphics.out_label = ['user_data_out'];
         graphics.in_label = ['sim_in'];
     end
-    graphics.style = 'shape=rectangle;fillColor=yellow';
+    graphics.style = swreg_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
 endfunction

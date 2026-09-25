@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>520</width>
-    <height>560</height>
+    <height>590</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -59,13 +59,27 @@
          <widget class="QFrame" name="frame_3">
           <layout class="QGridLayout" name="gridLayout_2">
            <item row="0" column="0">
+            <widget class="QLabel" name="label_name">
+             <property name="text">
+              <string>Block name</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1" colspan="2">
+            <widget class="QLineEdit" name="name">
+             <property name="toolTip">
+              <string>A name you choose for this block instance, e.g. to note what it's used for in this design. Shown below the block on the diagram.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
             <widget class="QLabel" name="label_4">
              <property name="text">
               <string>Direction (io_dir)</string>
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
+           <item row="1" column="1">
             <widget class="QComboBox" name="io_dir">
              <item>
               <property name="text">
@@ -79,14 +93,14 @@
              </item>
             </widget>
            </item>
-           <item row="1" column="0">
+           <item row="2" column="0">
             <widget class="QLabel" name="label_5">
              <property name="text">
               <string>Initial value (init_val)</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="1" colspan="2">
+           <item row="2" column="1" colspan="2">
             <widget class="QLineEdit" name="init_val">
              <property name="toolTip">
               <string>Reset value of the register (decimal, 0 ~ 4294967295). Only used when io_dir is From Processor.</string>
@@ -96,70 +110,70 @@
              </property>
             </widget>
            </item>
-           <item row="2" column="0">
+           <item row="3" column="0">
             <widget class="QLabel" name="label_6">
              <property name="text">
               <string>Names [msb...lsb]</string>
              </property>
             </widget>
            </item>
-           <item row="2" column="1" colspan="2">
+           <item row="3" column="1" colspan="2">
             <widget class="QLineEdit" name="names">
              <property name="text">
               <string>reg</string>
              </property>
             </widget>
            </item>
-           <item row="3" column="0">
+           <item row="4" column="0">
             <widget class="QLabel" name="label_7">
              <property name="text">
               <string>Bitwidths [msb...lsb] (one value or one per name)</string>
              </property>
             </widget>
            </item>
-           <item row="3" column="1" colspan="2">
+           <item row="4" column="1" colspan="2">
             <widget class="QLineEdit" name="bitwidths">
              <property name="text">
               <string>1</string>
              </property>
             </widget>
            </item>
-           <item row="4" column="0">
+           <item row="5" column="0">
             <widget class="QLabel" name="label_8">
              <property name="text">
               <string>Binary points [msb...lsb]</string>
              </property>
             </widget>
            </item>
-           <item row="4" column="1" colspan="2">
+           <item row="5" column="1" colspan="2">
             <widget class="QLineEdit" name="bin_pts">
              <property name="text">
               <string>0</string>
              </property>
             </widget>
            </item>
-           <item row="5" column="0">
+           <item row="6" column="0">
             <widget class="QLabel" name="label_9">
              <property name="text">
               <string>Data types [msb...lsb] (0=ufix,1=fix,2=bool)</string>
              </property>
             </widget>
            </item>
-           <item row="5" column="1" colspan="2">
+           <item row="6" column="1" colspan="2">
             <widget class="QLineEdit" name="arith_types">
              <property name="text">
               <string>2</string>
              </property>
             </widget>
            </item>
-           <item row="6" column="0">
+           <item row="7" column="0">
             <widget class="QLabel" name="label_10">
              <property name="text">
               <string>IO delay (io_delay)</string>
              </property>
             </widget>
            </item>
-           <item row="6" column="1">
+           <item row="7" column="1">
             <widget class="QSpinBox" name="io_delay">
              <property name="minimum">
               <number>0</number>
@@ -172,14 +186,14 @@
              </property>
             </widget>
            </item>
-           <item row="7" column="0">
+           <item row="8" column="0">
             <widget class="QLabel" name="label_11">
              <property name="text">
               <string>Sample period (sample_period)</string>
              </property>
             </widget>
            </item>
-           <item row="7" column="1">
+           <item row="8" column="1">
             <widget class="QSpinBox" name="sample_period">
              <property name="minimum">
               <number>1</number>
@@ -192,7 +206,7 @@
              </property>
             </widget>
            </item>
-           <item row="8" column="0">
+           <item row="9" column="0">
             <widget class="QCheckBox" name="sim_port">
              <property name="text">
               <string>Add simulation-only ports (sim_port)</string>
@@ -202,7 +216,7 @@
              </property>
             </widget>
            </item>
-           <item row="9" column="0">
+           <item row="10" column="0">
             <widget class="QCheckBox" name="show_format">
              <property name="text">
               <string>Show format string on icon (show_format)</string>
