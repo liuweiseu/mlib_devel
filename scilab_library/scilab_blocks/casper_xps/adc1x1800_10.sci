@@ -36,11 +36,22 @@ function [x, y, typ] = adc1x1800_10(job, arg1, arg2)
         x=standard_define([19.2 39.6],model,exprs,gr_i)
         x.graphics.in_label = ['sim_in', 'sim_sync', 'sim_data_valid', 'demux_tst_pat_en'];
         x.graphics.out_label = ['o0', 'o1', 'o2', 'o3', 'o4', 'o5', 'o6', 'o7', 'outofrange0', 'outofrange1', 'outofrange2', 'outofrange3', 'outofrange4', 'outofrange5', 'outofrange6', 'outofrange7', 'sync', 'data_valid'];
-        x.graphics.style = 'shape=rectangle;fillColor=yellow';
         /* init exprs */
         x = init_exprs(x);
+        x.graphics.style = adc1x1800_10_build_style(x.graphics.exprs(1));
         debug_info('adc1x1800_10 block loaded...')
     end
+endfunction
+
+/* build the graphics.style string for a given user-configurable block
+   name, showing it below the yellow fill (see displayedLabel). Strips
+   ';' and '=' from the name since those are the mxGraph style string's
+   own delimiter characters -- an unescaped one would corrupt every key
+   after it in the style string, not just truncate the label. */
+function [style] = adc1x1800_10_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
 function [x] = adc1x1800_10_update_ports(obj, bconfigfn)
@@ -57,7 +68,7 @@ function [x] = adc1x1800_10_update_ports(obj, bconfigfn)
     model.out2 = [10, 10, 10, 10, 10, 10, 10, 10, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
     graphics.in_label = ['sim_in', 'sim_sync', 'sim_data_valid', 'demux_tst_pat_en'];
     graphics.out_label = ['o0', 'o1', 'o2', 'o3', 'o4', 'o5', 'o6', 'o7', 'outofrange0', 'outofrange1', 'outofrange2', 'outofrange3', 'outofrange4', 'outofrange5', 'outofrange6', 'outofrange7', 'sync', 'data_valid'];
-    graphics.style = 'shape=rectangle;fillColor=yellow';
+    graphics.style = adc1x1800_10_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
 endfunction

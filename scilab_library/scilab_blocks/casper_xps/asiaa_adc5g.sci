@@ -44,10 +44,21 @@ function [x, y, typ] = asiaa_adc5g(job, arg1, arg2)
         x=standard_define([18 38.4],model,exprs,gr_i)
         x.graphics.in_label = ['sim_a', 'sim_sync'];
         x.graphics.out_label = ['a0', 'a1', 'a2', 'a3', 'a4', 'a5', 'a6', 'a7', 'a8', 'a9', 'a10', 'a11', 'a12', 'a13', 'a14', 'a15', 'sync_out'];
-        x.graphics.style = 'shape=rectangle;fillColor=yellow';
         x = init_exprs(x);
+        x.graphics.style = asiaa_adc5g_build_style(x.graphics.exprs(1));
         debug_info('asiaa_adc5g block loaded...')
     end
+endfunction
+
+/* build the graphics.style string for a given user-configurable block
+   name, showing it below the yellow fill (see displayedLabel). Strips
+   ';' and '=' from the name since those are the mxGraph style string's
+   own delimiter characters -- an unescaped one would corrupt every key
+   after it in the style string, not just truncate the label. */
+function [style] = asiaa_adc5g_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
 function [x] = asiaa_adc5g_update_ports(obj, bconfigfn)
@@ -100,7 +111,7 @@ function [x] = asiaa_adc5g_update_ports(obj, bconfigfn)
     model.out2 = out2;
     graphics.in_label = in_label;
     graphics.out_label = out_label;
-    graphics.style = 'shape=rectangle;fillColor=yellow';
+    graphics.style = asiaa_adc5g_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
 endfunction

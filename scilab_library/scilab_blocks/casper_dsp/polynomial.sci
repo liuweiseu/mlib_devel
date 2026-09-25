@@ -34,8 +34,8 @@ function [x, y, typ] = polynomial(job, arg1, arg2)
         x=standard_define([8.4 8.4],model,exprs,gr_i)
         x.graphics.in_label = iports_label;
         x.graphics.out_label = oports_label;
-        x.graphics.style = 'shape=rectangle;fillColor=#90EE90';
         x = init_exprs(x);
+        x.graphics.style = polynomial_build_style(x.graphics.exprs(1));
         debug_info('polynomial block loaded...')
     end
 endfunction
@@ -107,7 +107,18 @@ function [x] = polynomial_update_ports(obj, bconfigfn)
     model.out2 = out2;
     graphics.in_label = iports_label;
     graphics.out_label = oports_label;
-    graphics.style = 'shape=rectangle;fillColor=#90EE90';
+    graphics.style = polynomial_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
+endfunction
+
+/* build the graphics.style string for a given user-configurable block
+   name, showing it below the fill color (see displayedLabel). Strips
+   ';' and '=' from the name since those are the mxGraph style string's
+   own delimiter characters -- an unescaped one would corrupt every key
+   after it in the style string, not just truncate the label. */
+function [style] = polynomial_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=#90EE90;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
 endfunction

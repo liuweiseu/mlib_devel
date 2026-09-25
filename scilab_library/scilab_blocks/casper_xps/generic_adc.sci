@@ -53,10 +53,21 @@ function [x, y, typ] = generic_adc(job, arg1, arg2)
         // real naming from generic_adc_update_ports's d_index formula
         // (d=0, ds=0..3, not interleaved -> d_index=ds), not "data0_0" etc.
         x.graphics.out_label = ['data0', 'data1', 'data2', 'data3', 'sync0', 'sync1', 'sync2', 'sync3'];
-        x.graphics.style = 'shape=rectangle;fillColor=yellow';
         x = init_exprs(x);
+        x.graphics.style = generic_adc_build_style(x.graphics.exprs(1));
         debug_info('generic_adc block loaded...')
     end
+endfunction
+
+/* build the graphics.style string for a given user-configurable block
+   name, showing it below the yellow fill (see displayedLabel). Strips
+   ';' and '=' from the name since those are the mxGraph style string's
+   own delimiter characters -- an unescaped one would corrupt every key
+   after it in the style string, not just truncate the label. */
+function [style] = generic_adc_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
 function [x] = generic_adc_update_ports(obj, bconfigfn)
@@ -139,7 +150,7 @@ function [x] = generic_adc_update_ports(obj, bconfigfn)
     model.out2 = out2;
     graphics.in_label = in_label;
     graphics.out_label = out_label;
-    graphics.style = 'shape=rectangle;fillColor=yellow';
+    graphics.style = generic_adc_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
 endfunction

@@ -15,6 +15,11 @@ from utils.utils import make_rich_logger, gen_bconfig
 # The keys must match scilab_blocks/casper_xps/adc2x14_400.json, since the
 # Scilab side (update_exprs) only reads back the keys listed in that template.
 ADC2X14_400_CONFIG = {
+    'name':
+    {
+        'get': 'get_name',
+        'set': 'set_name'
+    },
     'adc_brd':
     {
         'get': 'get_adc_brd',
@@ -71,6 +76,15 @@ class Adc2x14400Operations(object):
     # *******************************************************************
     # Low-level APIs
     # *******************************************************************
+    def get_name(self):
+        val = self.ui.name.text()
+        self.logger.debug(f'name is {val}')
+        return val
+
+    def set_name(self, val):
+        self.logger.debug(f'Set name to {val}')
+        self.ui.name.setText(str(val))
+
     def get_adc_brd(self):
         text = self.ui.adc_brd.currentText()
         self.logger.debug(f'adc_brd is {text}')

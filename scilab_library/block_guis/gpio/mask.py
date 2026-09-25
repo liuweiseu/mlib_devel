@@ -15,6 +15,11 @@ from utils.utils import make_rich_logger, gen_bconfig
 # The keys must match scilab_blocks/casper_xps/gpio.json, since the
 # Scilab side (update_exprs) only reads back the keys listed in that template.
 GPIO_CONFIG = {
+    'name':
+    {
+        'get': 'get_name',
+        'set': 'set_name'
+    },
     'io_group':
     {
         'get': 'get_io_group',
@@ -136,6 +141,15 @@ class GpioOperations(object):
     # *******************************************************************
     # Low-level APIs
     # *******************************************************************
+    def get_name(self):
+        val = self.ui.name.text()
+        self.logger.debug(f'name is {val}')
+        return val
+
+    def set_name(self, val):
+        self.logger.debug(f'Set name to {val}')
+        self.ui.name.setText(str(val))
+
     def get_io_group(self):
         text = self.ui.io_group.currentText()
         self.logger.debug(f'io_group is {text}')

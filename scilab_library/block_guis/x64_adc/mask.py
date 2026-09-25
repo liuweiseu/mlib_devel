@@ -15,6 +15,11 @@ from utils.utils import make_rich_logger, gen_bconfig
 # The keys must match scilab_blocks/casper_xps/x64_adc.json, since the
 # Scilab side (update_exprs) only reads back the keys listed in that template.
 X64_ADC_CONFIG = {
+    'name':
+    {
+        'get': 'get_name',
+        'set': 'set_name'
+    },
     'adc_clk_rate':
     {
         'get': 'get_adc_clk_rate',
@@ -76,6 +81,15 @@ class X64AdcOperations(object):
     # *******************************************************************
     # Low-level APIs
     # *******************************************************************
+    def get_name(self):
+        val = self.ui.name.text()
+        self.logger.debug(f'name is {val}')
+        return val
+
+    def set_name(self, val):
+        self.logger.debug(f'Set name to {val}')
+        self.ui.name.setText(str(val))
+
     def get_adc_clk_rate(self):
         val = self.ui.adc_clk_rate.text()
         self.logger.debug(f'adc_clk_rate is {val}')

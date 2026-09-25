@@ -44,9 +44,8 @@ function [x, y, typ] = vacc_tvg(job, arg1, arg2)
         x=standard_define([12 8.4],model,exprs,gr_i)
         x.graphics.in_label = ['tvg_sel', 'sync_in', 'data_in', 'valid_in'];
         x.graphics.out_label = ['sync_out', 'data_out', 'valid_out'];
-        x.graphics.style = 'shape=rectangle;fillColor=#90EE90';
-        /* init exprs */
         x = init_exprs(x);
+        x.graphics.style = vacc_tvg_build_style(x.graphics.exprs(1));
         debug_info('vacc_tvg block loaded...')
     end
 endfunction
@@ -65,7 +64,18 @@ function [x] = vacc_tvg_update_ports(obj, bconfigfn)
     model.out2 = [1, strtod(p('n_bits')), 1];
     graphics.in_label = ['tvg_sel', 'sync_in', 'data_in', 'valid_in'];
     graphics.out_label = ['sync_out', 'data_out', 'valid_out'];
-    graphics.style = 'shape=rectangle;fillColor=#90EE90';
+    graphics.style = vacc_tvg_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
+endfunction
+
+/* build the graphics.style string for a given user-configurable block
+   name, showing it below the fill color (see displayedLabel). Strips ';'
+   and '=' from the name since those are the mxGraph style string's own
+   delimiter characters -- an unescaped one would corrupt every key after
+   it in the style string, not just truncate the label. */
+function [style] = vacc_tvg_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=#90EE90;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
 endfunction

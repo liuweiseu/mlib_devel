@@ -33,11 +33,21 @@ function [x, y, typ] = shifter_unit(job, arg1, arg2)
         x=standard_define([6 4.8],model,exprs,gr_i)
         x.graphics.in_label = ['sel', 'prev', 'pin', 'reg_en'];
         x.graphics.out_label = ['dout'];
-        x.graphics.style = 'shape=rectangle;fillColor=#90EE90';
-        /* init exprs */
+        // block name (shown below the fill color) comes from the
+        // "name" JSON key -- init_exprs populates exprs from the
+        // template first, so exprs(1) is its default value here
         x = init_exprs(x);
+        x.graphics.style = shifter_unit_build_style(x.graphics.exprs(1));
         debug_info('shifter_unit block loaded...')
     end
+endfunction
+
+function [style] = shifter_unit_build_style(name)
+    // strip mxGraph's own style-string delimiters so a user-typed
+    // name can never corrupt the rest of the style string
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=#90EE90;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
 function [x] = shifter_unit_update_ports(obj, bconfigfn)
@@ -56,7 +66,7 @@ function [x] = shifter_unit_update_ports(obj, bconfigfn)
     model.out2 = [data_width];
     graphics.in_label = ['sel', 'prev', 'pin', 'reg_en'];
     graphics.out_label = ['dout'];
-    graphics.style = 'shape=rectangle;fillColor=#90EE90';
+    graphics.style = shifter_unit_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
 endfunction

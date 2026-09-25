@@ -32,8 +32,8 @@ function [x, y, typ] = bus_addsub(job, arg1, arg2)
         x=standard_define([9.6 9.6],model,exprs,gr_i)
         x.graphics.in_label = ['a', 'b', 'en', 'misci'];
         x.graphics.out_label = ['dout', 'misco', 'dvalid'];
-        x.graphics.style = 'shape=rectangle;fillColor=#90EE90';
         x = init_exprs(x);
+        x.graphics.style = bus_addsub_build_style(x.graphics.exprs(1));
         debug_info('bus_addsub block loaded...')
     end
 endfunction
@@ -50,7 +50,18 @@ function [x] = bus_addsub_update_ports(obj, bconfigfn)
     model.out2 = [bus_vec_width(p('n_bits_out')), 1, 1];
     graphics.in_label = ['a', 'b', 'en', 'misci'];
     graphics.out_label = ['dout', 'misco', 'dvalid'];
-    graphics.style = 'shape=rectangle;fillColor=#90EE90';
+    graphics.style = bus_addsub_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
+endfunction
+
+/* build the graphics.style string for a given user-configurable block
+   name, showing it below the fill color (see displayedLabel). Strips ';'
+   and '=' from the name since those are the mxGraph style string's own
+   delimiter characters -- an unescaped one would corrupt every key after
+   it in the style string, not just truncate the label. */
+function [style] = bus_addsub_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=#90EE90;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
 endfunction

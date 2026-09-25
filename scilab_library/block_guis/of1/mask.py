@@ -15,6 +15,11 @@ from utils.utils import make_rich_logger, gen_bconfig
 # The keys must match scilab_blocks/casper_dsp/of1.json, since the
 # Scilab side (update_exprs) only reads back the keys listed in that template.
 OF1_CONFIG = {
+    'name':
+    {
+        'get': 'get_name',
+        'set': 'set_name'
+    },
     'bit_num':
     {
         'get': 'get_bit_num',
@@ -71,6 +76,15 @@ class Of1Operations(object):
     # *******************************************************************
     # Low-level APIs
     # *******************************************************************
+    def get_name(self):
+        val = self.ui.name.text()
+        self.logger.debug(f'name is {val}')
+        return val
+
+    def set_name(self, val):
+        self.logger.debug(f'Set name to {val}')
+        self.ui.name.setText(str(val))
+
     def get_bit_num(self):
         val = self.ui.bit_num.value()
         self.logger.debug(f'bit_num is {val}')

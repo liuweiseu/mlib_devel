@@ -12,6 +12,11 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.utils import make_rich_logger, gen_bconfig
 
 WBFFT_CONFIG = {
+        'name':
+        {
+            'get': 'get_name',
+            'set': 'set_name'
+        },
         'use_separate':
         {
             'get': 'get_use_separate',
@@ -158,6 +163,15 @@ class WBFFTOperations(object):
     # *******************************************************************
     # Low-level APIs
     # *******************************************************************
+    def get_name(self):
+        val = self.ui.name.text()
+        self.logger.debug(f'name is {val}')
+        return val
+
+    def set_name(self, val):
+        self.logger.debug(f'Set name to {val}')
+        self.ui.name.setText(str(val))
+
     def get_use_separate(self):
         status = self.ui.use_separate.isChecked()
         self.logger.debug(f'use_separate status is {status}')

@@ -39,11 +39,22 @@ function [x, y, typ] = x64_adc(job, arg1, arg2)
         x=standard_define([15.6 46.8],model,exprs,gr_i)
         x.graphics.in_label = ['sim0', 'sim1', 'sim2', 'sim3', 'sim4', 'sim5', 'sim6', 'sim7', 'sim8', 'sim9', 'sim10', 'sim11', 'sim12', 'sim13', 'sim14', 'sim15', 'sim_sync', 'adc_rst'];
         x.graphics.out_label = ['dout0', 'dout1', 'dout2', 'dout3', 'dout4', 'dout5', 'dout6', 'dout7', 'dout8', 'dout9', 'dout10', 'dout11', 'dout12', 'dout13', 'dout14', 'dout15', 'chan_sync'];
-        x.graphics.style = 'shape=rectangle;fillColor=yellow';
         /* init exprs */
         x = init_exprs(x);
+        x.graphics.style = x64_adc_build_style(x.graphics.exprs(1));
         debug_info('x64_adc block loaded...')
     end
+endfunction
+
+/* build the graphics.style string for a given user-configurable block
+   name, showing it below the yellow fill (see displayedLabel). Strips
+   ';' and '=' from the name since those are the mxGraph style string's
+   own delimiter characters -- an unescaped one would corrupt every key
+   after it in the style string, not just truncate the label. */
+function [style] = x64_adc_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
 function [x] = x64_adc_update_ports(obj, bconfigfn)
@@ -79,7 +90,7 @@ function [x] = x64_adc_update_ports(obj, bconfigfn)
     model.out2 = out2;
     graphics.in_label = in_label;
     graphics.out_label = out_label;
-    graphics.style = 'shape=rectangle;fillColor=yellow';
+    graphics.style = x64_adc_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
 endfunction

@@ -35,11 +35,21 @@ function [x, y, typ] = freeze_cntr(job, arg1, arg2)
         x=standard_define([8.4 8.4],model,exprs,gr_i)
         x.graphics.in_label = ['en', 'rst'];
         x.graphics.out_label = ['addr', 'we', 'done'];
-        x.graphics.style = 'shape=rectangle;fillColor=#90EE90';
-        /* init exprs */
+        // block name (shown below the fill color) comes from the
+        // "name" JSON key -- init_exprs populates exprs from the
+        // template first, so exprs(1) is its default value here
         x = init_exprs(x);
+        x.graphics.style = freeze_cntr_build_style(x.graphics.exprs(1));
         debug_info('freeze_cntr block loaded...')
     end
+endfunction
+
+function [style] = freeze_cntr_build_style(name)
+    // strip mxGraph's own style-string delimiters so a user-typed
+    // name can never corrupt the rest of the style string
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=#90EE90;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
 function [x] = freeze_cntr_update_ports(obj, bconfigfn)
@@ -56,7 +66,7 @@ function [x] = freeze_cntr_update_ports(obj, bconfigfn)
     model.out2 = [strtod(p('counter_bits')), 1, 1];
     graphics.in_label = ['en', 'rst'];
     graphics.out_label = ['addr', 'we', 'done'];
-    graphics.style = 'shape=rectangle;fillColor=#90EE90';
+    graphics.style = freeze_cntr_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
 endfunction

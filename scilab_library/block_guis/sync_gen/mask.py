@@ -15,6 +15,11 @@ from utils.utils import make_rich_logger, gen_bconfig
 # The keys must match scilab_blocks/casper_dsp/sync_gen.json, since the
 # Scilab side (update_exprs) only reads back the keys listed in that template.
 SYNC_GEN_CONFIG = {
+    'name':
+    {
+        'get': 'get_name',
+        'set': 'set_name'
+    },
     'sim_acc_len':
     {
         'get': 'get_sim_acc_len',
@@ -91,6 +96,15 @@ class SyncGenOperations(object):
     # *******************************************************************
     # Low-level APIs
     # *******************************************************************
+    def get_name(self):
+        val = self.ui.name.text()
+        self.logger.debug(f'name is {val}')
+        return val
+
+    def set_name(self, val):
+        self.logger.debug(f'Set name to {val}')
+        self.ui.name.setText(str(val))
+
     def get_sim_acc_len(self):
         val = self.ui.sim_acc_len.value()
         self.logger.debug(f'sim_acc_len is {val}')

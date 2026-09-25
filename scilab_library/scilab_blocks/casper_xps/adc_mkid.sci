@@ -35,11 +35,22 @@ function [x, y, typ] = adc_mkid(job, arg1, arg2)
         x=standard_define([7.2 18],model,exprs,gr_i)
         x.graphics.in_label = [];
         x.graphics.out_label = ['data_i0', 'data_i1', 'data_q0', 'data_q1', 'sync'];
-        x.graphics.style = 'shape=rectangle;fillColor=yellow';
         /* init exprs */
         x = init_exprs(x);
+        x.graphics.style = adc_mkid_build_style(x.graphics.exprs(1));
         debug_info('adc_mkid block loaded...')
     end
+endfunction
+
+/* build the graphics.style string for a given user-configurable block
+   name, showing it below the yellow fill (see displayedLabel). Strips
+   ';' and '=' from the name since those are the mxGraph style string's
+   own delimiter characters -- an unescaped one would corrupt every key
+   after it in the style string, not just truncate the label. */
+function [style] = adc_mkid_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
 function [x] = adc_mkid_update_ports(obj, bconfigfn)
@@ -56,7 +67,7 @@ function [x] = adc_mkid_update_ports(obj, bconfigfn)
     model.out2 = [12, 12, 12, 12, 1];
     graphics.in_label = [];
     graphics.out_label = ['data_i0', 'data_i1', 'data_q0', 'data_q1', 'sync'];
-    graphics.style = 'shape=rectangle;fillColor=yellow';
+    graphics.style = adc_mkid_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
 endfunction

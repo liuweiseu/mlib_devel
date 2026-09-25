@@ -10,7 +10,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(620, 360)
+        MainWindow.resize(620, 390)
         self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -32,6 +32,14 @@ class Ui_MainWindow(object):
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.gridLayout = QtWidgets.QGridLayout(self.scrollAreaWidgetContents)
         self.gridLayout.setObjectName("gridLayout")
+        self.label_name = QtWidgets.QLabel(parent=self.scrollAreaWidgetContents)
+        self.label_name.setObjectName("label_name")
+        self.label_name.setWordWrap(True)
+        self.label_name.setFixedWidth(220)
+        self.gridLayout.addWidget(self.label_name, 0, 0, 1, 1)
+        self.name = QtWidgets.QLineEdit(parent=self.scrollAreaWidgetContents)
+        self.name.setObjectName("name")
+        self.gridLayout.addWidget(self.name, 0, 1, 1, 2)
         self.gridLayout.setColumnStretch(1, 1)
         self.label_vec_len = QtWidgets.QLabel(parent=self.scrollAreaWidgetContents)
         self.label_vec_len.setObjectName("label_vec_len")
@@ -95,6 +103,8 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
+        self.label_name.setText(_translate("MainWindow", "Block name"))
+        self.name.setToolTip(_translate("MainWindow", "A name you choose for this block instance, e.g. to note what it's used for in this design. Shown below the block on the diagram."))
         MainWindow.setWindowTitle(_translate("MainWindow", "Async Vector Accumulator"))
         self.title_label.setText(_translate("MainWindow", "Async Vector Accumulator"))
         self.desc_label.setText(_translate("MainWindow", "Same functionality as simple_bram_vacc, but only accumulates when it receives valid data (the valid_in line). Outputs its previous accumulated vector after a new_acc pulse is received. Credit: Gianni Comoretto, INAF."))

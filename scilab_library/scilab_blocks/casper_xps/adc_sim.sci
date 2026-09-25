@@ -36,10 +36,21 @@ function [x, y, typ] = adc_sim(job, arg1, arg2)
         x=standard_define([10.8 16.8],model,exprs,gr_i)
         x.graphics.in_label = ['sim_adc_data_in'];
         x.graphics.out_label = ['s0','s1','s2','s3','s4','s5','s6','s7','of'];
-        x.graphics.style = 'shape=rectangle;fillColor=yellow';
         x = init_exprs(x);
+        x.graphics.style = adc_sim_build_style(x.graphics.exprs(1));
         debug_info('adc_sim block loaded...')
     end
+endfunction
+
+/* build the graphics.style string for a given user-configurable block
+   name, showing it below the yellow fill (see displayedLabel). Strips
+   ';' and '=' from the name since those are the mxGraph style string's
+   own delimiter characters -- an unescaped one would corrupt every key
+   after it in the style string, not just truncate the label. */
+function [style] = adc_sim_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
 function [x] = adc_sim_update_ports(obj, bconfigfn)
@@ -81,7 +92,7 @@ function [x] = adc_sim_update_ports(obj, bconfigfn)
     model.out2 = out2;
     graphics.in_label = in_label;
     graphics.out_label = out_label;
-    graphics.style = 'shape=rectangle;fillColor=yellow';
+    graphics.style = adc_sim_build_style(p('name'));
     graphics.exprs = exprs;
     x.graphics = graphics;
     x.model = model;

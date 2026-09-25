@@ -29,11 +29,22 @@ function [x, y, typ] = red_pitaya_adc(job, arg1, arg2)
         x=standard_define([16.8 31.2],model,exprs,gr_i)
         x.graphics.in_label = ['adc_reset_in'];
         x.graphics.out_label = ['adc_data_val_out', 'adc0_data_i_out', 'adc1_data_q_out'];
-        x.graphics.style = 'shape=rectangle;fillColor=yellow';
         /* init exprs */
         x = init_exprs(x);
+        x.graphics.style = red_pitaya_adc_build_style(x.graphics.exprs(1));
         debug_info('red_pitaya_adc block loaded...')
     end
+endfunction
+
+/* build the graphics.style string for a given user-configurable block
+   name, showing it below the yellow fill (see displayedLabel). Strips
+   ';' and '=' from the name since those are the mxGraph style string's
+   own delimiter characters -- an unescaped one would corrupt every key
+   after it in the style string, not just truncate the label. */
+function [style] = red_pitaya_adc_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
 function [x] = red_pitaya_adc_update_ports(obj, bconfigfn)
@@ -50,7 +61,7 @@ function [x] = red_pitaya_adc_update_ports(obj, bconfigfn)
     model.out2 = [1, strtod(p('bits')), strtod(p('bits'))];
     graphics.in_label = ['adc_reset_in'];
     graphics.out_label = ['adc_data_val_out', 'adc0_data_i_out', 'adc1_data_q_out'];
-    graphics.style = 'shape=rectangle;fillColor=yellow';
+    graphics.style = red_pitaya_adc_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
 endfunction

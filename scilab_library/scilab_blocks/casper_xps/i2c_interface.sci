@@ -29,12 +29,22 @@ function [x, y, typ] = i2c_interface(job, arg1, arg2)
         x=standard_define([4.8 4.8],model,exprs,gr_i)
         x.graphics.in_label = [];
         x.graphics.out_label = [];
-        x.graphics.style = 'shape=rectangle;fillColor=yellow';
-        /* init exprs */
         x = init_exprs(x);
+        x.graphics.style = i2c_interface_build_style(x.graphics.exprs(1));
         debug_info('i2c_interface block loaded...')
     end
 endfunction
+
+/* build graphics.style for a given user-configurable block name, shown
+   below the yellow fill. Strips ';' and '=' since those are mxGraph's
+   own style-string delimiters -- an unescaped one would corrupt every
+   key after it in the string, not just the label text. */
+function [style] = i2c_interface_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
+endfunction
+
 
 function [x] = i2c_interface_update_ports(obj, bconfigfn)
     // fixed port count: only widths/labels change, no set_io() needed
@@ -50,7 +60,7 @@ function [x] = i2c_interface_update_ports(obj, bconfigfn)
     model.out2 = [];
     graphics.in_label = [];
     graphics.out_label = [];
-    graphics.style = 'shape=rectangle;fillColor=yellow';
+    graphics.style = i2c_interface_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
 endfunction

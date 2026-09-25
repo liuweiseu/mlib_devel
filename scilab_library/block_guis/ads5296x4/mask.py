@@ -15,6 +15,11 @@ from utils.utils import make_rich_logger, gen_bconfig
 # The keys must match scilab_blocks/casper_xps/ads5296x4.json, since the
 # Scilab side (update_exprs) only reads back the keys listed in that template.
 ADS5296X4_CONFIG = {
+    'name':
+    {
+        'get': 'get_name',
+        'set': 'set_name'
+    },
     'board_count':
     {
         'get': 'get_board_count',
@@ -86,6 +91,15 @@ class Ads5296x4Operations(object):
     # *******************************************************************
     # Low-level APIs
     # *******************************************************************
+    def get_name(self):
+        val = self.ui.name.text()
+        self.logger.debug(f'name is {val}')
+        return val
+
+    def set_name(self, val):
+        self.logger.debug(f'Set name to {val}')
+        self.ui.name.setText(str(val))
+
     def get_board_count(self):
         text = self.ui.board_count.currentText()
         self.logger.debug(f'board_count is {text}')

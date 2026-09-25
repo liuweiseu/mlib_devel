@@ -15,6 +15,11 @@ from utils.utils import make_rich_logger, gen_bconfig
 # The keys must match scilab_blocks/casper_xps/skarab_adc4x3g_14.json, since the
 # Scilab side (update_exprs) only reads back the keys listed in that template.
 SKARAB_ADC4X3G_14_CONFIG = {
+    'name':
+    {
+        'get': 'get_name',
+        'set': 'set_name'
+    },
     'mez':
     {
         'get': 'get_mez',
@@ -71,6 +76,15 @@ class SkarabAdc4x3g14Operations(object):
     # *******************************************************************
     # Low-level APIs
     # *******************************************************************
+    def get_name(self):
+        val = self.ui.name.text()
+        self.logger.debug(f'name is {val}')
+        return val
+
+    def set_name(self, val):
+        self.logger.debug(f'Set name to {val}')
+        self.ui.name.setText(str(val))
+
     def get_mez(self):
         text = self.ui.mez.currentText()
         self.logger.debug(f'mez is {text}')

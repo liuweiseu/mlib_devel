@@ -15,6 +15,11 @@ from utils.utils import make_rich_logger, gen_bconfig
 # The keys must match scilab_blocks/casper_dsp/stopwatch.json, since the
 # Scilab side (update_exprs) only reads back the keys listed in that template.
 STOPWATCH_CONFIG = {
+    'name':
+    {
+        'get': 'get_name',
+        'set': 'set_name'
+    },
     'count_width':
     {
         'get': 'get_count_width',
@@ -66,6 +71,15 @@ class StopwatchOperations(object):
     # *******************************************************************
     # Low-level APIs
     # *******************************************************************
+    def get_name(self):
+        val = self.ui.name.text()
+        self.logger.debug(f'name is {val}')
+        return val
+
+    def set_name(self, val):
+        self.logger.debug(f'Set name to {val}')
+        self.ui.name.setText(str(val))
+
     def get_count_width(self):
         val = self.ui.count_width.value()
         self.logger.debug(f'count_width is {val}')

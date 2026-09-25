@@ -29,12 +29,22 @@ function [x, y, typ] = hmc(job, arg1, arg2)
         x=standard_define([16.8 49.2],model,exprs,gr_i)
         x.graphics.in_label = ['wr_en_link2', 'wr_address_link2', 'data_in_link2', 'rd_en_link2', 'rd_address_link2', 'rd_tag_in_link2', 'wr_en_link3', 'wr_address_link3', 'data_in_link3', 'rd_en_link3', 'rd_address_link3', 'rd_tag_in_link3'];
         x.graphics.out_label = ['data_out_link2', 'data_valid_link2', 'wr_ready_link2', 'rd_ready_link2', 'rd_tag_out_link2', 'data_out_link3', 'data_valid_link3', 'wr_ready_link3', 'rd_ready_link3', 'rd_tag_out_link3', 'hmc_ok'];
-        x.graphics.style = 'shape=rectangle;fillColor=yellow';
-        /* init exprs */
         x = init_exprs(x);
+        x.graphics.style = hmc_build_style(x.graphics.exprs(1));
         debug_info('hmc block loaded...')
     end
 endfunction
+
+/* build graphics.style for a given user-configurable block name, shown
+   below the yellow fill. Strips ';' and '=' since those are mxGraph's
+   own style-string delimiters -- an unescaped one would corrupt every
+   key after it in the string, not just the label text. */
+function [style] = hmc_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
+endfunction
+
 
 function [x] = hmc_update_ports(obj, bconfigfn)
     // fixed port count: only widths/labels change, no set_io() needed
@@ -50,7 +60,7 @@ function [x] = hmc_update_ports(obj, bconfigfn)
     model.out2 = [256, 1, 1, 1, 5, 256, 1, 1, 1, 5, 1];
     graphics.in_label = ['wr_en_link2', 'wr_address_link2', 'data_in_link2', 'rd_en_link2', 'rd_address_link2', 'rd_tag_in_link2', 'wr_en_link3', 'wr_address_link3', 'data_in_link3', 'rd_en_link3', 'rd_address_link3', 'rd_tag_in_link3'];
     graphics.out_label = ['data_out_link2', 'data_valid_link2', 'wr_ready_link2', 'rd_ready_link2', 'rd_tag_out_link2', 'data_out_link3', 'data_valid_link3', 'wr_ready_link3', 'rd_ready_link3', 'rd_tag_out_link3', 'hmc_ok'];
-    graphics.style = 'shape=rectangle;fillColor=yellow';
+    graphics.style = hmc_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
 endfunction

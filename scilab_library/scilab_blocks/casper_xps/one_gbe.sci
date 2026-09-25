@@ -28,11 +28,22 @@ function [x, y, typ] = one_gbe(job, arg1, arg2)
         x=standard_define([15.6 31.2],model,exprs,gr_i)
         x.graphics.in_label = ['tx_rst', 'rx_rst', 'tx_data', 'tx_val', 'tx_destip', 'tx_destport', 'tx_eof', 'rx_ack'];
         x.graphics.out_label = ['tx_afull', 'tx_overrun', 'rx_data', 'rx_val', 'rx_srcip', 'rx_srcport', 'rx_eof', 'rx_badframe', 'rx_overrun', 'dbg_data', 'dbg_data_val'];
-        x.graphics.style = 'shape=rectangle;fillColor=yellow';
         x = init_exprs(x);
+        x.graphics.style = one_gbe_build_style(x.graphics.exprs(1));
         debug_info('one_gbe block loaded...')
     end
 endfunction
+
+/* build graphics.style for a given user-configurable block name, shown
+   below the yellow fill. Strips ';' and '=' since those are mxGraph's
+   own style-string delimiters -- an unescaped one would corrupt every
+   key after it in the string, not just the label text. */
+function [style] = one_gbe_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
+endfunction
+
 
 function [x] = one_gbe_update_ports(obj, bconfigfn)
     x = obj;
@@ -46,7 +57,7 @@ function [x] = one_gbe_update_ports(obj, bconfigfn)
     model.out2 = [1, 1, 8, 1, 32, 16, 1, 1, 1, 8, 1];
     graphics.in_label = ['tx_rst', 'rx_rst', 'tx_data', 'tx_val', 'tx_destip', 'tx_destport', 'tx_eof', 'rx_ack'];
     graphics.out_label = ['tx_afull', 'tx_overrun', 'rx_data', 'rx_val', 'rx_srcip', 'rx_srcport', 'rx_eof', 'rx_badframe', 'rx_overrun', 'dbg_data', 'dbg_data_val'];
-    graphics.style = 'shape=rectangle;fillColor=yellow';
+    graphics.style = one_gbe_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
 endfunction

@@ -15,6 +15,11 @@ from utils.utils import make_rich_logger, gen_bconfig
 # The keys must match scilab_blocks/casper_dsp/parallel_to_serial_converter.json, since the
 # Scilab side (update_exprs) only reads back the keys listed in that template.
 PARALLEL_TO_SERIAL_CONVERTER_CONFIG = {
+    'name':
+    {
+        'get': 'get_name',
+        'set': 'set_name'
+    },
     'pin_width':
     {
         'get': 'get_pin_width',
@@ -52,6 +57,15 @@ class ParallelToSerialConverterOperations(object):
         self.ui = winobj.ui
         self.load_config()
         self.setup_signal_functions()
+
+    def get_name(self):
+        val = self.ui.name.text()
+        self.logger.debug(f'name is {val}')
+        return val
+
+    def set_name(self, val):
+        self.logger.debug(f'Set name to {val}')
+        self.ui.name.setText(str(val))
 
     def _convert_status(self, status):
         # checkbox status is saved as 'on'/'off', same convention as the

@@ -15,6 +15,11 @@ from utils.utils import make_rich_logger, gen_bconfig
 # The keys must match scilab_blocks/casper_dsp/qdr_vacc.json, since the
 # Scilab side (update_exprs) only reads back the keys listed in that template.
 QDR_VACC_CONFIG = {
+    'name':
+    {
+        'get': 'get_name',
+        'set': 'set_name'
+    },
     'vector_len':
     {
         'get': 'get_vector_len',
@@ -62,6 +67,15 @@ class QdrVaccOperations(object):
         else:
             self.logger.error(f' Value({status}) not supported')
             raise ValueError(f'Value({status}) not supported')
+
+    def get_name(self):
+        val = self.ui.name.text()
+        self.logger.debug(f'name is {val}')
+        return val
+
+    def set_name(self, val):
+        self.logger.debug(f'Set name to {val}')
+        self.ui.name.setText(str(val))
 
     # *******************************************************************
     # Low-level APIs

@@ -15,6 +15,11 @@ from utils.utils import make_rich_logger, gen_bconfig
 # The keys must match scilab_blocks/casper_dsp/bus_maddsub.json, since the
 # Scilab side (update_exprs) only reads back the keys listed in that template.
 BUS_MADDSUB_CONFIG = {
+    'name':
+    {
+        'get': 'get_name',
+        'set': 'set_name'
+    },
     'n_bits_a':
     {
         'get': 'get_n_bits_a',
@@ -182,6 +187,15 @@ class BusMaddsubOperations(object):
         else:
             self.logger.error(f' Value({status}) not supported')
             raise ValueError(f'Value({status}) not supported')
+
+    def get_name(self):
+        val = self.ui.name.text()
+        self.logger.debug(f'name is {val}')
+        return val
+
+    def set_name(self, val):
+        self.logger.debug(f'Set name to {val}')
+        self.ui.name.setText(str(val))
 
     # *******************************************************************
     # Low-level APIs

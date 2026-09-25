@@ -28,11 +28,22 @@ function [x, y, typ] = onehundred_gbe(job, arg1, arg2)
         x=standard_define([10.8 24],model,exprs,gr_i)
         x.graphics.in_label = ['rst', 'tx_data', 'tx_valid', 'tx_dest_ip', 'tx_dest_port', 'tx_end_of_frame', 'rx_ack', 'rx_overrun_ack', 'debug_rst', 'tx_byte_enable'];
         x.graphics.out_label = ['led_up', 'led_rx', 'led_tx', 'tx_afull', 'tx_overflow', 'rx_data', 'rx_valid', 'rx_source_ip', 'rx_source_port', 'rx_end_of_frame', 'rx_bad_frame', 'rx_overrun', 'rx_dest_ip', 'rx_dest_port'];
-        x.graphics.style = 'shape=rectangle;fillColor=yellow';
         x = init_exprs(x);
+        x.graphics.style = onehundred_gbe_build_style(x.graphics.exprs(1));
         debug_info('onehundred_gbe block loaded...')
     end
 endfunction
+
+/* build graphics.style for a given user-configurable block name, shown
+   below the yellow fill. Strips ';' and '=' since those are mxGraph's
+   own style-string delimiters -- an unescaped one would corrupt every
+   key after it in the string, not just the label text. */
+function [style] = onehundred_gbe_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
+endfunction
+
 
 function [x] = onehundred_gbe_update_ports(obj, bconfigfn)
     x = obj;
@@ -46,7 +57,7 @@ function [x] = onehundred_gbe_update_ports(obj, bconfigfn)
     model.out2 = [1, 1, 1, 1, 1, 64, 1, 32, 16, 1, 1, 1, 32, 16];
     graphics.in_label = ['rst', 'tx_data', 'tx_valid', 'tx_dest_ip', 'tx_dest_port', 'tx_end_of_frame', 'rx_ack', 'rx_overrun_ack', 'debug_rst', 'tx_byte_enable'];
     graphics.out_label = ['led_up', 'led_rx', 'led_tx', 'tx_afull', 'tx_overflow', 'rx_data', 'rx_valid', 'rx_source_ip', 'rx_source_port', 'rx_end_of_frame', 'rx_bad_frame', 'rx_overrun', 'rx_dest_ip', 'rx_dest_port'];
-    graphics.style = 'shape=rectangle;fillColor=yellow';
+    graphics.style = onehundred_gbe_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
 endfunction

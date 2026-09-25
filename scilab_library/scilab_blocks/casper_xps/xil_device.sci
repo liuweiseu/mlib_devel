@@ -26,17 +26,30 @@ function [x, y, typ] = xil_device(job, arg1, arg2)
         gr_i = [];
         exprs = [];
         x=standard_define([7.2 6],model,exprs,gr_i)
-        x.graphics.style = 'shape=rectangle;fillColor=yellow';
         x = init_exprs(x);
+        x.graphics.style = xil_device_build_style(x.graphics.exprs(1));
         debug_info('xil_device block loaded...')
     end
 endfunction
+
+/* build graphics.style for a given user-configurable block name, shown
+   below the yellow fill. Strips ';' and '=' since those are mxGraph's
+   own style-string delimiters -- an unescaped one would corrupt every
+   key after it in the string, not just the label text. */
+function [style] = xil_device_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
+endfunction
+
 
 function [x] = xil_device_refresh(obj, bconfigfn)
     // zero-port block -- nothing to resize/rewire, just keep the fill
     // style consistent (mirrors every other casper_xps block's 'set' path).
     x = obj;
+    bconfig = fromJSON(bconfigfn, 'file');
+    p = bconfig('parameters');
     graphics = x.graphics;
-    graphics.style = 'shape=rectangle;fillColor=yellow';
+    graphics.style = xil_device_build_style(p('name'));
     x.graphics = graphics;
 endfunction

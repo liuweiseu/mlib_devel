@@ -29,9 +29,9 @@ function [x, y, typ]= wbfft(job, arg1, arg2)
         x=standard_define([16.8 16.8],model,exprs,gr_i)
         x.graphics.in_label = iports_label;
         x.graphics.out_label = oports_label;
-        x.graphics.style = 'shape=rectangle;fillColor=green';
         /* init exprs */
         x = init_exprs(x);
+        x.graphics.style = wbfft_build_style(x.graphics.exprs(1));
         debug_info('wbfft loaded...')
     end
 endfunction
@@ -86,10 +86,21 @@ function [x]= wbfft_update_ports(arg1, bconfigfn)
     model.out2 = [1, 1, 1*log2(nof_points), 1*out_dat_w*ones(1, 2*wb_factor)];
     graphics.in_label = iports_label;
     graphics.out_label = oports_label;
-    graphics.style = 'shape=rectangle;fillColor=green'
+    graphics.style = wbfft_build_style(bconfig('parameters')('name'));
     graphics.exprs = exprs;
     x.graphics = graphics;
     x.model = model;
+endfunction
+
+/* build the graphics.style string for a given user-configurable block
+   name, showing it below the fill color (see displayedLabel). Strips ';'
+   and '=' from the name since those are the mxGraph style string's own
+   delimiter characters -- an unescaped one would corrupt every key after
+   it in the style string, not just truncate the label. */
+function [style] = wbfft_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=green;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
   

@@ -15,6 +15,11 @@ from utils.utils import make_rich_logger, gen_bconfig
 # The keys must match scilab_blocks/casper_xps/sbram.json, since the
 # Scilab side (update_exprs) only reads back the keys listed in that template.
 SBRAM_CONFIG = {
+    'name':
+    {
+        'get': 'get_name',
+        'set': 'set_name'
+    },
     'arith_type':
     {
         'get': 'get_arith_type',
@@ -106,6 +111,15 @@ class SbramOperations(object):
     # *******************************************************************
     # Low-level APIs
     # *******************************************************************
+    def get_name(self):
+        val = self.ui.name.text()
+        self.logger.debug(f'name is {val}')
+        return val
+
+    def set_name(self, val):
+        self.logger.debug(f'Set name to {val}')
+        self.ui.name.setText(str(val))
+
     def get_arith_type(self):
         text = self.ui.arith_type.currentText()
         self.logger.debug(f'arith_type is {text}')

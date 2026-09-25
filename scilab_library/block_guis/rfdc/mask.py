@@ -394,11 +394,17 @@ class RFDCOperations(object):
         elif status == 'off':
             return False
         
+    def get_name(self):
+        return self.ui.name.text()
+
+    def set_name(self, val):
+        self.ui.name.setText(str(val))
+
     def get_tile_status(self, tile):
         """
         Docstring for get_tile_status:
             get the tile status.
-        
+
         :param tile (uint8) : tile number.
         """
         # This function is a little bit different,
@@ -1861,6 +1867,7 @@ class RFDCOperations(object):
             config['parameters']['name'] = ''
             config['parameters']['fullpath'] = ''
             config['parameters']['tag'] = 'xps:rfdc'
+        config['parameters']['name'] = self.get_name()
         for tile in ADC_TILES:
             # Txxx_enable is a very special one, as the name rule is different
             config['parameters'][f'Tile{tile}_enable'] = self.get_tile_status(tile)
@@ -1909,6 +1916,7 @@ class RFDCOperations(object):
         with open(self.target_config, 'r', encoding='utf-8') as f:
             config = json.load(f)
         parameters = config['parameters']
+        self.set_name(parameters.get('name', ''))
         for tile in ADC_TILES:
             # set Txxx_enable
             s = parameters[f'Tile{tile}_enable']

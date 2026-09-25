@@ -37,11 +37,22 @@ function [x, y, typ] = adc(job, arg1, arg2)
         x=standard_define([15.6 28.8],model,exprs,gr_i)
         x.graphics.in_label = ['sim_in', 'sim_sync', 'sim_data_valid'];
         x.graphics.out_label = ['i0', 'i1', 'i2', 'i3', 'q0', 'q1', 'q2', 'q3', 'outofrangei0', 'outofrangei1', 'outofrangeq0', 'outofrangeq1', 'sync0', 'sync1', 'sync2', 'sync3', 'data_valid'];
-        x.graphics.style = 'shape=rectangle;fillColor=yellow';
         /* init exprs */
         x = init_exprs(x);
+        x.graphics.style = adc_build_style(x.graphics.exprs(1));
         debug_info('adc block loaded...')
     end
+endfunction
+
+/* build the graphics.style string for a given user-configurable block
+   name, showing it below the yellow fill (see displayedLabel). Strips
+   ';' and '=' from the name since those are the mxGraph style string's
+   own delimiter characters -- an unescaped one would corrupt every key
+   after it in the style string, not just truncate the label. */
+function [style] = adc_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
 function [x] = adc_update_ports(obj, bconfigfn)
@@ -58,7 +69,7 @@ function [x] = adc_update_ports(obj, bconfigfn)
     model.out2 = [8, 8, 8, 8, 8, 8, 8, 8, 1, 1, 1, 1, 1, 1, 1, 1, 1];
     graphics.in_label = ['sim_in', 'sim_sync', 'sim_data_valid'];
     graphics.out_label = ['i0', 'i1', 'i2', 'i3', 'q0', 'q1', 'q2', 'q3', 'outofrangei0', 'outofrangei1', 'outofrangeq0', 'outofrangeq1', 'sync0', 'sync1', 'sync2', 'sync3', 'data_valid'];
-    graphics.style = 'shape=rectangle;fillColor=yellow';
+    graphics.style = adc_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
 endfunction

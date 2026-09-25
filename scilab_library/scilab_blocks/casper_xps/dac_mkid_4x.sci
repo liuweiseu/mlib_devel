@@ -29,12 +29,22 @@ function [x, y, typ] = dac_mkid_4x(job, arg1, arg2)
         x=standard_define([18 44.4],model,exprs,gr_i)
         x.graphics.in_label = ['data_i0', 'data_i1', 'data_i2', 'data_i3', 'data_q0', 'data_q1', 'data_q2', 'data_q3', 'sync_i', 'sync_q', 'sdenb', 'config10Data', 'reset'];
         x.graphics.out_label = [];
-        x.graphics.style = 'shape=rectangle;fillColor=yellow';
-        /* init exprs */
         x = init_exprs(x);
+        x.graphics.style = dac_mkid_4x_build_style(x.graphics.exprs(1));
         debug_info('dac_mkid_4x block loaded...')
     end
 endfunction
+
+/* build graphics.style for a given user-configurable block name, shown
+   below the yellow fill. Strips ';' and '=' since those are mxGraph's
+   own style-string delimiters -- an unescaped one would corrupt every
+   key after it in the string, not just the label text. */
+function [style] = dac_mkid_4x_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
+endfunction
+
 
 function [x] = dac_mkid_4x_update_ports(obj, bconfigfn)
     // fixed port count: only widths/labels change, no set_io() needed
@@ -50,7 +60,7 @@ function [x] = dac_mkid_4x_update_ports(obj, bconfigfn)
     model.out2 = [];
     graphics.in_label = ['data_i0', 'data_i1', 'data_i2', 'data_i3', 'data_q0', 'data_q1', 'data_q2', 'data_q3', 'sync_i', 'sync_q', 'sdenb', 'config10Data', 'reset'];
     graphics.out_label = [];
-    graphics.style = 'shape=rectangle;fillColor=yellow';
+    graphics.style = dac_mkid_4x_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
 endfunction

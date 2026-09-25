@@ -15,6 +15,11 @@ from utils.utils import make_rich_logger, gen_bconfig
 # The keys must match scilab_blocks/casper_dsp/freeze_cntr.json, since the
 # Scilab side (update_exprs) only reads back the keys listed in that template.
 FREEZE_CNTR_CONFIG = {
+    'name':
+    {
+        'get': 'get_name',
+        'set': 'set_name'
+    },
     'counter_bits':
     {
         'get': 'get_counter_bits',
@@ -47,6 +52,15 @@ class FreezeCntrOperations(object):
         self.ui = winobj.ui
         self.load_config()
         self.setup_signal_functions()
+
+    def get_name(self):
+        val = self.ui.name.text()
+        self.logger.debug(f'name is {val}')
+        return val
+
+    def set_name(self, val):
+        self.logger.debug(f'Set name to {val}')
+        self.ui.name.setText(str(val))
 
     def _convert_status(self, status):
         # checkbox status is saved as 'on'/'off', same convention as the

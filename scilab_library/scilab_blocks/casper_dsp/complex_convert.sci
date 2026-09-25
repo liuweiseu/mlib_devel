@@ -31,11 +31,21 @@ function [x, y, typ] = complex_convert(job, arg1, arg2)
         x=standard_define([8.4 8.4],model,exprs,gr_i)
         x.graphics.in_label = ['z'];
         x.graphics.out_label = ['z_out'];
-        x.graphics.style = 'shape=rectangle;fillColor=#90EE90';
-        /* init exprs */
+        // block name (shown below the fill color) comes from the
+        // "name" JSON key -- init_exprs populates exprs from the
+        // template first, so exprs(1) is its default value here
         x = init_exprs(x);
+        x.graphics.style = complex_convert_build_style(x.graphics.exprs(1));
         debug_info('complex_convert block loaded...')
     end
+endfunction
+
+function [style] = complex_convert_build_style(name)
+    // strip mxGraph's own style-string delimiters so a user-typed
+    // name can never corrupt the rest of the style string
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=#90EE90;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
 function [x] = complex_convert_update_ports(obj, bconfigfn)
@@ -52,7 +62,7 @@ function [x] = complex_convert_update_ports(obj, bconfigfn)
     model.out2 = [2*strtod(p('n_bits_out'))];
     graphics.in_label = ['z'];
     graphics.out_label = ['z_out'];
-    graphics.style = 'shape=rectangle;fillColor=#90EE90';
+    graphics.style = complex_convert_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
 endfunction

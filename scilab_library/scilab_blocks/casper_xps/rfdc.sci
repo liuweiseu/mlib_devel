@@ -82,12 +82,23 @@ function [x, y, typ]= rfdc(job, arg1, arg2)
                                 'm10_axis_tdata_sim', 'm12_axis_tdata_sim', ...
                                 'm20_axis_tdata_sim', 'm22_axis_tdata_sim', ...
                                 'm30_axis_tdata_sim', 'm32_axis_tdata_sim'];
-        x.graphics.style = 'shape=rectangle;fillColor=yellow'
         /* init exprs */
         x = init_exprs(x);
+        x.graphics.style = rfdc_build_style(x.graphics.exprs(1));
         debug_info('rfdc block loaded...')
     end
   endfunction
+
+/* build the graphics.style string for a given user-configurable block
+   name, showing it below the yellow fill (see displayedLabel). Strips
+   ';' and '=' from the name since those are the mxGraph style string's
+   own delimiter characters -- an unescaped one would corrupt every key
+   after it in the style string, not just truncate the label. */
+function [style] = rfdc_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
+endfunction
 
 // Helper: append one port PAIR (a real signal port + its matching
 // simulation-side port, see file header) to the accumulator arrays and
@@ -282,7 +293,7 @@ function [x] = rfdc_update_ports(obj, bconfigfn)
     model.in2 = in2;
     graphics.out_label = out_label;
     graphics.in_label = in_label;
-    graphics.style = 'shape=rectangle;fillColor=yellow'
+    graphics.style = rfdc_build_style(p('name'));
     graphics.exprs = exprs;
     x.graphics = graphics;
     x.model = model;

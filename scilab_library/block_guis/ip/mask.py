@@ -15,6 +15,11 @@ from utils.utils import make_rich_logger, gen_bconfig
 # The keys must match scilab_blocks/casper_xps/ip.json, since the
 # Scilab side (update_exprs) only reads back the keys listed in that template.
 IP_CONFIG = {
+    'name':
+    {
+        'get': 'get_name',
+        'set': 'set_name'
+    },
     'lib_path':
     {
         'get': 'get_lib_path',
@@ -71,6 +76,15 @@ class IpOperations(object):
     # *******************************************************************
     # Low-level APIs
     # *******************************************************************
+    def get_name(self):
+        val = self.ui.name.text()
+        self.logger.debug(f'name is {val}')
+        return val
+
+    def set_name(self, val):
+        self.logger.debug(f'Set name to {val}')
+        self.ui.name.setText(str(val))
+
     def get_lib_path(self):
         val = self.ui.lib_path.text()
         self.logger.debug(f'lib_path is {val}')

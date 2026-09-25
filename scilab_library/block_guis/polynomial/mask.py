@@ -15,6 +15,11 @@ from utils.utils import make_rich_logger, gen_bconfig
 # The keys must match scilab_blocks/casper_dsp/polynomial.json, since the
 # Scilab side (update_exprs) only reads back the keys listed in that template.
 POLYNOMIAL_CONFIG = {
+    'name':
+    {
+        'get': 'get_name',
+        'set': 'set_name'
+    },
     'n_polys':
     {
         'get': 'get_n_polys',
@@ -111,6 +116,15 @@ class PolynomialOperations(object):
     # *******************************************************************
     # Low-level APIs
     # *******************************************************************
+    def get_name(self):
+        val = self.ui.name.text()
+        self.logger.debug(f'name is {val}')
+        return val
+
+    def set_name(self, val):
+        self.logger.debug(f'Set name to {val}')
+        self.ui.name.setText(str(val))
+
     def get_n_polys(self):
         val = self.ui.n_polys.value()
         self.logger.debug(f'n_polys is {val}')

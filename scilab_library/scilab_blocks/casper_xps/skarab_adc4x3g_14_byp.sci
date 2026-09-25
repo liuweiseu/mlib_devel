@@ -29,11 +29,22 @@ function [x, y, typ] = skarab_adc4x3g_14_byp(job, arg1, arg2)
         x=standard_define([25.2 78],model,exprs,gr_i)
         x.graphics.in_label = [];
         x.graphics.out_label = ['adc0_data_val_out', 'adc1_data_val_out', 'adc2_data_val_out', 'adc3_data_val_out', 'adc0_data_out0', 'adc0_data_out1', 'adc0_data_out2', 'adc0_data_out3', 'adc0_data_out4', 'adc0_data_out5', 'adc0_data_out6', 'adc0_data_out7', 'adc0_data_out8', 'adc0_data_out9', 'adc0_data_out10', 'adc0_data_out11', 'adc0_data_out12', 'adc0_data_out13', 'adc0_data_out14', 'adc0_data_out15', 'adc1_data_out0', 'adc1_data_out1', 'adc1_data_out2', 'adc1_data_out3', 'adc1_data_out4', 'adc1_data_out5', 'adc1_data_out6', 'adc1_data_out7', 'adc1_data_out8', 'adc1_data_out9', 'adc1_data_out10', 'adc1_data_out11', 'adc1_data_out12', 'adc1_data_out13', 'adc1_data_out14', 'adc1_data_out15', 'adc2_data_out0', 'adc2_data_out1', 'adc2_data_out2', 'adc2_data_out3', 'adc2_data_out4', 'adc2_data_out5', 'adc2_data_out6', 'adc2_data_out7', 'adc2_data_out8', 'adc2_data_out9', 'adc2_data_out10', 'adc2_data_out11', 'adc2_data_out12', 'adc2_data_out13', 'adc2_data_out14', 'adc2_data_out15', 'adc3_data_out0', 'adc3_data_out1', 'adc3_data_out2', 'adc3_data_out3', 'adc3_data_out4', 'adc3_data_out5', 'adc3_data_out6', 'adc3_data_out7', 'adc3_data_out8', 'adc3_data_out9', 'adc3_data_out10', 'adc3_data_out11', 'adc3_data_out12', 'adc3_data_out13', 'adc3_data_out14', 'adc3_data_out15'];
-        x.graphics.style = 'shape=rectangle;fillColor=yellow';
         /* init exprs */
         x = init_exprs(x);
+        x.graphics.style = skarab_adc4x3g_14_byp_build_style(x.graphics.exprs(1));
         debug_info('skarab_adc4x3g_14_byp block loaded...')
     end
+endfunction
+
+/* build the graphics.style string for a given user-configurable block
+   name, showing it below the yellow fill (see displayedLabel). Strips
+   ';' and '=' from the name since those are the mxGraph style string's
+   own delimiter characters -- an unescaped one would corrupt every key
+   after it in the style string, not just truncate the label. */
+function [style] = skarab_adc4x3g_14_byp_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
 function [x] = skarab_adc4x3g_14_byp_update_ports(obj, bconfigfn)
@@ -50,7 +61,7 @@ function [x] = skarab_adc4x3g_14_byp_update_ports(obj, bconfigfn)
     model.out2 = [1, 1, 1, 1, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14];
     graphics.in_label = [];
     graphics.out_label = ['adc0_data_val_out', 'adc1_data_val_out', 'adc2_data_val_out', 'adc3_data_val_out', 'adc0_data_out0', 'adc0_data_out1', 'adc0_data_out2', 'adc0_data_out3', 'adc0_data_out4', 'adc0_data_out5', 'adc0_data_out6', 'adc0_data_out7', 'adc0_data_out8', 'adc0_data_out9', 'adc0_data_out10', 'adc0_data_out11', 'adc0_data_out12', 'adc0_data_out13', 'adc0_data_out14', 'adc0_data_out15', 'adc1_data_out0', 'adc1_data_out1', 'adc1_data_out2', 'adc1_data_out3', 'adc1_data_out4', 'adc1_data_out5', 'adc1_data_out6', 'adc1_data_out7', 'adc1_data_out8', 'adc1_data_out9', 'adc1_data_out10', 'adc1_data_out11', 'adc1_data_out12', 'adc1_data_out13', 'adc1_data_out14', 'adc1_data_out15', 'adc2_data_out0', 'adc2_data_out1', 'adc2_data_out2', 'adc2_data_out3', 'adc2_data_out4', 'adc2_data_out5', 'adc2_data_out6', 'adc2_data_out7', 'adc2_data_out8', 'adc2_data_out9', 'adc2_data_out10', 'adc2_data_out11', 'adc2_data_out12', 'adc2_data_out13', 'adc2_data_out14', 'adc2_data_out15', 'adc3_data_out0', 'adc3_data_out1', 'adc3_data_out2', 'adc3_data_out3', 'adc3_data_out4', 'adc3_data_out5', 'adc3_data_out6', 'adc3_data_out7', 'adc3_data_out8', 'adc3_data_out9', 'adc3_data_out10', 'adc3_data_out11', 'adc3_data_out12', 'adc3_data_out13', 'adc3_data_out14', 'adc3_data_out15'];
-    graphics.style = 'shape=rectangle;fillColor=yellow';
+    graphics.style = skarab_adc4x3g_14_byp_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
 endfunction

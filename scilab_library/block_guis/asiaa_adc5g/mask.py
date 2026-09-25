@@ -15,6 +15,11 @@ from utils.utils import make_rich_logger, gen_bconfig
 # The keys must match scilab_blocks/casper_xps/asiaa_adc5g.json, since the
 # Scilab side (update_exprs) only reads back the keys listed in that template.
 ASIAA_ADC5G_CONFIG = {
+    'name':
+    {
+        'get': 'get_name',
+        'set': 'set_name'
+    },
     'input_mode':
     {
         'get': 'get_input_mode',
@@ -96,6 +101,15 @@ class AsiaaAdc5gOperations(object):
     # *******************************************************************
     # Low-level APIs
     # *******************************************************************
+    def get_name(self):
+        val = self.ui.name.text()
+        self.logger.debug(f'name is {val}')
+        return val
+
+    def set_name(self, val):
+        self.logger.debug(f'Set name to {val}')
+        self.ui.name.setText(str(val))
+
     def get_input_mode(self):
         text = self.ui.input_mode.currentText()
         self.logger.debug(f'input_mode is {text}')

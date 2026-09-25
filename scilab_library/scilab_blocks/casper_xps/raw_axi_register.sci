@@ -36,11 +36,22 @@ function [x, y, typ] = raw_axi_register(job, arg1, arg2)
         x=standard_define([19.8 6.96],model,exprs,gr_i)
         x.graphics.in_label = ['sim_in'];
         x.graphics.out_label = ['user_data_out'];
-        x.graphics.style = 'shape=rectangle;fillColor=yellow';
         x = init_exprs(x);
+        x.graphics.style = raw_axi_register_build_style(x.graphics.exprs(1));
         debug_info('raw_axi_register block loaded...')
     end
 endfunction
+
+/* build graphics.style for a given user-configurable block name, shown
+   below the yellow fill. Strips ';' and '=' since those are mxGraph's
+   own style-string delimiters -- an unescaped one would corrupt every
+   key after it in the string, not just the label text. */
+function [style] = raw_axi_register_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
+endfunction
+
 
 /* convert a list string, e.g. "[a, b]" or "8 24", to a column of strings --
    mirrors swreg_str_to_list exactly (defined as a separate function here
@@ -89,7 +100,7 @@ function [x] = raw_axi_register_update_ports(obj, bconfigfn)
         graphics.out_label = ['user_data_out'];
         graphics.in_label = ['sim_in'];
     end
-    graphics.style = 'shape=rectangle;fillColor=yellow';
+    graphics.style = raw_axi_register_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
 endfunction
