@@ -73,16 +73,22 @@ if __name__ == '__main__':
             xps_user_modules[module_name]['sources'] = []
             xps_user_modules[module_name]['sources'].append('%s/glues/%s.v'%(builddir, module_name))
     # add ip core info to xps_user_modules
-    xps_user_modules['%s_ip'%(model_name)] = {}
-    xps_user_modules['%s_ip'%(model_name)]['clock'] = 'clk'
-    xps_user_modules['%s_ip'%(model_name)]['ports'] = []
-    for link in link_info:
-        if link['link_type'] == 'xps_dsp':
-            xps_user_modules['%s_ip'%(model_name)]['ports'].append(link['src_port_name'])
-        if link['link_type'] == 'dsp_xps':
-            xps_user_modules['%s_ip'%(model_name)]['ports'].append(link['dst_port_name'])
-    xps_user_modules['%s_ip'%(model_name)]['sources'] = []
-    # generate jasper.per
+    # we need to see if there is at least one dsp block used in the design
+    # if there is not dsp blocks used, we shouldn't add the ip core info to the xps_user_module
+    # or the ip core will be optimized during the Out-of-Context (OOC) Synthesis
+    # it will cause "Failed to stitch checkpoint 'xx_ip.dcp' at cell 'xx_ip_inst'."
+    dsp_blocks = model_info['dsp_blocks']
+    if len(dsp_blocks) > 0:
+        xps_user_modules['%s_ip'%(model_name)] = {}
+        xps_user_modules['%s_ip'%(model_name)]['clock'] = 'clk'
+        xps_user_modules['%s_ip'%(model_name)]['ports'] = []
+        for link in link_info:
+            if link['link_type'] == 'xps_dsp':
+                xps_user_modules['%s_ip'%(model_name)]['ports'].append(link['src_port_name'])
+            if link['link_type'] == 'dsp_xps':
+                xps_user_modules['%s_ip'%(model_name)]['ports'].append(link['dst_port_name'])
+        xps_user_modules['%s_ip'%(model_name)]['sources'] = []
+        # generate jasper.per
     jasper_per = {}
     jasper_per['yellow_blocks'] = xps_blocks
     jasper_per['user_modules'] = xps_user_modules
