@@ -67,7 +67,7 @@ clear casper_module_registry casper_group_keys casper_g casper_group_key casper_
 /* instantiate/register every module enabled=true under registry(group_key)
    (e.g. group_key = 'casper_dsp'), grouping them into one Xcos sub-palette
    per distinct "category" value, all nested under one top-level Category
-   folder named top_name (e.g. "CASPER DSP" -> "General"/"Flow_Control"/
+   folder named top_name (e.g. "CASPER DSP" -> "Basic Elements"/"Flow_Control"/
    "Misc"). Every leaf here reuses the same top_name string for its
    xcosPalAdd call, which is what merges them into one folder instead of
    each spawning its own duplicate top-level entry (xcosPalAdd's category
