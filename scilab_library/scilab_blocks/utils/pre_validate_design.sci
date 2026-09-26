@@ -1,9 +1,12 @@
 /*
-check if the design meets the basic requirements:
+checks that don't depend on jasper.json existing yet -- these run
+before collect_block_info(fn) is called:
 1. the filename has to be a valid, absolute path to an existing file.
 2. the design has to contain a platform block.
+3. no two blocks in the design share the same name.
+See post_validate_design.sci for checks that run after collect_block_info.
 */
-function [validation] = validate_design(fn)
+function [validation] = pre_validate_design(fn)
     /* check the filename before touching the diagram at all -- an */
     /* invalid path (e.g. one using '~' or a relative path) can make */
     /* xcosDiagramToScilab and later file I/O fail confusingly, or */

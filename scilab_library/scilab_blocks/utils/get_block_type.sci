@@ -23,7 +23,7 @@ function [type] = get_block_type(obj)
     // the only other kind of block an Xcos diagram can contain is a
     // built-in Scicos/Xcos block (SPLIT_f from a fanned-out wire being
     // the most common, but also links, superblocks, annotations, ...).
-    // Callers that walk a whole diagram (validate_design.sci,
+    // Callers that walk a whole diagram (pre_validate_design.sci,
     // collect_block_info.sci) need to tell these apart from a genuine
     // casper module without crashing, so this is a real return value,
     // not an error -- every other caller here only ever operates on an

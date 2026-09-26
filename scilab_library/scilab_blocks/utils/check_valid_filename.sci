@@ -1,5 +1,5 @@
 /*
-check that fn (the design file path passed to jasper()/validate_design())
+check that fn (the design file path passed to jasper()/pre_validate_design())
 is safe to use with Scilab's own path functions.
 
 Scilab has no shell in front of it, so it never expands "~" or resolves a

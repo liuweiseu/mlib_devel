@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 from utils.design_info import gen_design_info
 from utils.git_info import gen_git_info
-from utils.utils import gen_glue_module, dump_jasper, val_format_conv, check_bit_width
+from utils.utils import gen_glue_module, dump_jasper, val_format_conv
 from argparse import ArgumentParser
 
 if __name__ == '__main__':
@@ -30,13 +30,7 @@ if __name__ == '__main__':
         model_info = json.load(f)
     
     """
-    Step 2: check bit witdh for each link
-    """
-    match = check_bit_width(model_info)
-    if match == False:
-        print('port width not match')
-    """
-    Step 3: generate jasper.per, which contains the yellow(xps) block info and user module info 
+    Step 3: generate jasper.per, which contains the yellow(xps) block info and user module info
     """
     # yellow(xps) blocks
     xps_blocks = {}
