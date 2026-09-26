@@ -1,8 +1,21 @@
-/* 
+/*
 check if the design meets the basic requirements:
-1. the design has to contain a platform block.
+1. the filename has to be a valid, absolute path to an existing file.
+2. the design has to contain a platform block.
 */
 function [validation] = validate_design(fn)
+    /* check the filename before touching the diagram at all -- an */
+    /* invalid path (e.g. one using '~' or a relative path) can make */
+    /* xcosDiagramToScilab and later file I/O fail confusingly, or */
+    /* even silently write bconfig files to the wrong place. */
+    filename_msg = check_valid_filename(fn);
+    if filename_msg <> '' then
+        validation = ascii(10) + '**************Validation Failed**************';
+        validation = validation + ascii(10) + filename_msg;
+        validation = validation + ascii(10) + '*********************************************';
+        validation = validation + ascii(10);
+        return;
+    end
     /* load the diagram file */
     scs_m = xcosDiagramToScilab(fn);
     /* get the number of objs */
