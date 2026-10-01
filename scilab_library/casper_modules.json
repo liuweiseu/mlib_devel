@@ -66,7 +66,8 @@
         "sync_gen": { "enabled": true, "category": "Misc" },
         "test": { "enabled": true, "category": "Misc" },
         "triggered_counter": { "enabled": true, "category": "Misc" },
-        "fft_wideband_real": { "enabled": true, "category": "FFTs" }
+        "fft_wideband_real": { "enabled": true, "category": "FFTs" },
+        "pfb_fir_real": { "enabled": true, "category": "PFBs" }
     },
     "casper_xps": {
         "gpio": { "enabled": true, "category": "IO" },
