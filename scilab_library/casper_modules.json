@@ -65,7 +65,8 @@
         "stopwatch": { "enabled": true, "category": "Misc" },
         "sync_gen": { "enabled": true, "category": "Misc" },
         "test": { "enabled": true, "category": "Misc" },
-        "triggered_counter": { "enabled": true, "category": "Misc" }
+        "triggered_counter": { "enabled": true, "category": "Misc" },
+        "fft_wideband_real": { "enabled": true, "category": "FFTs" }
     },
     "casper_xps": {
         "gpio": { "enabled": true, "category": "IO" },
