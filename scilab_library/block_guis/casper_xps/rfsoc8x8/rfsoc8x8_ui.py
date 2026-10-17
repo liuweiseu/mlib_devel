@@ -115,7 +115,7 @@ class Ui_MainWindow(object):
         self.title_label.setText(_translate("MainWindow", "RFSoC8x8"))
         self.desc_label.setText(_translate("MainWindow", "The XSG Core Config block is used to configure the System Generator design\nfor the casper_xps toolflow. Settings here are used to configure the\nXilinx System Generator block parameters automatically, and control toolflow\nscript  execution. It needs to be at the top level of all designs being compiled\nwith the casper_xps toolflow."))
         self.label_hw_sys.setText(_translate("MainWindow", "Hardware Platform"))
-        self.hw_sys.setItemText(0, _translate("MainWindow", "rfsoc8x8:xczu48dr"))
+        self.hw_sys.setItemText(0, _translate("MainWindow", "rfsoc8x8:xczu47dr"))
         self.label_clk_src.setText(_translate("MainWindow", "User IP Clock source"))
         self.clk_src.setItemText(0, _translate("MainWindow", "adc_clk"))
         self.label_clk_rate.setText(_translate("MainWindow", "User IP Clock Rate (MHz)"))
