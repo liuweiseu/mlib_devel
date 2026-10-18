@@ -106,8 +106,8 @@ class rfsoc8x8(YellowBlock):
 
         cons.append(ClockGroupConstraint('clk_pl_0', 'pl_clk_mmcm', 'asynchronous'))
 
-        # TODO: AU10 is the RFSoC4x2 (ffvg1517) pin; replace with the RFSoC8x8 board's pin.
-        cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AU10 IOSTANDARD LVCMOS18 } [get_ports { mmcm_locked }]'))
+        # mmcm_locked drives GPIO 8 of the RFSoC8x8 board (AM5, HP bank 66, VCCO 1.2 V)
+        cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AM5 IOSTANDARD LVCMOS12 } [get_ports { mmcm_locked }]'))
 
         return cons
 
