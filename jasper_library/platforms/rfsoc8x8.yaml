@@ -1,8 +1,8 @@
 # RFSoC8x8 platform description.
 #
-# NOTE: this file was bootstrapped from rfsoc4x2.yaml. Only `name`, `fpga`
-# and the rfdc tile clocking have been changed so far. The onehundredgbe CMAC
-# location, `provides` and EVERY pin location below are still the RFSoC4x2
+# NOTE: this file was bootstrapped from rfsoc4x2.yaml. Only `name`, `fpga`,
+# the rfdc tile clocking and the 100 GbE (onehundredgbe + qsfp_* pins) have
+# been changed so far. `provides` and every other pin location are still the RFSoC4x2
 # (xczu48dr-ffvg1517) values. The xczu47dr-ffve1156 package has a different
 # pinout, so all `loc` entries must be replaced with the RFSoC8x8 board's
 # real pin assignments before a design for this platform can be implemented.
@@ -65,10 +65,15 @@ onehundredgbe:
   include_rs_fec: 1
   ncommon: 1
   management_interface: [modprsl_ls, intl_ls]
-  # UG1075 v1.9 Fig. 1-54
+  # RFSoC8x8 has two 100GbE ports. One entry per port (index = 100GbE block
+  # port number). xczu47dr-ffve1156 has CMACE4_X0Y0 (clock region X0Y3) and
+  # CMACE4_X0Y1 (clock region X0Y6); only GTY quads 128 (X0Y4) and 129 (X0Y5)
+  # are bonded out in this package.
+  # Note: onehundredgbe_rfsoc reads but does not apply cmac_loc; Vivado places
+  # the CMAC next to the GTs chosen by the qsfp_mgt_* pin constraints.
   cmac_loc:
-    # xczu48dr has 2 cmac locations, rfsoc4x2 places only one physical QSFP28 (TODO: confirm for rfsoc8x8)
     - CMACE4_X0Y0
+    - CMACE4_X0Y1
 
 
 provides:
@@ -135,47 +140,43 @@ pins:
 
 
 # 100 GbE
+  # Two QSFP28 ports. List index = 100GbE block port number:
+  #   port 0 = QSFP1 -> GTY quad 128 (CMACE4_X0Y0)
+  #   port 1 = QSFP2 -> GTY quad 129 (CMACE4_X0Y1)
+  # Each QSFP uses MGTREFCLK1 (156.25 MHz) of its quad. QSFP lanes 0-3 map to
+  # GT channels 0-3 in order, no P/N swaps. mgt tx/rx lists hold 4 lanes per
+  # port (port 0: entries 0-3, port 1: entries 4-7).
   qsfp_mgt_ref_clk_p:
-    loc:
-      - AA33
+    loc: [K28, F28]   # MGTREFCLK1P_128, MGTREFCLK1P_129
   qsfp_mgt_ref_clk_n:
-    loc:
-      - AA34
+    loc: [K29, F29]   # MGTREFCLK1N_128, MGTREFCLK1N_129
   qsfp_mgt_tx_p:
-    # bank 128
-    loc: [Y35 ,T35 ,V35 ,R33]
+    #      quad 128 ch0-3        quad 129 ch0-3
+    loc: [N30, L30, J30, G30,  E30, D28, C30, B28]
   qsfp_mgt_tx_n:
-    # bank 128
-    loc: [Y36 ,T36 ,V36 ,R34]
+    loc: [N31, L31, J31, G31,  E31, D29, C31, B29]
   qsfp_mgt_rx_p:
-    # bank 128
-    loc: [R38, W38, U38, AA38]
+    loc: [P33, M33, K33, H33,  F33, D33, B33, A31]
   qsfp_mgt_rx_n:
-    # bank 128
-    loc: [R39, W39, U39, AA39]
+    loc: [P34, M34, K34, H34,  F34, D34, B34, A32]
 
-  qsfp_modsel:
-    iostd: LVCMOS18
-    loc: [AK22]
+  # QSFP low-speed management signals, [QSFP1, QSFP2], all on HD bank 89
+  # (VCCO = 3.3 V).
+  qsfp_modsell_ls:
+    iostd: LVCMOS33
+    loc: [J12, K11]
+  qsfp_resetl_ls:
+    iostd: LVCMOS33
+    loc: [K12, H9]
   qsfp_modprsl_ls:
-    iostd: LVCMOS18
-    loc: [AL22]
-  qsfp_sda:
-    iostd: LVCMOS18
-    loc: [None, None]
-  qsfp_scl:
-    iostd: LVCMOS18
-    loc: [None, None]
+    iostd: LVCMOS33
+    loc: [H11, H10]
   qsfp_intl_ls:
-    iostd: LVCMOS18
-    loc: [AM22]
-  qsfp_reset_ls:
-    iostd: LVCMOS18
-    loc: [AL21]
+    iostd: LVCMOS33
+    loc: [J11, G10]
   qsfp_lpmode_ls:
-    iostd: LVCMOS18
-    loc: [AN22]
-
+    iostd: LVCMOS33
+    loc: [K10, G11]
 
   led:
     drive_strength: 8 #HP banks don't support the default of 12
