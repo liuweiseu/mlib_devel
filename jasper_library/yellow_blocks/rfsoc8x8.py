@@ -7,6 +7,7 @@ class rfsoc8x8(YellowBlock):
     def initialize(self):
         self.add_source('infrastructure/zcu216_clk_infrastructure.sv')
         self.add_source('utils/cdc_synchroniser.vhd')
+        self.add_source('infrastructure/emio_gpio_iobuf.v')
 
         # create reference to block design name
         self.blkdesign = '{:s}_bd'.format(self.platform.conf['name'])
@@ -34,6 +35,11 @@ class rfsoc8x8(YellowBlock):
 
         self.requires.append('M_AXI') # axi4lite interface from block design
 
+        # PS EMIO GPIO width set by the rfsoc8x8_mpsoc presets, and the number of
+        # its low bits that drive the LMK04828 control pins
+        self.emio_gpio_width = 5
+        self.lmk_ctrl_width = 4
+
     def modify_top(self, top):
         top.assign_signal('axil_clk', 'pl_sys_clk')
         #top.assign_signal('axil_rst', 'axil_rst')
@@ -58,6 +64,30 @@ class rfsoc8x8(YellowBlock):
         inst_infr.add_port('adc_clk180', 'adc_clk180')
         inst_infr.add_port('adc_clk270', 'adc_clk270')
         inst_infr.add_port('mmcm_locked', 'mmcm_locked', dir='out', parent_port=True)
+
+        # LMK04828 SPI: PS SPI0 routed to EMIO (see the zynq_emio child). SCLK is
+        # looped back into the PS as in the vendor reference design.
+        top.add_port('lmk_spi_sclk', dir='out')
+        top.add_port('lmk_spi_mosi', dir='out')
+        top.add_port('lmk_spi_cs_n', dir='out')
+        top.add_port('lmk_spi_miso', dir='in')
+        top.assign_signal('lmk_spi_sclk', 'emio_spi0_sclk_o')
+        top.assign_signal('emio_spi0_sclk_i', 'emio_spi0_sclk_o')
+        top.assign_signal('lmk_spi_mosi', 'emio_spi0_m_o')
+        top.assign_signal('emio_spi0_m_i', 'lmk_spi_miso')
+        top.assign_signal('lmk_spi_cs_n', 'emio_spi0_ss_o_n')
+
+        # LMK04828 control pins on PS GPIO EMIO bits 0-3 (REF_SEL0, REF_SEL1,
+        # RESET, SYNC). EMIO GPIO bit 4 is not connected.
+        n = self.lmk_ctrl_width
+        iobuf = top.get_instance('emio_gpio_iobuf', 'lmk_ctrl_iobuf_inst')
+        iobuf.add_parameter('WIDTH', n)
+        iobuf.add_port('gpio_o', 'emio_gpio_tri_o[{:d}:0]'.format(n-1), parent_sig=False)
+        iobuf.add_port('gpio_t', 'emio_gpio_tri_t[{:d}:0]'.format(n-1), parent_sig=False)
+        iobuf.add_port('gpio_i', 'emio_gpio_tri_i[{:d}:0]'.format(n-1), parent_sig=False)
+        iobuf.add_port('gpio_io', 'lmk_ctrl', dir='inout', width=n, parent_port=True)
+        top.assign_signal('emio_gpio_tri_i[{:d}:{:d}]'.format(self.emio_gpio_width-1, n),
+                          "{:d}'b0".format(self.emio_gpio_width-n))
 
     def gen_children(self):
         children = []
@@ -96,6 +126,17 @@ class rfsoc8x8(YellowBlock):
             'wuser_wid'       : 0
         }
         children.append(YellowBlock.make_block(proto_conv_blk, self.platform))
+
+        # expose PS SPI0 and GPIO EMIO (LMK04828 programming and control). Must
+        # come after the mpsoc child so its bd commands follow the presets.
+        emio_blk = {
+            'tag'       : 'xps:zynq_emio',
+            'name'      : 'mpsoc_emio',
+            'ps_cell'   : 'mpsoc',
+            'spi'       : [0],
+            'gpio_width': self.emio_gpio_width,
+        }
+        children.append(YellowBlock.make_block(emio_blk, self.platform))
         return children
 
 
@@ -108,6 +149,12 @@ class rfsoc8x8(YellowBlock):
 
         # mmcm_locked drives GPIO 8 of the RFSoC8x8 board (AM5, HP bank 66, VCCO 1.2 V)
         cons.append(RawConstraint('set_property -dict { PACKAGE_PIN AM5 IOSTANDARD LVCMOS12 } [get_ports { mmcm_locked }]'))
+
+        # LMK04828 SPI and control pins
+        for port in ['lmk_spi_sclk', 'lmk_spi_mosi', 'lmk_spi_cs_n', 'lmk_spi_miso']:
+            cons.append(PortConstraint(port, port))
+        n = self.lmk_ctrl_width
+        cons.append(PortConstraint('lmk_ctrl', 'lmk_ctrl', port_index=list(range(n)), iogroup_index=list(range(n))))
 
         return cons
 

@@ -194,6 +194,26 @@ pins:
     loc: [AP5, AP8, AP6, AM6, AP7, AM7, AM8, AM5]
 
 
+  # LMK04828 SPI, driven by PS SPI0 over EMIO (zynq_emio child of
+  # yellow_blocks/rfsoc8x8.py). HD bank 89 (VCCO = 3.3 V).
+  lmk_spi_sclk:
+    iostd: LVCMOS33
+    loc: D11
+  lmk_spi_mosi:
+    iostd: LVCMOS33
+    loc: B10
+  lmk_spi_miso:
+    iostd: LVCMOS33
+    loc: D9
+  lmk_spi_cs_n:
+    iostd: LVCMOS33
+    loc: C11
+  # LMK04828 control, PS GPIO EMIO bits 0-3 via IOBUFs:
+  # [REF_SEL0, REF_SEL1, RESET, SYNC]. HD bank 89 (VCCO = 3.3 V).
+  lmk_ctrl:
+    iostd: LVCMOS33
+    loc: [C10, C9, E11, E9]
+
   # GPIO0-GPIO7, all on HD bank 88 (VCCO = 3.3 V).
   gpio:
     iostd: LVCMOS33
