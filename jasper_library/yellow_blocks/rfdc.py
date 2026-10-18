@@ -186,7 +186,7 @@ class rfdc(YellowBlock):
     self.rfdc_conf = self.platform.conf['rfdc']
 
     part = self.platform.conf['fpga']
-    m = re.search('(2[8-9])|(39)|(4[8-9])', part)
+    m = re.search('(2[8-9])|(39)|(4[7-9])', part)
     if not m:
       self.throw_error("ERROR: RFSoC part designator {} not recognized or is not yet supported".format(part))
 
@@ -218,7 +218,8 @@ class rfdc(YellowBlock):
     elif self.gen == 2:
       raise NotImplemented
     elif self.gen == 3:
-      if designator[1] == '8':
+      # xczu47dr has the same RF tile architecture as xczu48dr (no SD-FEC)
+      if designator[1] in ('7', '8'):
         self.adc_tiles = range(224, 228)
         self.adc_tile_arch = 'DT'
         self.num_adc_slice = 2
