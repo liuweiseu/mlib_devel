@@ -22,8 +22,9 @@ function [name] = gen_block_name(bconfigdir, obj)
         /* 
         if the block uid is not in the block list,
         add the name for the block.
+        the name is from the block itself, and it's set by the users.
         */
-        name = sprintf("%s_%d", tag, nobjs);
+        name = obj.graphics.exprs(1);
         nobjs = nobjs + 1;
         // write the info back to the blist
         blist(tag)('nobjs') = nobjs;

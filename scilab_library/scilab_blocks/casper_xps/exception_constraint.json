@@ -1,0 +1,18 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "constraint_type",
+            "num_clock_cycles"
+        ],
+        "values": [
+            "exception_constraint",
+            "",
+            "xps:exception_constraint",
+            "Multicycle Constraint",
+            "4"
+        ]
+    }
+}

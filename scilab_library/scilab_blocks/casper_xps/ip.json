@@ -1,0 +1,18 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "lib_path",
+            "ip_name"
+        ],
+        "values": [
+            "ip",
+            "",
+            "xps:ip",
+            "lib_path",
+            "ip_name"
+        ]
+    }
+}

@@ -1,6 +1,6 @@
 function [build_cmd] = jasper_frontend(fn)
     /* validate the design */
-    validation = validate_design(fn);
+    validation = pre_validate_design(fn);
     if validation ~= 'ok' then
         disp(validation);
         build_cmd = struct();
@@ -21,7 +21,15 @@ function [build_cmd] = jasper_frontend(fn)
     
     /* collect the block info, and generate the jasper.json file */
     collect_block_info(fn);
-    
+
+    /* validate the collected design (checks that need jasper.json) */
+    validation = post_validate_design(fn);
+    if validation ~= 'ok' then
+        disp(validation);
+        build_cmd = struct();
+        return;
+    end
+
     /* execute a python script to read the json file and generate jasper.per and jasper.dsp */
     python_path = 'python';
     disp('****************************************');

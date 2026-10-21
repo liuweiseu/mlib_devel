@@ -1,0 +1,28 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "input_mode",
+            "adc_brd",
+            "demux",
+            "adc_bit_width",
+            "adc_clk_rate",
+            "using_ctrl",
+            "test_ramp"
+        ],
+        "values": [
+            "asiaa_adc5g",
+            "",
+            "xps:asiaa_adc5g",
+            "One-channel -- A",
+            "ZDOK 0",
+            "1:2",
+            "4",
+            "2500",
+            "on",
+            "off"
+        ]
+    }
+}

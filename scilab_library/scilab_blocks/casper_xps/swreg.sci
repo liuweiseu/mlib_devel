@@ -5,18 +5,20 @@
       x = arg1;
       /* diagrams saved with the old scicos_getvalue dialog have 9 exprs */
       x = swreg_upgrade_exprs(x);
-      /* configure the block with the pyqt GUI in block_guis/swreg */
+      /* configure the block with the pyqt GUI in block_guis/casper_xps/swreg */
       export_exprs_to_tmpdir(x);
       bconfig = run_mask(x);
       x = update_exprs_from_tmpdir(x);
       x = swreg_update_ports(x, bconfig);
     case 'define' then
-      btype = 'xps';
       model = scicos_model();
       // what does this sim mean??
       model.sim = list('swreg_out',4);
       model.blocktype = 'c';
-      model.label = btype;
+      // model.label doubles as the on-diagram display text (Scicos aliases
+      // it with graphics.id); category is derived separately by
+      // get_block_type.sci via file-probe, so this is free to be the name.
+      model.label = 'swreg';
       model.rpar = [];
       /* the port width is the total width of the bitfields */
       model.out = [1];
@@ -25,12 +27,21 @@
       model.in2 = [1];
       exprs = [];
       gr_i = [];
-      x=standard_define([10 1.4],model,exprs,gr_i)
+      x=standard_define([12 1.7],model,exprs,gr_i)
       x.graphics.out_label = ['user_data_out'];
       x.graphics.in_label = ['sim_in'];
-      x.graphics.style = 'shape=rectangle;fillColor=yellow';
-      /* the parameters are defined in swreg.json */
+      /* the parameters (including the default "name") are defined in
+         swreg.json -- populate exprs from it before building the style,
+         so the very first on-diagram label already shows the template's
+         default block name instead of the hardcoded tag. */
       x = init_exprs(x);
+      // block name drawn BELOW the fill color instead of centered on top
+      // of it (verticalAlign=top;verticalLabelPosition=bottom; instead of
+      // verticalAlign=middle;), showing the user-configurable "name"
+      // parameter (swreg.json key "name", exprs(1)) rather than a fixed
+      // literal -- per direct user request, to compare against the
+      // Platforms-group centered-fixed-label look.
+      x.graphics.style = swreg_build_style(x.graphics.exprs(1));
       debug_info('swreg block loaded...')
   end
   endfunction
@@ -51,6 +62,17 @@ function [x] = swreg_upgrade_exprs(obj)
         debug_info('upgrading the exprs of the old swreg block');
         x.graphics.exprs = [exprs(1); ''; 'xps:sw_reg'; matrix(exprs(2:9), -1, 1); 'on'; 'on'];
     end
+endfunction
+
+/* build the graphics.style string for a given user-configurable block
+   name, showing it below the yellow fill (see displayedLabel). Strips
+   ';' and '=' from the name since those are the mxGraph style string's
+   own delimiter characters -- an unescaped one would corrupt every key
+   after it in the style string, not just truncate the label. */
+function [style] = swreg_build_style(name)
+    name = strsubst(string(name), ';', '');
+    name = strsubst(name, '=', '');
+    style = 'shape=rectangle;fillColor=yellow;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
 /* convert a list string, e.g. "[a, b]" or "8 24", to a column of strings */
@@ -101,7 +123,7 @@ function [x] = swreg_update_ports(obj, bconfigfn)
         graphics.out_label = ['user_data_out'];
         graphics.in_label = ['sim_in'];
     end
-    graphics.style = 'shape=rectangle;fillColor=yellow';
+    graphics.style = swreg_build_style(p('name'));
     x.graphics = graphics;
     x.model = model;
 endfunction

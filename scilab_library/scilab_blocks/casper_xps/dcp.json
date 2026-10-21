@@ -1,0 +1,16 @@
+{
+    "parameters": {
+        "keys": [
+            "name",
+            "fullpath",
+            "tag",
+            "dcp_file"
+        ],
+        "values": [
+            "dcp",
+            "",
+            "xps:dcp",
+            ""
+        ]
+    }
+}
