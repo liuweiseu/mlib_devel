@@ -36987,7 +36987,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t228_DT_dac0_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t228_DT_dac0_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -37011,7 +37011,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t228_DT_dac0_coarse_freq_fine">
+                      <widget class="QComboBox" name="t228_DT_dac0_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -38518,7 +38518,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t228_DT_dac1_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t228_DT_dac1_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -38542,7 +38542,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t228_DT_dac1_coarse_freq_fine">
+                      <widget class="QComboBox" name="t228_DT_dac1_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -40069,7 +40069,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t228_QT_dac1_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t228_QT_dac1_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -40093,7 +40093,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t228_QT_dac1_coarse_freq_fine">
+                      <widget class="QComboBox" name="t228_QT_dac1_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -41600,7 +41600,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t228_QT_dac0_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t228_QT_dac0_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -41624,7 +41624,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t228_QT_dac0_coarse_freq_fine">
+                      <widget class="QComboBox" name="t228_QT_dac0_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -43136,7 +43136,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t228_QT_dac3_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t228_QT_dac3_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -43160,7 +43160,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t228_QT_dac3_coarse_freq_fine">
+                      <widget class="QComboBox" name="t228_QT_dac3_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -44667,7 +44667,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t228_QT_dac2_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t228_QT_dac2_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -44691,7 +44691,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t228_QT_dac2_coarse_freq_fine">
+                      <widget class="QComboBox" name="t228_QT_dac2_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -46429,7 +46429,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t229_DT_dac0_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t229_DT_dac0_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -46453,7 +46453,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t229_DT_dac0_coarse_freq_fine">
+                      <widget class="QComboBox" name="t229_DT_dac0_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -47960,7 +47960,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t229_DT_dac1_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t229_DT_dac1_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -47984,7 +47984,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t229_DT_dac1_coarse_freq_fine">
+                      <widget class="QComboBox" name="t229_DT_dac1_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -49511,7 +49511,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t229_QT_dac1_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t229_QT_dac1_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -49535,7 +49535,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t229_QT_dac1_coarse_freq_fine">
+                      <widget class="QComboBox" name="t229_QT_dac1_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -51042,7 +51042,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t229_QT_dac0_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t229_QT_dac0_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -51066,7 +51066,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t229_QT_dac0_coarse_freq_fine">
+                      <widget class="QComboBox" name="t229_QT_dac0_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -52578,7 +52578,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t229_QT_dac3_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t229_QT_dac3_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -52602,7 +52602,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t229_QT_dac3_coarse_freq_fine">
+                      <widget class="QComboBox" name="t229_QT_dac3_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -54109,7 +54109,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t229_QT_dac2_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t229_QT_dac2_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -54133,7 +54133,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t229_QT_dac2_coarse_freq_fine">
+                      <widget class="QComboBox" name="t229_QT_dac2_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -55856,7 +55856,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t230_DT_dac0_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t230_DT_dac0_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -55880,7 +55880,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t230_DT_dac0_coarse_freq_fine">
+                      <widget class="QComboBox" name="t230_DT_dac0_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -57387,7 +57387,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t230_DT_dac1_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t230_DT_dac1_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -57411,7 +57411,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t230_DT_dac1_coarse_freq_fine">
+                      <widget class="QComboBox" name="t230_DT_dac1_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -58938,7 +58938,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t230_QT_dac1_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t230_QT_dac1_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -58962,7 +58962,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t230_QT_dac1_coarse_freq_fine">
+                      <widget class="QComboBox" name="t230_QT_dac1_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -60469,7 +60469,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t230_QT_dac0_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t230_QT_dac0_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -60493,7 +60493,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t230_QT_dac0_coarse_freq_fine">
+                      <widget class="QComboBox" name="t230_QT_dac0_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -62005,7 +62005,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t230_QT_dac3_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t230_QT_dac3_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -62029,7 +62029,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t230_QT_dac3_coarse_freq_fine">
+                      <widget class="QComboBox" name="t230_QT_dac3_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -63536,7 +63536,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t230_QT_dac2_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t230_QT_dac2_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -63560,7 +63560,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t230_QT_dac2_coarse_freq_fine">
+                      <widget class="QComboBox" name="t230_QT_dac2_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -65283,7 +65283,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t231_DT_dac0_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t231_DT_dac0_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -65307,7 +65307,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t231_DT_dac0_coarse_freq_fine">
+                      <widget class="QComboBox" name="t231_DT_dac0_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -66814,7 +66814,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t231_DT_dac1_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t231_DT_dac1_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -66838,7 +66838,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t231_DT_dac1_coarse_freq_fine">
+                      <widget class="QComboBox" name="t231_DT_dac1_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -68365,7 +68365,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t231_QT_dac1_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t231_QT_dac1_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -68389,7 +68389,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t231_QT_dac1_coarse_freq_fine">
+                      <widget class="QComboBox" name="t231_QT_dac1_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -69896,7 +69896,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t231_QT_dac0_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t231_QT_dac0_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -69920,7 +69920,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t231_QT_dac0_coarse_freq_fine">
+                      <widget class="QComboBox" name="t231_QT_dac0_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -71432,7 +71432,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t231_QT_dac3_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t231_QT_dac3_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -71456,7 +71456,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t231_QT_dac3_coarse_freq_fine">
+                      <widget class="QComboBox" name="t231_QT_dac3_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -72963,7 +72963,7 @@
                       </widget>
                      </item>
                      <item row="1" column="1">
-                      <widget class="QComboBox" name="t231_QT_dac2_nyquist_zone_fine">
+                      <widget class="QComboBox" name="t231_QT_dac2_decode_mode_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>
@@ -72987,7 +72987,7 @@
                       </widget>
                      </item>
                      <item row="0" column="1">
-                      <widget class="QComboBox" name="t231_QT_dac2_coarse_freq_fine">
+                      <widget class="QComboBox" name="t231_QT_dac2_nyquist_zone_fine">
                        <property name="editable">
                         <bool>false</bool>
                        </property>

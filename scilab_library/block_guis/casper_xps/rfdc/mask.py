@@ -1,17 +1,18 @@
 import sys, os
+import re
 import logging
 import json
 from argparse import ArgumentParser
-from pathlib import Path
-import shutil
 
-from PyQt6.QtWidgets import QApplication, QMainWindow
+from PyQt6.QtWidgets import (QApplication, QMainWindow, QMessageBox, QCheckBox,
+                             QComboBox, QDoubleSpinBox)
 from PyQt6.QtGui import QIcon
 from rfdc_ui import Ui_MainWindow
 
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from utils.utils import make_rich_logger, gen_bconfig
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -20,2109 +21,729 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
 
-class _MissingWidgetStub(object):
-    """
-    Stand-in returned by RFDCOperations._get_qt_obj for a tile/slice/page
-    widget name that has no backing object in rfdc_ui.py at all -- a
-    handful of these gaps are confirmed to exist (e.g.
-    't225_QT_adc3_enable_iq_coarse', 't228_QT_dac1_sample_per_cycle_coarse')
-    and, critically, one of them sits on rfdc.json's own DEFAULT config
-    path (t228_QT_dac1's default mixer_type is 'Coarse', which
-    load_config's stack-page logic switches to on every dialog open) --
-    so this can't be treated as a rare user-triggered edge case, it needs
-    to degrade gracefully by default. Implements just enough of the Qt
-    widget surface this file actually calls (checked via a full grep of
-    every obj.<method>(...) / obj.<signal>.connect(...) pattern in this
-    module) as safe no-ops / neutral-value reads, so a get/set/signal-
-    connect against a missing widget never raises AttributeError.
-    """
-    def isChecked(self):
-        return False
+# ---------------------------------------------------------------------------
+# Device properties (xps_library/get_rfsoc_properties.m)
+#
+# In Simulink these come from the FPGA part of the System Generator block.
+# Nothing about the platform/part reaches this dialog (run_mask.sci only
+# passes --template/--target/--log), so the values below are fixed to the
+# RFSoC gen3 dual-tile devices (xczu47dr/xczu48dr) used by the supported
+# platforms (rfsoc4x2, rfsoc8x8).  To support a quad-tile / gen1 part, the
+# part (or platform) has to be passed to this script (e.g. an extra JSON
+# parameter written by run_mask.sci from the design's platform block) and
+# assigned to the three variables below -- every rule in this file is
+# already parameterised on them.
+# ---------------------------------------------------------------------------
+RFSOC_GEN = 3
+ADC_TILE_ARCH = 'DT'
+DAC_TILE_ARCH = 'DT'
 
-    def setChecked(self, *args, **kwargs):
-        pass
-
-    def currentText(self):
-        return ''
-
-    def setCurrentText(self, *args, **kwargs):
-        pass
-
-    def currentIndex(self):
-        return 0
-
-    def setCurrentIndex(self, *args, **kwargs):
-        pass
-
-    def value(self):
-        return 0
-
-    def setValue(self, *args, **kwargs):
-        pass
-
-    def setReadOnly(self, *args, **kwargs):
-        pass
-
-    def lineEdit(self):
-        return self
-
-    def setText(self, *args, **kwargs):
-        pass
-
-    def clear(self):
-        pass
-
-    def addItem(self, *args, **kwargs):
-        pass
-
-    def connect(self, *args, **kwargs):
-        # so `stub.toggled`/`stub.activated`/`stub.editingFinished` (see
-        # the properties below) can still be `.connect(...)`-ed as a no-op
-        pass
-
-    @property
-    def toggled(self):
-        return self
-
-    @property
-    def activated(self):
-        return self
-
-    @property
-    def editingFinished(self):
-        return self
-
-
-"""
-This class define the signal functions for the GUI.
-"""
 ADC_TILES = [224, 225, 226, 227]
-ADC_DEC_MODE = [1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 40]
-ADC_TILE_ALL_CONFIG = [
-    {
-        'key':'enable_mts',
-        'get': 'get_adc_mts_status',
-        'set': 'set_adc_mts_status'
-    },
-    {
-        'key': 'sample_rate',
-        'get': 'get_adc_sample_rate',
-        'set': 'set_adc_sample_rate'
-    },
-    {
-        'key': 'clk_out',
-        'get': 'get_adc_clkout',
-        'set': 'set_adc_clkout'
-    },
-    {
-        'key': 'enable_pll',
-        'get': 'get_adc_pll_status',
-        'set': 'set_adc_pll_status'
-    },
-    {
-        'key': 'ref_clk',
-        'get': 'get_adc_refclk',
-        'set': 'set_adc_refclk'
-    },
-    {
-        'key': 'axi_stream_clk',
-        'get': 'get_adc_req_axis_clk',
-        'set': 'set_adc_req_axis_clk'
-    },
-    {
-        'key': 'has_adc_clk',
-        'get': 'get_adc_has_clk_status',
-        'set': 'set_adc_has_clk_status'
-    },
-    {
-        'key': 'adc_clk_src',
-        'get': 'get_adc_clk_src',
-        'set': 'set_adc_clk_src'
-    },
-    {
-        'key': 'clk_dist',
-        'get': 'get_adc_clk_dist',
-        'set': 'set_adc_clk_dist'
-    }
-]
-# DAC tile-level fields: every one of these except 'output_power'/
-# 'has_dac_clk'/'dac_clk_src'/'clk_dist' reuses the SAME get/set methods as
-# ADC_TILE_ALL_CONFIG verbatim -- tile-level widgets are named 't{tile}_
-# {field}' with no adc/dac infix at all (confirmed: t224_enable_mts and
-# t228_enable_mts are both plain QCheckBox with identical semantics), so
-# get_adc_mts_status(tile)/get_adc_sample_rate(tile)/etc already work
-# correctly for DAC tiles unchanged -- they just needed _get_qt_obj's tile
-# range widened (see below), not new methods.
-DAC_TILE_ALL_CONFIG = [
-    {
-        'key':'enable_mts',
-        'get': 'get_adc_mts_status',
-        'set': 'set_adc_mts_status'
-    },
-    {
-        'key': 'sample_rate',
-        'get': 'get_adc_sample_rate',
-        'set': 'set_adc_sample_rate'
-    },
-    {
-        'key': 'clk_out',
-        'get': 'get_adc_clkout',
-        'set': 'set_adc_clkout'
-    },
-    {
-        'key': 'enable_pll',
-        'get': 'get_adc_pll_status',
-        'set': 'set_adc_pll_status'
-    },
-    {
-        'key': 'ref_clk',
-        'get': 'get_adc_refclk',
-        'set': 'set_adc_refclk'
-    },
-    {
-        'key': 'axi_stream_clk',
-        'get': 'get_adc_req_axis_clk',
-        'set': 'set_adc_req_axis_clk'
-    },
-    {
-        'key': 'output_power',
-        'get': 'get_dac_output_power',
-        'set': 'set_dac_output_power'
-    },
-    {
-        'key': 'has_dac_clk',
-        'get': 'get_dac_has_clk_status',
-        'set': 'set_dac_has_clk_status'
-    },
-    {
-        'key': 'dac_clk_src',
-        'get': 'get_dac_clk_src',
-        'set': 'set_dac_clk_src'
-    },
-    {
-        'key': 'clk_dist',
-        'get': 'get_dac_clk_dist',
-        'set': 'set_dac_clk_dist'
-    }
-]
-# DAC slice-level fields (both DT and QT arch share this field list --
-# 'datapath_mode' is a real QT-only JSON key but has NO backing widget
-# anywhere in rfdc_ui.py, confirmed by exhaustive grep, so it is
-# deliberately left out of this list and never touched by collect_config/
-# load_config, same treatment as the widget-less 'frame' readout fields).
-# Page-suffix convention for DAC is '_bypassed'/'_fine'/'_coarse' (NOT
-# ADC's '_real'/'_iq'/'_iq_coarse') -- confirmed via rfdc_ui.py.
-DAC_TILE_SEPARATE_CONFIG = [
-    {
-        'key': 'enable',
-        'get': 'get_dt_dac_status',
-        'set': 'set_dt_dac_status'
-    },
-    {
-        'key': 'analog_output',
-        'get': 'get_dt_dac_analog_output',
-        'set': 'set_dt_dac_analog_output'
-    },
-    {
-        'key': 'inter_mode',
-        'get': 'get_dt_dac_inter_mode_text',
-        'set': 'set_dt_dac_inter_mode'
-    },
-    {
-        'key': 'sample_per_cycle',
-        'get': 'get_dt_dac_samples_per_cycle',
-        'set': 'set_dt_dac_samples_per_cycle'
-    },
-    {
-        'key': 'req_axis_clk',
-        'get': 'get_dt_dac_req_axis_clk',
-        'set': 'set_dt_dac_req_axis_clk'
-    },
-    {
-        'key': 'mixer_type',
-        'get': 'get_dt_dac_mixer_type',
-        'set': 'set_dt_dac_mixer_type'
-    },
-    {
-        'key': 'mixer_mode',
-        'get': 'get_dt_dac_mixer_mode',
-        'set': 'set_dt_dac_mixer_mode'
-    },
-    {
-        'key': 'coarse_freq',
-        'get': 'get_dt_dac_coarse_freq',
-        'set': 'set_dt_dac_coarse_freq'
-    },
-    {
-        'key': 'nco_freq',
-        'get': 'get_dt_dac_nco_freq',
-        'set': 'set_dt_dac_nco_freq'
-    },
-    {
-        'key': 'nco_phase',
-        'get': 'get_dt_dac_nco_phase',
-        'set': 'set_dt_dac_nco_phase'
-    },
-    {
-        'key': 'nyquist_zone',
-        'get': 'get_dt_dac_nyquist_zone',
-        'set': 'set_dt_dac_nyquist_zone'
-    },
-    {
-        'key': 'decode_mode',
-        'get': 'get_dt_dac_decode_mode',
-        'set': 'set_dt_dac_decode_mode'
-    }
-]
-ADC_TILE_SEPARATE_CONFIG = [
-    {
-        'key': 'enable',
-        'get': 'get_dt_adc_status',
-        'set': 'set_dt_adc_status'
-    },
-    {
-        'key': 'digital_output',
-        'get': 'get_dt_adc_digital_output',
-        'set': 'set_dt_adc_digital_output'
-    },
-    {
-        'key': 'dec_mode',
-        'get': 'get_dt_adc_dec_mode_text',
-        'set': 'set_dt_adc_dec_mode'
-    },
-    {
-        'key': 'sample_per_cycle',
-        'get': 'get_dt_adc_samples_per_cycle',
-        'set': 'set_dt_adc_samples_per_cycle'
-    },
-    {
-        'key': 'req_axis_clk',
-        'get': 'get_dt_adc_req_axis_clk',
-        'set': 'set_dt_adc_req_axis_clk'
-    },
-    {
-        'key': 'mixer_type',
-        'get': 'get_dt_adc_mixer_type',
-        'set': 'set_dt_adc_mixer_type'
-    },
-    {
-        'key': 'mixer_mode',
-        'get': 'get_dt_adc_mixer_mode',
-        'set': 'set_dt_adc_mixer_mode'
-    },
-    {
-        'key': 'coarse_freq',
-        'get': 'get_dt_adc_coarse_freq',
-        'set': 'set_dt_adc_coarse_freq'
-    },
-    {
-        'key': 'nco_freq',
-        'get': 'get_dt_adc_nco_freq',
-        'set': 'set_dt_adc_nco_freq'
-    },
-    {
-        'key': 'nco_phase',
-        'get': 'get_dt_adc_nco_phase',
-        'set': 'set_dt_adc_nco_phase'
-    },
-    {
-        'key': 'nyquist_zone',
-        'get': 'get_dt_adc_nyquist_zone',
-        'set': 'set_dt_adc_nyquist_zone'
-    },
-    {
-        'key': 'cal_mode',
-        'get': 'get_dt_adc_cal_mode',
-        'set': 'set_dt_adc_cal_mode'
-    }
-]
 DAC_TILES = [228, 229, 230, 231]
+NSLICES = {'DT': 2, 'QT': 4}
+DEC_INTERP_OPTS = {
+    1: ['1x', '2x', '4x', '8x'],
+    3: ['1x', '2x', '3x', '4x', '5x', '6x', '8x', '10x', '12x', '16x', '20x', '24x', '40x'],
+}
+# (gen, adc arch) -> (fs_min, fs_max) in Msps, get_rfsoc_properties.m
+ADC_FS_LIMITS = {
+    (1, 'DT'): (1000.0, 4096.0),
+    (1, 'QT'): (500.0, 2058.0),
+    (3, 'DT'): (500.0, 5000.0),
+    (3, 'QT'): (500.0, 2500.0),
+}
+AXIS_CLK_MAX_MHZ = 512.0          # update_axis_clk.m
+INVALID_AXIS = '*Axis Clocking Invalid*'
+
+# slice fields that have one widget per stacked page
+ADC_PAGES = ('real', 'iq', 'iq_coarse')
+DAC_PAGES = ('bypassed', 'fine', 'coarse')
+ADC_FIELD_SUFFIXES = {
+    'enable': ADC_PAGES, 'digital_output': ADC_PAGES, 'dec_mode': ADC_PAGES,
+    'sample_per_cycle': ADC_PAGES, 'req_axis_clk': ADC_PAGES,
+    'mixer_type': ADC_PAGES, 'mixer_mode': ADC_PAGES,
+    'nyquist_zone': ADC_PAGES, 'cal_mode': ADC_PAGES,
+    'coarse_freq': (None,), 'nco_freq': ('iq',), 'nco_phase': ('iq',),
+}
+DAC_FIELD_SUFFIXES = {
+    'enable': DAC_PAGES, 'analog_output': DAC_PAGES, 'inter_mode': DAC_PAGES,
+    'sample_per_cycle': DAC_PAGES, 'req_axis_clk': DAC_PAGES,
+    'mixer_type': DAC_PAGES, 'mixer_mode': DAC_PAGES,
+    'nyquist_zone': DAC_PAGES, 'decode_mode': DAC_PAGES,
+    'coarse_freq': ('coarse',), 'nco_freq': (None,), 'nco_phase': (None,),
+}
+FIELD_SUFFIXES = {'adc': ADC_FIELD_SUFFIXES, 'dac': DAC_FIELD_SUFFIXES}
+
+ADC_TILE_KEYS = ['enable_mts', 'sample_rate', 'clk_out', 'enable_pll', 'ref_clk',
+                 'axi_stream_clk', 'has_adc_clk', 'adc_clk_src', 'clk_dist']
+DAC_TILE_KEYS = ['enable_mts', 'sample_rate', 'clk_out', 'enable_pll', 'ref_clk',
+                 'axi_stream_clk', 'output_power', 'has_dac_clk', 'dac_clk_src', 'clk_dist']
+
+
+# ---------------------------------------------------------------------------
+# helpers ported from the MATLAB callbacks
+# ---------------------------------------------------------------------------
+def fmt_num(v, nd=3):
+    """round to `nd` decimals and print without trailing zeros (MATLAB
+    num2str/%g style: 2000 -> '2000', 245.76 -> '245.76')."""
+    s = f'{round(float(v), nd):.{nd}f}'.rstrip('0').rstrip('.')
+    return '0' if s in ('', '-0') else s
+
+
+def to_float(v, default=0.0):
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return default
+
+
+def parse_factor(s):
+    """'8x' -> 8 (regexp '([0-9]*)x' in update_axis_clk.m)"""
+    m = re.match(r'\s*([0-9]+)\s*x', str(s))
+    return int(m.group(1)) if m else None
+
+
+def calc_rfpll_vco(gen, sample_rate_mhz):
+    """calc_rfpll_vco.m"""
+    vco_min = 8500.0
+    vco_max = 13112.0 if gen < 2 else 13200.0
+    M, VCO = [], []
+    for m in [2, 3] + list(range(4, 65, 2)):
+        vco = sample_rate_mhz * m
+        if vco >= vco_min:
+            if vco <= vco_max:
+                VCO.append(vco)
+                M.append(m)
+            else:
+                break
+    return M, VCO
+
+
+def calc_refclk(vco, R=1):
+    """calc_refclk.m"""
+    refclk_min = 102.406
+    refclk_max = 1230.0
+    refclk, fbdiv = [], []
+    n = 13
+    while n < 256:
+        fin = round(vco * (R / n), 3)
+        if fin <= refclk_max:
+            if fin >= refclk_min:
+                refclk.append(fin)
+                fbdiv.append(n)
+            else:
+                break
+        n += 1
+    return fbdiv, refclk
+
+
+def calc_clkout(sample_rate_mhz, fs_max):
+    """update_adc_clkout.m (note: fs_max is in Msps so `fs_max >= 4.0` is
+    always true there, i.e. the dividers are always 16/32/64/128)."""
+    div = [2 ** k for k in range(3, 7)]
+    if fs_max >= 4.0:
+        div = [d * 2 for d in div]
+    out = []
+    for d in div:
+        c = round(sample_rate_mhz / d, 3)
+        if c > 10.0:
+            out.append(c)
+    return out
+
+
 class RFDCOperations(object):
     def __init__(self, winobj, template_config='rfdc.json', target_config='rfdc.json', logdir='.', debug=False):
-        if debug:
-            self.logger = make_rich_logger('rfdc.log', logging.DEBUG, mode='a', logdir=logdir)
-        else:
-            self.logger = make_rich_logger('rfdc.log', logging.ERROR, mode='a', logdir=logdir)
-        self.logger.info('*************************************************')
+        level = logging.DEBUG if debug else logging.ERROR
+        self.logger = make_rich_logger('rfdc.log', level, mode='a', logdir=logdir)
         self.logger.info('RFDC Mask started.')
-        self.logger.info('*************************************************')
         self.logger.info(f'Template config file is {template_config}.')
         self.logger.info(f'Target config file is {target_config}.')
         self.template_config = template_config
         self.target_config = target_config
         self.winobj = winobj
         self.ui = winobj.ui
+        self.gen = RFSOC_GEN
+        self.arch = {'adc': ADC_TILE_ARCH, 'dac': DAC_TILE_ARCH}
+        self.params = {}      # full flat parameter dict (pass-through for unknown keys)
+        self.tiles = {}       # tile -> dict of tile level values (strings)
+        self.slices = {}      # (kind, tile, DQ, slice) -> dict of slice values (strings)
+        self.opts = {}        # (kind, tile, DQ, slice) -> dict field -> option list (active arch only)
+        self.forced = {}      # (kind, tile, DQ, slice) -> odd slice slaved to its even neighbour
+        self.ref_opts = {}    # tile -> ref clk option list ([] = PLL unresolvable)
+        self.clkout_opts = {}
+        self._setup_widgets()
         self.load_config()
         self.setup_signal_functions()
 
-    def _get_qt_obj(self, tile, name, adc=None, DQ=None, kind='adc'):
-        """
-        Docstring for _get_qt_obj:
-            get the QT object.
-        :param tile (uint8) : tile number (ADC: 224-227, DAC: 228-231).
-        :param name (str)   : object name.
-        :param adc  (uint8) : slice ID - 0/1 for Dual Tile, 0-3 for Quad Tile.
-        :param DQ   (str)   : Dual Tile(DT) or Quad Tile(QT).
-        :param kind (str)   : 'adc' or 'dac' -- selects the widget-name
-                               infix (t{tile}_{DQ}_adc{n}_.../
-                               t{tile}_{DQ}_dac{n}_...). Ignored (and safe
-                               to leave at its default) when adc is None,
-                               since tile-level widget names never carry an
-                               adc/dac infix.
-        """
-        if tile not in ADC_TILES and tile not in DAC_TILES:
-            self.logger.error(f'Tile{tile} is not a valid RFDC tile')
-            raise ValueError(f'Tile{tile} is not a valid RFDC tile')
-        objname = f't{tile}_{name}' if adc == None else f't{tile}_{DQ}_{kind}{adc}_{name}'
+    # -------------------------------------------------------------------
+    # generic widget access
+    # -------------------------------------------------------------------
+    @staticmethod
+    def _kind(tile):
+        return 'adc' if tile in ADC_TILES else 'dac'
+
+    def _tile_w(self, tile, name):
+        return getattr(self.ui, f't{tile}_{name}', None)
+
+    def _slice_ws(self, kind, tile, DQ, a, field):
+        """all existing widgets (one per stacked page) of a slice field;
+        a handful of tile/slice/page combinations have no widget in
+        rfdc_ui.py at all and are simply skipped."""
+        out = []
+        for suf in FIELD_SUFFIXES[kind][field]:
+            name = f't{tile}_{DQ}_{kind}{a}_{field}' + (f'_{suf}' if suf else '')
+            w = getattr(self.ui, name, None)
+            if w is not None:
+                out.append(w)
+        return out
+
+    def _all_slice_keys(self):
+        for kind, tiles in (('adc', ADC_TILES), ('dac', DAC_TILES)):
+            for tile in tiles:
+                for DQ in ('DT', 'QT'):
+                    for a in range(NSLICES[DQ]):
+                        yield (kind, tile, DQ, a)
+
+    @staticmethod
+    def _set_combo(w, value, items=None):
+        w.blockSignals(True)
+        if items is not None:
+            cur = [w.itemText(i) for i in range(w.count())]
+            if cur != list(items):
+                w.clear()
+                w.addItems(list(items))
+        value = str(value)
+        if w.findText(value) < 0:
+            w.addItem(value)
+        w.setCurrentText(value)
+        w.blockSignals(False)
+
+    @staticmethod
+    def _set_spin(w, value):
+        w.blockSignals(True)
+        w.setValue(to_float(value))
+        w.blockSignals(False)
+
+    @staticmethod
+    def _set_check(w, on):
+        w.blockSignals(True)
+        w.setChecked(on)
+        w.blockSignals(False)
+
+    def _setup_widgets(self):
+        """ranges/decimals that rfdc_ui.py leaves at the Qt defaults
+        (2 decimals, max 99.99 / 3932.16)."""
+        for tile in ADC_TILES + DAC_TILES:
+            w = self._tile_w(tile, 'sample_rate')
+            w.setDecimals(3)
+            w.setRange(0.0, 100000.0)
+            w = self._tile_w(tile, 'axi_stream_clk')
+            w.setDecimals(3)
+            w.setRange(0.0, 100000.0)
+            # value 0 (= minimum) is used to show the invalid marker
+            w.setSpecialValueText(INVALID_AXIS)
+            w.setReadOnly(True)
+            w = self._tile_w(tile, 'output_power')
+            if w is not None:
+                w.setDecimals(0)
+                w.setRange(0.0, 100000.0)
+        for key in self._all_slice_keys():
+            kind = key[0]
+            for w in self._slice_ws(*key, 'req_axis_clk'):
+                w.setDecimals(3)
+                w.setRange(0.0, 100000.0)
+                w.setReadOnly(True)
+                w.setEnabled(False)
+            for w in self._slice_ws(*key, 'nco_freq'):
+                w.setDecimals(6)            # GHz -> 1 kHz resolution
+                w.setRange(-100.0, 100.0)
+                w.setReadOnly(False)
+            for w in self._slice_ws(*key, 'nco_phase'):
+                w.setDecimals(6)
+                w.setRange(-1.0e6, 1.0e6)
+                w.setReadOnly(False)
+        # only the architecture of the device can be configured
+        for tile in ADC_TILES:
+            getattr(self.ui, f't{tile}_adcs_stackedwidget').setCurrentIndex(0 if self.arch['adc'] == 'DT' else 1)
+        for tile in DAC_TILES:
+            getattr(self.ui, f't{tile}_dacs_stackedwidget').setCurrentIndex(0 if self.arch['dac'] == 'DT' else 1)
+
+    def _status(self, msg):
+        self.logger.warning(msg)
         try:
-            return getattr(self.ui, objname)
-        except AttributeError:
-            # confirmed gap in rfdc_ui.py (no backing widget at all for
-            # this tile/slice/page combination) -- see _MissingWidgetStub's
-            # docstring for why this must degrade gracefully rather than
-            # raise, even on the default config.
-            self.logger.warning(f'{objname} has no widget in rfdc_ui.py -- using a no-op stub.')
-            return _MissingWidgetStub()
-    
-    def _convert_status(self, status):
-        if status == True:
-            return 'on'
-        elif status == False:
-            return 'off'
-        elif status == 'on':
-            return True
-        elif status == 'off':
-            return False
-        
-    def get_tile_status(self, tile):
-        """
-        Docstring for get_tile_status:
-            get the tile status.
+            self.winobj.statusBar().showMessage(msg, 10000)
+        except Exception:
+            pass
 
-        :param tile (uint8) : tile number.
-        """
-        # This function is a little bit different,
-        # as the obj name is different from others.
-        if tile not in ADC_TILES and tile not in DAC_TILES:
-            self.logger.error('Tile{tile} is not valid.')
-            raise ValueError('Tile{tile} is not valid.')
-        obj = getattr(self.ui, f'Tile{tile}_enable')
-        status = obj.isChecked()
-        self.logger.debug(f'Tile{tile} status is {status}.')
-        return self._convert_status(status)
+    # -------------------------------------------------------------------
+    # tile level derived values
+    # -------------------------------------------------------------------
+    def _fs(self, tile):
+        return to_float(self.tiles[tile]['sample_rate'])
 
-    def set_title_status(self, tile, status):
-        """
-        Docstring for set_title_status
-        
-        :param tile (uint8) : tile number.
-        :param status(bool or str): status. 
-        """
-        self.logger.debug(f'Set Tile{tile} Status to {status}.')
-        if status == 'on' or status == 'off':
-            status = self._convert_status(status)
-        obj = getattr(self.ui, f'Tile{tile}_enable')
-        obj.setChecked(status)
+    def _adc_fs_limits(self):
+        return ADC_FS_LIMITS[(self.gen, self.arch['adc'])]
 
-    def get_adc_mts_status(self, tile):
-        """
-        Docstring for get_adc_mts:
-            get the status of adc mts.
-        
-        :param tile (uint8) : tile number.
-        """
-        obj = self._get_qt_obj(tile, 'enable_mts')
-        status = obj.isChecked()
-        self.logger.debug(f'Tile{tile} MTS status is {status}')
-        return self._convert_status(status)
-    
-    def set_adc_mts_status(self, tile, status):
-        """
-        Docstring for set_adc_mts_status
-        
-        :param tile (uint8) : tile number.
-        :param tile (str)   : 'on' or 'off'.
-        """
-        self.logger.debug(f'Set Tile{tile} MTS status to {status}.')
-        if status == 'on' or status == 'off':
-            status = self._convert_status(status)
-        obj = self._get_qt_obj(tile, 'enable_mts')
-        obj.setChecked(status)
-
-
-    def get_adc_sample_rate(self, tile):
-        """
-        Docstring for get_adc_sample_rate:
-            get the adc sampling rate.
-        :param tile (uint8) : tile number.
-        """
-        obj = self._get_qt_obj(tile, 'sample_rate')
-        samplerate = obj.value()
-        self.logger.debug(f'Sampling Rate of Tile{tile} ADC: {samplerate}MHz')
-        return samplerate
-    
-    def set_adc_sample_rate(self, tile, freq):
-        """
-        Docstring for set_adc_sample_rate
-        
-        :param tile (uint8) : tile number.
-        :param freq (float or str) : frequency in MHz.
-        """
-        self.logger.debug(f'Set Tile{tile} ADC Sampling Rate to {freq} MHz.')
-        obj = self._get_qt_obj(tile, 'sample_rate')
-        obj.setValue(float(freq))
-        
-    def get_adc_pll_status(self, tile):
-        """
-        Docstring for get_adc_pll_status:
-            get the adc pll status.
-        
-        :param tile (uint8): tile number.
-        """
-        obj = self._get_qt_obj(tile, 'enable_pll')
-        status = obj.isChecked()
-        self.logger.debug(f'Tile{tile} PLL status is {status}')
-        return self._convert_status(status)
-    
-    def set_adc_pll_status(self, tile, status):
-        """
-        Docstring for set_adc_pll_status
-        
-        :param self: Description
-        :param tile (uint8) : tile number.
-        :param tile (str)   : 'on' or 'off'.
-        """
-        self.logger.debug(f'Set Tile{tile} ADC PLL status to {status}.')
-        if status == 'on' or status == 'off':
-            status = self._convert_status(status)
-        obj = self._get_qt_obj(tile, 'enable_pll')
-        obj.setChecked(status)
-    
-    def get_adc_refclk(self, tile):
-        """
-        Docstring for get_adc_refclk:
-            get the adc reference clk freqency.
-        
-        :param tile (uint8): tile number.
-        """
-        obj = self._get_qt_obj(tile, 'ref_clk')
-        refclk = obj.currentText()
-        self.logger.debug(f'Tile{tile} Ref Clock freq is {refclk} MHz.')
-        return float(refclk)
-    
-    def set_adc_refclk(self, tile, freq):
-        """
-        Docstring for set_adc_refclk
-        
-        :param tile (uint8) : tile number.
-        :param freq (float or str) : frequency in MHz.
-        """
-        self.logger.debug(f'Set Tile{tile} ADC Ref Clock to {freq} MHz.')
-        obj = self._get_qt_obj(tile, 'ref_clk')
-        obj.setCurrentText(str(freq))
-    
-    def get_adc_req_axis_clk(self, tile):
-        """
-        Docstring for get_req_axis_clk:
-            get the required axi4 stream clock frequency.
-        
-        :param tile (uint8): tile number.
-        """
-        obj = self._get_qt_obj(tile, 'axi_stream_clk')
-        clkfreq = obj.value()
-        self.logger.debug(f'Tile{tile} required axis clock is {clkfreq} MHz')
-        return clkfreq
-        
-    def set_adc_req_axis_clk(self, tile, freq):
-        """
-        Docstring for set_req_axis_clk:
-            set the required axi4 stream clock freq.
-
-        :param tile (uint8) : tile number.
-        :param freq (str) : the frequency in MHz.
-        """
-        self.logger.debug(f'Set Tile{tile} required axis clk frequency to {freq} MHz.')
-        obj = self._get_qt_obj(tile, 'axi_stream_clk')
-        obj.setReadOnly(True)
-        obj.lineEdit().setText(str(freq))
-
-    def get_adc_clkout(self, tile):
-        """
-        Docstring for get_adc_clkout
-        
-        :param tile     (uint8) : tile number.
-        :param tile: Description
-        """
-        obj = self._get_qt_obj(tile, 'clk_out')
-        value = obj.currentText()
-        self.logger.debug(f'ADC clock out of Tile{tile} is {value}.')
-        return value
-
-    def set_adc_clkout_list(self, tile, values, default=0):
-        """
-        Docstring for set_adc_clkout_list:
-            set the adc clkout freq.
-        :param tile     (uint8) : tile number.
-        :param values   (list)  : the values for adc_clkout
-        """
-        self.logger.debug(f'ADC clock out of Tile{tile} is {values}.')
-        self.logger.debug(f'Default ADC clock out is {values[default]}MHz.')
-        obj = self._get_qt_obj(tile, 'clk_out')
-        obj.clear()
-        for i in range(len(values)):
-            obj.addItem(str(values[i]), i)
-        obj.setCurrentIndex(default)
-    
-    def set_adc_clkout(self, tile, val):
-        """
-        Docstring for set_adc_clkout
-        
-        Docstring for set_adc_clkout_list:
-            set the adc clkout freq.
-        :param tile     (uint8) : tile number.
-        :param val      (str)   : the adc_clkout val
-        """
-        self.logger.debug(f'ADC clock out of Tile{tile} is {val}.')
-        obj = self._get_qt_obj(tile, 'clk_out')
-        obj.setCurrentText(str(val))
-
-    def get_adc_has_clk_status(self, tile):
-        obj = self._get_qt_obj(tile, 'has_adc_clk')
-        status = obj.isChecked()
-        self.logger.debug(f'Tile{tile} has_adc_clk status is {status}')
-        return self._convert_status(status)
-
-    def set_adc_has_clk_status(self, tile, status):
-        if status == 'on' or status == 'off':
-            status = self._convert_status(status)
-        obj = self._get_qt_obj(tile, 'has_adc_clk')
-        obj.setChecked(status)
-
-    def get_adc_clk_src(self, tile):
-        obj = self._get_qt_obj(tile, 'adc_clk_src')
-        return obj.currentText()
-
-    def set_adc_clk_src(self, tile, val):
-        obj = self._get_qt_obj(tile, 'adc_clk_src')
-        obj.setCurrentText(str(val))
-
-    def get_adc_clk_dist(self, tile):
-        obj = self._get_qt_obj(tile, 'clk_dist')
-        return obj.currentText()
-
-    def set_adc_clk_dist(self, tile, val):
-        obj = self._get_qt_obj(tile, 'clk_dist')
-        obj.setCurrentText(str(val))
-
-    def get_dac_output_power(self, tile):
-        obj = self._get_qt_obj(tile, 'output_power')
-        return obj.value()
-
-    def set_dac_output_power(self, tile, val):
-        obj = self._get_qt_obj(tile, 'output_power')
-        obj.setValue(float(val))
-
-    def get_dac_has_clk_status(self, tile):
-        obj = self._get_qt_obj(tile, 'has_dac_clk')
-        status = obj.isChecked()
-        self.logger.debug(f'Tile{tile} has_dac_clk status is {status}')
-        return self._convert_status(status)
-
-    def set_dac_has_clk_status(self, tile, status):
-        if status == 'on' or status == 'off':
-            status = self._convert_status(status)
-        obj = self._get_qt_obj(tile, 'has_dac_clk')
-        obj.setChecked(status)
-
-    def get_dac_clk_src(self, tile):
-        obj = self._get_qt_obj(tile, 'dac_clk_src')
-        return obj.currentText()
-
-    def set_dac_clk_src(self, tile, val):
-        obj = self._get_qt_obj(tile, 'dac_clk_src')
-        obj.setCurrentText(str(val))
-
-    def get_dac_clk_dist(self, tile):
-        obj = self._get_qt_obj(tile, 'clk_dist')
-        return obj.currentText()
-
-    def set_dac_clk_dist(self, tile, val):
-        obj = self._get_qt_obj(tile, 'clk_dist')
-        obj.setCurrentText(str(val))
-
-    def get_dt_adc_status(self, tile, adc, DQ='DT'):
-        """
-        Docstring for get_dt_adc_status
-        
-        :param tile (uint8): tile number
-        :param adc. (uin8) : adc id - 0 or 1.
-        """
-        # get current stack page first
-        page = self.get_dt_adc_stack_page(tile, adc, DQ)
-        # we need to get the value based on the page
-        targets = []
-        if page == 0:
-            source = 'enable_real'
-            targets.append('enable_iq')
-            targets.append('enable_iq_coarse')
-        elif page == 1:
-            source = 'enable_iq'
-            targets.append('enable_real')
-            targets.append('enable_iq_coarse')
-        elif page == 2:
-            source ='enable_iq_coarse'
-            targets.append('enable_real')
-            targets.append('enable_iq')
-        obj = self._get_qt_obj(tile, source, adc, DQ)
-        status = obj.isChecked()
-        self.logger.debug(f'Tile{tile}.ADC{adc}(Dual Tile) status is {status}.')
-        # also set the other status for sync
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, adc, DQ)
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setChecked(status)
-        return self._convert_status(status)
-    
-    def set_dt_adc_status(self, tile, adc, status, DQ='DT'):
-        """
-        Docstring for set_dt_adc_status
-        
-        :param tile     (uint8) : tile number.
-        :param adc      (uint8) : adc id - 0 or 1.
-        :param status   (str)  : 'on' or 'off'.
-        """
-        self.logger.debug(f'Set Tile{tile}.ADC{adc}(Dual Tile) status to {status}.')
-        if status == 'on' or status == 'off':
-            status = self._convert_status(status)
-        # we will set the status on all of the three pages
-        targets = ['enable_real', 
-                   'enable_iq', 
-                   'enable_iq_coarse']
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, adc, DQ)
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setChecked(status)
-
-    def get_dt_adc_digital_output(self, tile, adc, DQ='DT'):
-        """
-        Docstring for get_dt_digital_output
-        
-        :param tile (uint8): tile number
-        :param adc  (uint8): adc id - 0 or 1.
-        """
-        # get current stack page first
-        page = self.get_dt_adc_stack_page(tile, adc, DQ)
-        # we need to get the value based on the page
-        targets = []
-        if page == 0:
-            source = 'digital_output_real'
-            targets.append('digital_output_iq')
-            targets.append('digital_output_iq_coarse')
-        elif page == 1:
-            source = 'digital_output_iq'
-            targets.append('digital_output_real')
-            targets.append('digital_output_iq_coarse')
-        elif page == 2:
-            source = 'digital_output_iq_coarse'
-            targets.append('digital_output_real')
-            targets.append('digital_output_iq_coarse')
-        obj = self._get_qt_obj(tile, source, adc, DQ)
-        val = obj.currentText()
-        self.logger.debug(f'Tile{tile}.ADC{adc} (Dual Tile) digital output is {val}.')
-        # also set the other status for sync
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, adc, DQ)
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(val))
-        return val
-    
-    def set_dt_adc_digital_output(self, tile, adc, val, DQ='DT'):
-        """
-        Docstring for set_dt_adc_digital_output
-        
-        :param tile     (uint8) : tile number.
-        :param adc      (uint8) : adc id - 0 or 1.
-        :param val      (str)   : 'Real' or ''I/Q.
-        """
-        self.logger.debug(f'Set Tile{tile}.ADC{tile} (Dual Tile) digital output to {val}.')
-        # we will set the status on all of the three pages
-        targets = ['digital_output_real', 
-                   'digital_output_iq', 
-                   'digital_output_iq_coarse']
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, adc, DQ)
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(val))
-
-    def get_dt_adc_dec_mode(self, tile, adc, DQ='DT'):
-        """
-        Docstring for get_dt_adc_dec_mode
-        
-        :param tile (uint8): tile number
-        :param adc  (uint8): adc id - 0 or 1.
-        """
-        # get current stack page first
-        page = self.get_dt_adc_stack_page(tile, adc, DQ)
-        # we need to get the value based on the page
-        targets = []
-        if page == 0:
-            source = 'dec_mode_real'
-            targets.append('dec_mode_iq')
-            targets.append('dec_mode_iq_coarse')
-        elif page == 1:
-            source = 'dec_mode_iq'
-            targets.append('dec_mode_real')
-            targets.append('dec_mode_iq_coarse')
-        elif page == 2:
-            source = 'dec_mode_iq_coarse'
-            targets.append('dec_mode_real')
-            targets.append('dec_mode_iq')
-        obj = self._get_qt_obj(tile, source, adc, DQ)
-        decmode = obj.currentIndex()
-        self.logger.debug(f'Tile{tile}.ADC{adc} (Dual Tile) DEC mode is x{ADC_DEC_MODE[decmode]}.')
-        # also set the other value for sync
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, adc, DQ)
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentIndex(decmode)
-        return ADC_DEC_MODE[decmode]
-
-    def get_dt_adc_dec_mode_text(self, tile, adc, DQ='DT'):
-        """
-        Docstring for get_dt_adc_dec_mode
-        
-        :param tile (uint8): tile number
-        :param adc  (uint8): adc id - 0 or 1.
-        """
-        # get current stack page first
-        page = self.get_dt_adc_stack_page(tile, adc, DQ)
-        # we need to get the value based on the page
-        targets = []
-        if page == 0:
-            source = 'dec_mode_real'
-            targets.append('dec_mode_iq')
-            targets.append('dec_mode_iq_coarse')
-        elif page == 1:
-            source = 'dec_mode_iq'
-            targets.append('dec_mode_real')
-            targets.append('dec_mode_iq_coarse')
-        elif page == 2:
-            source = 'dec_mode_iq_coarse'
-            targets.append('dec_mode_real')
-            targets.append('dec_mode_iq')
-        obj = self._get_qt_obj(tile, source, adc, DQ)
-        decmode = obj.currentText()
-        self.logger.debug(f'Tile{tile}.ADC{adc} (Dual Tile) DEC mode is decmode].')
-        # also set the other value for sync
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, adc, DQ)
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(decmode))
-        return decmode
-
-    def set_dt_adc_dec_mode(self, tile, adc, decmode, DQ='DT'):
-        """
-        Docstring for set_dt_adc_dec_mode
-        
-        :param tile (uint8): tile number
-        :param adc  (uint8): adc id - 0 or 1.
-        :param decmode (str or int): dec mode
-        """
-        self.logger.debug(f'Set Tile{tile}.ADC{adc} DEC Mode to {decmode}.')
-        targets = ['dec_mode_real',
-                   'dec_mode_iq',
-                   'dec_mode_iq_coarse']
-        for t in targets:
-            obj = self._get_qt_obj(tile, t, adc, DQ)
-            if isinstance(decmode, int):
-                obj.setCurrentIndex(decmode)
-            elif isinstance(decmode, str):
-                obj.setCurrentText(str(decmode))
+    def update_pll(self, tile, initial=False):
+        """update_pll.m"""
+        t = self.tiles[tile]
+        fs = self._fs(tile)
+        w = self._tile_w(tile, 'ref_clk')
+        if t['enable_pll'] != 'on':
+            opts = [fmt_num(fs)]
+            t['ref_clk'] = opts[0]
+            w.setEnabled(False)
+        else:
+            w.setEnabled(True)
+            M, VCO = calc_rfpll_vco(self.gen, fs)
+            if not VCO:
+                opts = []
+                self._status(f'Tile{tile}: RFPLL parameters could not be resolved to determine a valid ref. clock freq.')
             else:
-                self.logger.error(f'decmode({decmode}) is not supported.')
-    
-    def get_dt_adc_samples_per_cycle(self, tile, adc, DQ='DT'):
-        """
-        Docstring for get_dt_adc_samples_per_cycle
-        
-        :param tile (uint8): tile number
-        :param adc  (uint8): adc id - 0 or 1.
-        """
-        # get current stack page first
-        page = self.get_dt_adc_stack_page(tile, adc, DQ)
-        # we need to get the value based on the page
-        targets = []
-        if page == 0:
-            source = 'sample_per_cycle_real'
-            targets.append('sample_per_cycle_iq')
-            targets.append('sample_per_cycle_iq_coarse')
-        elif page == 1:
-            source = 'sample_per_cycle_iq'
-            targets.append('sample_per_cycle_real')
-            targets.append('sample_per_cycle_iq_coarse')
-        elif page == 2:
-            source = 'sample_per_cycle_iq_coarse'
-            targets.append('sample_per_cycle_real')
-            targets.append('sample_per_cycle_iq')
-        obj = self._get_qt_obj(tile, source, adc, DQ)
-        spc = obj.currentText()
-        self.logger.debug(f'Tile{tile}.ADC{adc} (Dual Tile) samples per cycle is {spc}.')
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, adc, DQ)
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(spc))
-        return int(spc)
-    
-    def set_dt_adc_samples_per_cycle(self, tile, adc, spc, DQ='DT'):
-        """
-        Docstring for set_dt_adc_samples_per_cycle
-        
-        :param tile (uint8): tile number
-        :param adc  (uint8): adc id - 0 or 1.
-        :param spc  (uint8): samples per cycle.
-        """
-        self.logger.debug(f'Set Tile{tile}.ADC{adc} (Dual Tile) samples per cycle to {spc}.')
-        targets = ['sample_per_cycle_real',
-                   'sample_per_cycle_iq',
-                   'sample_per_cycle_iq_coarse']
-        for t in targets:
-            obj = self._get_qt_obj(tile, t, adc, DQ)
-        obj.setCurrentText(str(spc))
+                fbdiv, refclk = calc_refclk(VCO[0], 1)
+                opts = [fmt_num(r) for r in refclk]
+                sel = [r for r in refclk if r <= fs / 8.0] or [r for r in refclk if r <= 130.0] or refclk[-1:]
+                default = fmt_num(sel[0])
+                if initial:
+                    match = [o for o in opts if abs(to_float(o) - to_float(t['ref_clk'], -1)) < 1e-6]
+                    if match:
+                        t['ref_clk'] = match[0]
+                    else:
+                        self.logger.warning(f'Tile{tile}: ref_clk {t["ref_clk"]} is not a valid RF-PLL reference, using {default}.')
+                        t['ref_clk'] = default
+                elif opts != self.ref_opts.get(tile):
+                    t['ref_clk'] = default
+        self.ref_opts[tile] = opts
+        self._set_combo(w, t['ref_clk'], opts if opts else None)
 
-    def get_dt_adc_req_axis_clk(self, tile, adc, DQ='DT'):
-        """
-        Docstring for get_dt_adc_req_axis_clk
-        
-        :param tile (uint8): tile number
-        :param adc  (uint8): adc id - 0 or 1.
-        """
-        # get current stack page first
-        page = self.get_dt_adc_stack_page(tile, adc, DQ)
-        # we need to get the value based on the page
-        targets = []
-        if page == 0:
-            source = 'req_axis_clk_real'
-            targets.append('req_axis_clk_iq')
-            targets.append('req_axis_clk_iq_coarse')
-        elif page == 1:
-            source = 'req_axis_clk_iq'
-            targets.append('req_axis_clk_real')
-            targets.append('req_axis_clk_iq_coarse')
-        elif page == 2:
-            source = 'req_axis_clk_iq_coarse'
-            targets.append('req_axis_clk_real')
-            targets.append('req_axis_clk_iq')
-        obj = self._get_qt_obj(tile, source, adc, DQ)
-        value = obj.value()
-        self.logger.debug(f'Tile{tile}.ADC{adc} (Dual Tile)  required axis clock is {value}MHz.')
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, adc, DQ)
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setValue(value)
-        return value
+    def update_clkout(self, tile, initial=False):
+        """update_adc_clkout.m"""
+        t = self.tiles[tile]
+        opts = [fmt_num(c) for c in calc_clkout(self._fs(tile), self._adc_fs_limits()[1])]
+        if opts:
+            if initial:
+                match = [o for o in opts if abs(to_float(o) - to_float(t['clk_out'], -1)) < 1e-6]
+                if match:
+                    t['clk_out'] = match[0]
+                else:
+                    self.logger.warning(f'Tile{tile}: clk_out {t["clk_out"]} not available, using {opts[0]}.')
+                    t['clk_out'] = opts[0]
+            elif opts != self.clkout_opts.get(tile):
+                t['clk_out'] = opts[0]
+        self.clkout_opts[tile] = opts
+        self._set_combo(self._tile_w(tile, 'clk_out'), t['clk_out'], opts if opts else None)
 
-    def set_dt_adc_req_axis_clk(self, tile, adc, freq, DQ='DT'):
-        """
-        Docstring for set_dt_adc_req_axis_clk
-        
-        :param tile (uint8): tile number
-        :param adc  (uint8): adc id - 0 or 1.
-        :param freq (float or str): the clock freqency.
-        """
-        self.logger.debug(f'Set Tile{tile}.ADC{adc} (Dual Tile) required axi4 stream clock to {freq} MHz.')
-        targets = ['req_axis_clk_real', 
-                   'req_axis_clk_iq',
-                   'req_axis_clk_iq_coarse']
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, adc, DQ)
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setValue(float(freq))
-
-    def get_dt_adc_mixer_type(self, tile, adc, DQ='DT'):
-        """
-        Docstring for get_dt_adc_mixer_type
-        
-        :param tile (uint8): tile number
-        :param adc  (uint8): adc id - 0 or 1.
-        """
-        page = self.get_dt_adc_stack_page(tile, adc, DQ)
-        # we need to get the value based on the page
-        targets = []
-        if page == 0:
-            source = 'mixer_type_real'
-            #targets.append('mixer_type_iq')
-            #targets.append('mixer_type_iq_coarse')
-        elif page == 1:
-            source = 'mixer_type_iq'
-            #targets.append('mixer_type_real')
-            targets.append('mixer_type_iq_coarse')
-        elif page == 2:
-            source = 'mixer_type_iq_coarse'
-            #targets.append('mixer_type_real')
-            targets.append('mixer_type_iq')
-        obj = self._get_qt_obj(tile, source, adc, DQ)
-        mixertype = obj.currentText()
-        self.logger.debug(f'Tile{tile}.ADC{adc} (Dual Tile) Mixer Type is {mixertype}.')
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, adc, DQ)
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(mixertype))
-        return mixertype
-
-    def set_dt_adc_mixer_type(self, tile, adc, mixertype, DQ='DT'):
-        """
-        Docstring for set_dt_adc_mixer_type
-        
-        :param tile     (uint8) : tile number
-        :param adc      (uint8) : adc id - 0 or 1.
-        :param mixertype(str)   : mixer type.
-        """
-        self.logger.debug(f'Set Tile{tile}.ADC{adc} Mixer Type to {mixertype}.')
-        # It depends on what the mixertype is
-        if mixertype == 'Bypassed':
-            targets = ['mixer_type_real']
-        elif mixertype == 'Fine' or mixertype == 'Coarse':
-            targets = ['mixer_type_iq',
-                       'mixer_type_iq_coarse']
+    def enable_mts_opt(self):
+        """enable_mts_opt.m (only tile 224 in the MATLAB mask)"""
+        w = self._tile_w(224, 'enable_mts')
+        if self.tiles[224]['enable'] == 'on':
+            w.setEnabled(True)
         else:
-            self.logger.error(f'mixtertype{mixertype} is not supported.')
-            raise ValueError(f'mixtertype{mixertype} is not supported.')
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, adc, DQ)
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(mixertype))
-
-    def get_dt_adc_mixer_mode(self, tile, adc, DQ='DT'):
-        """
-        Docstring for get_dt_adc_mixer_mode
-        
-        :param tile (uint8): tile number
-        :param adc  (uint8): adc id - 0 or 1.
-        """
-        page = self.get_dt_adc_stack_page(tile, adc, DQ)
-        # we need to get the value based on the page
-        targets = []
-        if page == 0:
-            source = 'mixer_mode_real'
-            #targets.append('mixer_mode_iq')
-            #targets.append('mixer_mode_iq_coarse')
-        elif page == 1:
-            source = 'mixer_mode_iq'
-            targets.append('mixer_mode_real')
-            targets.append('mixer_mode_iq_coarse')
-        elif page == 2:
-            source = 'mixer_mode_iq_coarse'
-            targets.append('mixer_mode_real')
-            targets.append('mixer_mode_iq')
-        obj = self._get_qt_obj(tile, source, adc, DQ)
-        mixermode = obj.currentText()
-        self.logger.debug(f'Tile{tile}.ADC{adc} (Dual Tile) Mixer Type is {mixermode}.')
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, adc, DQ)
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(mixermode))
-        return mixermode
-    
-    def set_dt_adc_mixer_mode(self, tile, adc, mixermode, DQ='DT'):
-        """
-        Docstring for set_dt_adc_mixer_mode
-        
-        :param tile     (uint8) : tile number
-        :param adc      (uint8) : adc id - 0 or 1.
-        :param mixermode(str)   : mixer mode
-        """
-        self.logger.debug(f'Set Tile{tile}.ADC{adc} Mixer Mode to {mixermode}.')
-        if mixermode == 'Real -> Real':
-            targets = ['mixer_mode_real',
-                       'mixer_mode_iq',
-                       'mixer_mode_iq_coarse']
-        elif mixermode == 'Real -> I/Q':
-            targets = ['mixer_mode_iq',
-                       'mixer_mode_iq_coarse']
-        else:
-            self.logger.error(f'mixermode{mixermode} is not supported.')
-            raise ValueError(f'mixermode{mixermode} is not supported.')
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, adc, DQ)
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(mixermode))
-        
-    def get_dt_adc_nco_freq(self, tile, adc, DQ='DT'):
-        """
-        Docstring for get_dt_adc_nco_freq
-        
-        :param tile (uint8): tile number
-        :param adc  (uint8): adc id - 0 or 1.
-        """
-        obj = self._get_qt_obj(tile, 'nco_freq_iq', adc, DQ)
-        ncofreq = obj.value()
-        self.logger.debug(f'Tile{tile}.ADC{adc} (Dual Tile) NCO Freq is {ncofreq} GHz.')
-        return ncofreq
-    
-    def set_dt_adc_nco_freq(self, tile, adc, ncofreq, DQ='DT'):
-        """
-        Docstring for set_dt_adc_nco_freq
-        
-        :param tile     (uint8): tile number
-        :param adc      (uint8): adc id - 0 or 1.
-        :param ncofreq  (float or str): nco frequency in GHz.
-        """
-        self.logger.debug(f'Set Tile{tile}.ADC{adc} NCO Freqnency to {ncofreq} GHz.')
-        obj = self._get_qt_obj(tile, 'nco_freq_iq', adc, DQ)
-        obj.setValue(float(ncofreq))
-
-    def get_dt_adc_nco_phase(self, tile, adc, DQ='DT'):
-        """
-        Docstring for get_dt_adc_nco_phase
-        
-        :param tile (uint8): tile number
-        :param adc  (uint8): adc id - 0 or 1.
-        """
-        obj = self._get_qt_obj(tile, 'nco_phase_iq', adc, DQ)
-        ncophase = obj.value()
-        self.logger.debug(f'Tile{tile}.ADC{adc} (Dual Tile) NCO Phase is {ncophase}.')
-        return ncophase
-
-    def set_dt_adc_nco_phase(self, tile, adc, ncophase, DQ='DT'):
-        """
-        Docstring for set_dt_adc_nco_phase
-        
-        :param tile (uint8): tile number
-        :param adc  (uint8): adc id - 0 or 1.
-        :param ncophase (float or str): nco phase.
-        """
-        self.logger.debug(f'Set Tile{tile}.ADC{adc} NCO Phase to {ncophase}.')
-        obj = self._get_qt_obj(tile, 'nco_phase_iq', adc, DQ)
-        obj.setValue(float(ncophase))
-
-    def get_dt_adc_coarse_freq(self, tile, adc, DQ='DT'):
-        """
-        Docstring for get_dt_adc_coarse_freq
-        
-        :param tile (uint8): tile number
-        :param adc  (uint8): adc id - 0 or 1.
-        """
-        obj = self._get_qt_obj(tile, 'coarse_freq', adc, DQ)
-        freq = obj.currentText()
-        self.logger.debug(f'Tile{tile}.ADC{adc} (Dual Tile) Coarse Freq is {freq}MHz.')
-        return freq
-
-    def set_dt_adc_coarse_freq(self, tile, adc, freq, DQ='DT'):
-        """
-        Docstring for set_dt_adc_coarse_freq
-        
-        :param tile (uint8): tile number
-        :param adc  (uint8): adc id - 0 or 1.
-        :param freq (str)  : coarse frequency in ??
-        """
-        self.logger.debug(f'Set Tile{tile}.ADC{adc} Coarse Frequency to {freq}.')
-        obj = self._get_qt_obj(tile, 'coarse_freq', adc, DQ)
-        obj.setCurrentText(str(freq))
-
-    def get_dt_adc_nyquist_zone(self, tile, adc, DQ='DT'):
-        """
-        Docstring for get_dt_adc_nyquist_zone
-        
-        :param tile (uint8): tile number
-        :param adc  (uint8): adc id - 0 or 1.
-        """
-        # get current stack page first
-        page = self.get_dt_adc_stack_page(tile, adc, DQ)
-        # we need to get the value based on the page
-        targets = []
-        if page == 0:
-            source = 'nyquist_zone_real'
-            targets.append('nyquist_zone_iq')
-            targets.append('nyquist_zone_iq_coarse')
-        elif page == 1:
-            source = 'nyquist_zone_iq'
-            targets.append('nyquist_zone_real')
-            targets.append('nyquist_zone_iq_coarse')
-        elif page == 2:
-            source = 'nyquist_zone_iq_coarse'
-            targets.append('nyquist_zone_real')
-            targets.append('nyquist_zone_iq')
-        obj = self._get_qt_obj(tile, source, adc, DQ)
-        nzone = obj.currentText()
-        self.logger.debug(f'Tile{tile}.ADC{adc} (Dual Tile) Nyquist Zone is {nzone}.')
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, adc, DQ)
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(nzone))
-        return nzone
-
-    def set_dt_adc_nyquist_zone(self, tile, adc, nzone, DQ='DT'):
-        """
-        Docstring for set_dt_adc_nyquist_zone
-        
-        :param tile (uint8): tile number
-        :param adc  (uint8): adc id - 0 or 1.
-        :param nzone (str): nyquist zone
-        """
-        self.logger.debug(f'Set Tile{tile}.ADC{adc} Nyquist Zone to {nzone}.')
-        if nzone not in ['Zone 1', 'Zone 2']:
-            self.logger.error(f'nzone({nzone}) is not supported.')
-            raise ValueError(f'nzone({nzone}) is not supported.')
-        targets = ['nyquist_zone_real',
-                   'nyquist_zone_iq',
-                   'nyquist_zone_iq_coarse']
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, adc, DQ)
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(nzone))
-
-    def get_dt_adc_cal_mode(self, tile, adc, DQ='DT'):
-        """
-        Docstring for get_dt_adc_cal_mode
-        
-        :param tile (uint8): tile number
-        :param adc  (uint8): adc id - 0 or 1.
-        """
-        # get current stack page first
-        page = self.get_dt_adc_stack_page(tile, adc, DQ)
-        # we need to get the value based on the page
-        targets = []
-        if page == 0:
-            source = 'cal_mode_real'
-            targets.append('cal_mode_iq')
-            targets.append('cal_mode_iq_coarse')
-        elif page == 1:
-            source = 'cal_mode_iq'
-            targets.append('cal_mode_real')
-            targets.append('cal_mode_iq_coarse')
-        elif page == 2:
-            source = 'cal_mode_iq_coarse'
-            targets.append('cal_mode_real')
-            targets.append('cal_mode_iq_coarse')
-        obj = self._get_qt_obj(tile, source, adc, DQ)
-        calmode = obj.currentText()
-        self.logger.debug(f'Tile{tile}.ADC{adc} (Dual Tile) Calibration Mode is {calmode}.')
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, adc, DQ)
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(calmode))
-        return calmode
-
-    def set_dt_adc_cal_mode(self, tile, adc, calmode, DQ='DT'):
-        """
-        Docstring for set_dt_adc_cal_mode
-        
-        :param tile (uint8): tile number
-        :param adc  (uint8): adc id - 0 or 1.
-        :param calmode (str): calibration mode.
-        """
-        self.logger.debug(f'Set Tile{tile}.ADC{adc} Calibration Mode to {calmode}.')
-        if calmode not in ['Mode 1', 'Mode 2']:
-            self.logger.error(f'calmode{calmode} is not supported.')
-            raise ValueError(f'calmode{calmode} is not supported.')
-        targets = ['cal_mode_real',
-                   'cal_mode_iq',
-                   'cal_mode_iq_coarse']
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, adc, DQ)
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(calmode))
-        
-    def get_dt_adc_stack_page(self, tile, adc, DQ='DT'):
-        """
-        Docstring for get_dt_adc_stack_page
-        
-        :param tile (uint8): tile number
-        :param adc  (uint8): adc id - 0 or 1.
-        """
-        obj = self._get_qt_obj(tile, 'stackedwidget', adc, DQ)
-        page = obj.currentIndex()
-        self.logger.debug(f'Tile{tile}.ADC{adc} (Dual Tile) stack page is {page}.')
-        return page
-
-    def set_dt_adc_stack_page(self, tile, adc, page, DQ='DT'):
-        """
-        Docstring for set_dt_adc_stack_page
-        
-        :param tile (uint8): tile number
-        :param adc  (uint8): adc id - 0 or 1.
-        :param page (uint8): page id - 0 or 1.
-        """
-        self.logger.debug(f'Set Tile{tile}.ADC{adc} (Dual Tile) stack page to {page}.')
-        obj = self._get_qt_obj(tile, 'stackedwidget', adc, DQ)
-        obj.setCurrentIndex(page)
+            self.tiles[224]['enable_mts'] = 'off'
+            self._set_check(w, False)
+            w.setEnabled(False)
 
     # -------------------------------------------------------------------
-    # DAC slice-level accessors (Dual Tile by default, DQ='QT' for Quad
-    # Tile -- mirrors the get_dt_adc_*/set_dt_adc_* structure above, but
-    # DAC's page-suffix convention is '_bypassed'/'_fine'/'_coarse' (not
-    # ADC's '_real'/'_iq'/'_iq_coarse') and several field names differ
-    # (analog_output not digital_output, inter_mode not dec_mode,
-    # decode_mode instead of cal_mode -- confirmed against rfdc_ui.py).
+    # slice rules (validate_digital_data.m, validate_analog_data.m,
+    # mixer_callback.m, mixertype_callback.m, dec_interp_opts.m,
+    # enable_adc_opt.m, enable_dac_opt.m, update_axis_clk.m,
+    # update_axis_clk_label.m, validate_tile_clocking.m)
     # -------------------------------------------------------------------
-    def get_dt_dac_status(self, tile, dac, DQ='DT'):
-        page = self.get_dt_dac_stack_page(tile, dac, DQ)
-        targets = []
-        if page == 0:
-            source = 'enable_bypassed'
-            targets = ['enable_fine', 'enable_coarse']
-        elif page == 1:
-            source = 'enable_fine'
-            targets = ['enable_bypassed', 'enable_coarse']
-        elif page == 2:
-            source = 'enable_coarse'
-            targets = ['enable_bypassed', 'enable_fine']
-        obj = self._get_qt_obj(tile, source, dac, DQ, kind='dac')
-        status = obj.isChecked()
-        self.logger.debug(f'Tile{tile}.DAC{dac} ({DQ}) status is {status}.')
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, dac, DQ, kind='dac')
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setChecked(status)
-        return self._convert_status(status)
+    @staticmethod
+    def _coerce(s, field, opts, prefer=None):
+        if opts and s.get(field) not in opts:
+            s[field] = prefer if prefer in opts else opts[0]
 
-    def set_dt_dac_status(self, tile, dac, status, DQ='DT'):
-        self.logger.debug(f'Set Tile{tile}.DAC{dac} ({DQ}) status to {status}.')
-        if status == 'on' or status == 'off':
-            status = self._convert_status(status)
-        for t in ['enable_bypassed', 'enable_fine', 'enable_coarse']:
-            try:
-                obj = self._get_qt_obj(tile, t, dac, DQ, kind='dac')
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setChecked(status)
+    def _spc_options(self, fs, factor, wmax, quad_iq):
+        w = list(range(1, (8 if self.gen < 2 else wmax) + 1))
+        if quad_iq:
+            w = w[1::2]
+        out = []
+        for x in w:
+            clk = fs / factor / x
+            if quad_iq:
+                clk = 2 * clk
+            if round(clk, 3) <= AXIS_CLK_MAX_MHZ:
+                out.append(str(x))
+        return out
 
-    def get_dt_dac_analog_output(self, tile, dac, DQ='DT'):
-        page = self.get_dt_dac_stack_page(tile, dac, DQ)
-        targets = []
-        if page == 0:
-            source = 'analog_output_bypassed'
-            targets = ['analog_output_fine', 'analog_output_coarse']
-        elif page == 1:
-            source = 'analog_output_fine'
-            targets = ['analog_output_bypassed', 'analog_output_coarse']
-        elif page == 2:
-            source = 'analog_output_coarse'
-            targets = ['analog_output_bypassed', 'analog_output_fine']
-        obj = self._get_qt_obj(tile, source, dac, DQ, kind='dac')
-        val = obj.currentText()
-        self.logger.debug(f'Tile{tile}.DAC{dac} ({DQ}) analog output is {val}.')
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, dac, DQ, kind='dac')
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(val))
-        return val
+    def apply_rules(self, tile):
+        kind = self._kind(tile)
+        DQ = self.arch[kind]
+        fs = self._fs(tile)
+        for a in range(NSLICES[DQ]):
+            key = (kind, tile, DQ, a)
+            if kind == 'adc':
+                self._adc_slice_rules(key, fs)
+            else:
+                self._dac_slice_rules(key, fs)
+        self._tile_axis(tile)
 
-    def set_dt_dac_analog_output(self, tile, dac, val, DQ='DT'):
-        self.logger.debug(f'Set Tile{tile}.DAC{dac} ({DQ}) analog output to {val}.')
-        for t in ['analog_output_bypassed', 'analog_output_fine', 'analog_output_coarse']:
-            try:
-                obj = self._get_qt_obj(tile, t, dac, DQ, kind='dac')
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(val))
-
-    def get_dt_dac_inter_mode_text(self, tile, dac, DQ='DT'):
-        page = self.get_dt_dac_stack_page(tile, dac, DQ)
-        targets = []
-        if page == 0:
-            source = 'inter_mode_bypassed'
-            targets = ['inter_mode_fine', 'inter_mode_coarse']
-        elif page == 1:
-            source = 'inter_mode_fine'
-            targets = ['inter_mode_bypassed', 'inter_mode_coarse']
-        elif page == 2:
-            source = 'inter_mode_coarse'
-            targets = ['inter_mode_bypassed', 'inter_mode_fine']
-        obj = self._get_qt_obj(tile, source, dac, DQ, kind='dac')
-        val = obj.currentText()
-        self.logger.debug(f'Tile{tile}.DAC{dac} ({DQ}) inter mode is {val}.')
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, dac, DQ, kind='dac')
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(val))
-        return val
-
-    def set_dt_dac_inter_mode(self, tile, dac, val, DQ='DT'):
-        self.logger.debug(f'Set Tile{tile}.DAC{dac} ({DQ}) inter mode to {val}.')
-        for t in ['inter_mode_bypassed', 'inter_mode_fine', 'inter_mode_coarse']:
-            try:
-                obj = self._get_qt_obj(tile, t, dac, DQ, kind='dac')
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(val))
-
-    def get_dt_dac_samples_per_cycle(self, tile, dac, DQ='DT'):
-        page = self.get_dt_dac_stack_page(tile, dac, DQ)
-        targets = []
-        if page == 0:
-            source = 'sample_per_cycle_bypassed'
-            targets = ['sample_per_cycle_fine', 'sample_per_cycle_coarse']
-        elif page == 1:
-            source = 'sample_per_cycle_fine'
-            targets = ['sample_per_cycle_bypassed', 'sample_per_cycle_coarse']
-        elif page == 2:
-            source = 'sample_per_cycle_coarse'
-            targets = ['sample_per_cycle_bypassed', 'sample_per_cycle_fine']
-        obj = self._get_qt_obj(tile, source, dac, DQ, kind='dac')
-        spc = obj.currentText()
-        self.logger.debug(f'Tile{tile}.DAC{dac} ({DQ}) samples per cycle is {spc}.')
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, dac, DQ, kind='dac')
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(spc))
-        return int(spc)
-
-    def set_dt_dac_samples_per_cycle(self, tile, dac, spc, DQ='DT'):
-        self.logger.debug(f'Set Tile{tile}.DAC{dac} ({DQ}) samples per cycle to {spc}.')
-        for t in ['sample_per_cycle_bypassed', 'sample_per_cycle_fine', 'sample_per_cycle_coarse']:
-            try:
-                obj = self._get_qt_obj(tile, t, dac, DQ, kind='dac')
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(spc))
-
-    def get_dt_dac_req_axis_clk(self, tile, dac, DQ='DT'):
-        page = self.get_dt_dac_stack_page(tile, dac, DQ)
-        targets = []
-        if page == 0:
-            source = 'req_axis_clk_bypassed'
-            targets = ['req_axis_clk_fine', 'req_axis_clk_coarse']
-        elif page == 1:
-            source = 'req_axis_clk_fine'
-            targets = ['req_axis_clk_bypassed', 'req_axis_clk_coarse']
-        elif page == 2:
-            source = 'req_axis_clk_coarse'
-            targets = ['req_axis_clk_bypassed', 'req_axis_clk_fine']
-        obj = self._get_qt_obj(tile, source, dac, DQ, kind='dac')
-        value = obj.value()
-        self.logger.debug(f'Tile{tile}.DAC{dac} ({DQ}) required axis clock is {value}MHz.')
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, dac, DQ, kind='dac')
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setValue(value)
-        return value
-
-    def set_dt_dac_req_axis_clk(self, tile, dac, freq, DQ='DT'):
-        self.logger.debug(f'Set Tile{tile}.DAC{dac} ({DQ}) required axi4 stream clock to {freq} MHz.')
-        for t in ['req_axis_clk_bypassed', 'req_axis_clk_fine', 'req_axis_clk_coarse']:
-            try:
-                obj = self._get_qt_obj(tile, t, dac, DQ, kind='dac')
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setValue(float(freq))
-
-    def get_dt_dac_mixer_type(self, tile, dac, DQ='DT'):
-        page = self.get_dt_dac_stack_page(tile, dac, DQ)
-        targets = []
-        if page == 0:
-            source = 'mixer_type_bypassed'
-        elif page == 1:
-            source = 'mixer_type_fine'
-            targets = ['mixer_type_coarse']
-        elif page == 2:
-            source = 'mixer_type_coarse'
-            targets = ['mixer_type_fine']
-        obj = self._get_qt_obj(tile, source, dac, DQ, kind='dac')
-        mixertype = obj.currentText()
-        self.logger.debug(f'Tile{tile}.DAC{dac} ({DQ}) Mixer Type is {mixertype}.')
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, dac, DQ, kind='dac')
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(mixertype))
-        return mixertype
-
-    def set_dt_dac_mixer_type(self, tile, dac, mixertype, DQ='DT'):
-        self.logger.debug(f'Set Tile{tile}.DAC{dac} ({DQ}) Mixer Type to {mixertype}.')
-        if mixertype == 'Bypassed':
-            targets = ['mixer_type_bypassed']
-        elif mixertype == 'Fine' or mixertype == 'Coarse':
-            targets = ['mixer_type_fine', 'mixer_type_coarse']
+    def _adc_slice_rules(self, key, fs):
+        kind, tile, DQ, a = key
+        s = self.slices[key]
+        o = {}
+        forced = False
+        if a % 2 == 1:
+            e = self.slices[(kind, tile, DQ, a - 1)]
+            forced = (e['enable'] == 'on' and e['digital_output'] == 'I/Q'
+                      and e['mixer_mode'] == 'I/Q -> I/Q')
+        if forced:
+            s.update(enable='on', digital_output='I/Q', mixer_type='Off', mixer_mode='I/Q -> I/Q')
+            for f in ('dec_mode', 'sample_per_cycle', 'nyquist_zone', 'cal_mode'):
+                s[f] = e[f]
+        o['digital_output'] = ['I/Q'] if forced else ['Real', 'I/Q']
+        self._coerce(s, 'digital_output', o['digital_output'])
+        if s['digital_output'] == 'Real':
+            o['mixer_type'], o['mixer_mode'] = ['Bypassed'], ['Real -> Real']
+        elif forced:
+            o['mixer_type'], o['mixer_mode'] = ['Off'], ['I/Q -> I/Q']
+        elif a % 2 == 0:
+            o['mixer_type'], o['mixer_mode'] = ['Fine', 'Coarse'], ['Real -> I/Q', 'I/Q -> I/Q']
         else:
-            self.logger.error(f'mixertype({mixertype}) is not supported.')
-            raise ValueError(f'mixertype({mixertype}) is not supported.')
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, dac, DQ, kind='dac')
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(mixertype))
+            o['mixer_type'], o['mixer_mode'] = ['Fine', 'Coarse'], ['Real -> I/Q']
+        self._coerce(s, 'mixer_type', o['mixer_type'])
+        self._coerce(s, 'mixer_mode', o['mixer_mode'])
+        if s['mixer_type'] == 'Bypassed':
+            s.update(nco_freq='0', nco_phase='0', coarse_freq='0')
+            o['coarse_freq'] = ['0']
+        elif s['mixer_type'] == 'Coarse':
+            s.update(nco_freq='0', nco_phase='0')
+            o['coarse_freq'] = ['Fs/2', 'Fs/4', '-Fs/4']
+            self._coerce(s, 'coarse_freq', o['coarse_freq'])
+        else:   # Fine / Off: coarse freq not used, keep the value
+            o['coarse_freq'] = [s['coarse_freq']]
+        o['dec_mode'] = DEC_INTERP_OPTS[self.gen]
+        self._coerce(s, 'dec_mode', o['dec_mode'])
+        factor = parse_factor(s['dec_mode'])
+        quad_iq = (DQ == 'QT' and s['digital_output'] == 'I/Q')
+        o['sample_per_cycle'] = self._spc_options(fs, factor, 12, quad_iq)
+        self._coerce(s, 'sample_per_cycle', o['sample_per_cycle'])
+        clk = fs / factor / to_float(s['sample_per_cycle'], 1)
+        if quad_iq:
+            clk = 2 * clk
+        s['req_axis_clk'] = fmt_num(clk)
+        self.opts[key] = o
+        self.forced[key] = forced
 
-    def get_dt_dac_mixer_mode(self, tile, dac, DQ='DT'):
-        page = self.get_dt_dac_stack_page(tile, dac, DQ)
-        targets = []
-        if page == 0:
-            source = 'mixer_mode_bypassed'
-        elif page == 1:
-            source = 'mixer_mode_fine'
-            targets = ['mixer_mode_bypassed', 'mixer_mode_coarse']
-        elif page == 2:
-            source = 'mixer_mode_coarse'
-            targets = ['mixer_mode_bypassed', 'mixer_mode_fine']
-        obj = self._get_qt_obj(tile, source, dac, DQ, kind='dac')
-        mixermode = obj.currentText()
-        self.logger.debug(f'Tile{tile}.DAC{dac} ({DQ}) Mixer Mode is {mixermode}.')
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, dac, DQ, kind='dac')
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(mixermode))
-        return mixermode
-
-    def set_dt_dac_mixer_mode(self, tile, dac, mixermode, DQ='DT'):
-        self.logger.debug(f'Set Tile{tile}.DAC{dac} ({DQ}) Mixer Mode to {mixermode}.')
-        if mixermode == 'Real -> Real':
-            targets = ['mixer_mode_bypassed', 'mixer_mode_fine', 'mixer_mode_coarse']
-        elif mixermode == 'I/Q -> Real':
-            targets = ['mixer_mode_fine', 'mixer_mode_coarse']
+    def _dac_slice_rules(self, key, fs):
+        kind, tile, DQ, a = key
+        s = self.slices[key]
+        o = {}
+        forced = False
+        if a % 2 == 1:
+            e = self.slices[(kind, tile, DQ, a - 1)]
+            forced = (e['enable'] == 'on' and e['analog_output'] == 'I/Q'
+                      and e['mixer_mode'] == 'I/Q -> I/Q')
+        if forced:
+            s.update(enable='on', analog_output='I/Q', mixer_type='Off', mixer_mode='I/Q -> I/Q')
+            for f in ('inter_mode', 'sample_per_cycle', 'nyquist_zone', 'decode_mode'):
+                s[f] = e[f]
+            o['analog_output'] = ['I/Q']
+        elif a % 2 == 0:
+            o['analog_output'] = ['Real', 'I/Q']
         else:
-            self.logger.error(f'mixermode({mixermode}) is not supported.')
-            raise ValueError(f'mixermode({mixermode}) is not supported.')
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, dac, DQ, kind='dac')
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(mixermode))
+            o['analog_output'] = ['Real']      # odd slice can only be I/Q through its even neighbour
+        self._coerce(s, 'analog_output', o['analog_output'])
+        if forced:
+            o['mixer_type'], o['mixer_mode'] = ['Off'], ['I/Q -> I/Q']
+        else:
+            o['mixer_type'] = ['Fine', 'Coarse']
+            # the DAC has no 'Bypassed' mixer in the MATLAB mask; the backend maps
+            # 'Bypassed' to the same value as 'Coarse' on gen3
+            self._coerce(s, 'mixer_type', o['mixer_type'], prefer='Coarse')
+            if s['analog_output'] == 'I/Q':
+                o['mixer_mode'] = ['I/Q -> I/Q']
+            elif s['mixer_type'] == 'Fine':
+                o['mixer_mode'] = ['I/Q -> Real']
+            else:
+                o['mixer_mode'] = ['Real -> Real', 'I/Q -> Real']
+        self._coerce(s, 'mixer_type', o['mixer_type'])
+        self._coerce(s, 'mixer_mode', o['mixer_mode'])
+        if s['mixer_type'] == 'Coarse':
+            s.update(nco_freq='0', nco_phase='0')
+            if s['mixer_mode'] == 'I/Q -> Real':
+                o['coarse_freq'] = ['Fs/2', 'Fs/4', '-Fs/4']
+            elif s['mixer_mode'] == 'I/Q -> I/Q':
+                o['coarse_freq'] = ['Fs/2', 'Fs/4', '-Fs/4', '0']
+            else:
+                o['coarse_freq'] = ['0']
+            self._coerce(s, 'coarse_freq', o['coarse_freq'])
+        else:
+            o['coarse_freq'] = [s['coarse_freq']]
+        o['inter_mode'] = list(DEC_INTERP_OPTS[self.gen])
+        if s['mixer_mode'] != 'Real -> Real':
+            o['inter_mode'] = o['inter_mode'][1:]
+        self._coerce(s, 'inter_mode', o['inter_mode'])
+        factor = parse_factor(s['inter_mode'])
+        quad_iq = (DQ == 'QT' and s['analog_output'] == 'I/Q')
+        o['sample_per_cycle'] = self._spc_options(fs, factor, 16, quad_iq)
+        self._coerce(s, 'sample_per_cycle', o['sample_per_cycle'])
+        clk = fs / factor / to_float(s['sample_per_cycle'], 1)
+        if s['analog_output'] == 'I/Q' or s['mixer_mode'] == 'I/Q -> Real':
+            clk = 2 * clk
+        s['req_axis_clk'] = fmt_num(clk)
+        self.opts[key] = o
+        self.forced[key] = forced
 
-    def get_dt_dac_nco_freq(self, tile, dac, DQ='DT'):
-        obj = self._get_qt_obj(tile, 'nco_freq', dac, DQ, kind='dac')
-        ncofreq = obj.value()
-        self.logger.debug(f'Tile{tile}.DAC{dac} ({DQ}) NCO Freq is {ncofreq} GHz.')
-        return ncofreq
-
-    def set_dt_dac_nco_freq(self, tile, dac, ncofreq, DQ='DT'):
-        self.logger.debug(f'Set Tile{tile}.DAC{dac} ({DQ}) NCO Freqency to {ncofreq} GHz.')
-        obj = self._get_qt_obj(tile, 'nco_freq', dac, DQ, kind='dac')
-        obj.setValue(float(ncofreq))
-
-    def get_dt_dac_nco_phase(self, tile, dac, DQ='DT'):
-        obj = self._get_qt_obj(tile, 'nco_phase', dac, DQ, kind='dac')
-        ncophase = obj.value()
-        self.logger.debug(f'Tile{tile}.DAC{dac} ({DQ}) NCO Phase is {ncophase}.')
-        return ncophase
-
-    def set_dt_dac_nco_phase(self, tile, dac, ncophase, DQ='DT'):
-        self.logger.debug(f'Set Tile{tile}.DAC{dac} ({DQ}) NCO Phase to {ncophase}.')
-        obj = self._get_qt_obj(tile, 'nco_phase', dac, DQ, kind='dac')
-        obj.setValue(float(ncophase))
-
-    def get_dt_dac_coarse_freq(self, tile, dac, DQ='DT'):
-        # Unlike ADC's bare (unsuffixed) coarse_freq widget, DAC's
-        # coarse_freq is page-suffixed with only '_fine'/'_coarse' variants
-        # -- there is no '_bypassed' widget (the concept doesn't apply when
-        # the mixer is bypassed), confirmed against rfdc_ui.py. Page 0
-        # falls back to reading/syncing the 'fine' widget.
-        page = self.get_dt_dac_stack_page(tile, dac, DQ)
-        source = 'coarse_freq_coarse' if page == 2 else 'coarse_freq_fine'
-        target = 'coarse_freq_fine' if page == 2 else 'coarse_freq_coarse'
-        obj = self._get_qt_obj(tile, source, dac, DQ, kind='dac')
-        freq = obj.currentText()
-        self.logger.debug(f'Tile{tile}.DAC{dac} ({DQ}) Coarse Freq is {freq}MHz.')
-        obj2 = self._get_qt_obj(tile, target, dac, DQ, kind='dac')
-        obj2.setCurrentText(str(freq))
-        return freq
-
-    def set_dt_dac_coarse_freq(self, tile, dac, freq, DQ='DT'):
-        self.logger.debug(f'Set Tile{tile}.DAC{dac} ({DQ}) Coarse Frequency to {freq}.')
-        for t in ['coarse_freq_fine', 'coarse_freq_coarse']:
-            try:
-                obj = self._get_qt_obj(tile, t, dac, DQ, kind='dac')
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(freq))
-
-    def get_dt_dac_nyquist_zone(self, tile, dac, DQ='DT'):
-        page = self.get_dt_dac_stack_page(tile, dac, DQ)
-        targets = []
-        if page == 0:
-            source = 'nyquist_zone_bypassed'
-            targets = ['nyquist_zone_fine', 'nyquist_zone_coarse']
-        elif page == 1:
-            source = 'nyquist_zone_fine'
-            targets = ['nyquist_zone_bypassed', 'nyquist_zone_coarse']
-        elif page == 2:
-            source = 'nyquist_zone_coarse'
-            targets = ['nyquist_zone_bypassed', 'nyquist_zone_fine']
-        obj = self._get_qt_obj(tile, source, dac, DQ, kind='dac')
-        nzone = obj.currentText()
-        self.logger.debug(f'Tile{tile}.DAC{dac} ({DQ}) Nyquist Zone is {nzone}.')
-        for t in targets:
-            try:
-                obj = self._get_qt_obj(tile, t, dac, DQ, kind='dac')
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(nzone))
-        return nzone
-
-    def set_dt_dac_nyquist_zone(self, tile, dac, nzone, DQ='DT'):
-        self.logger.debug(f'Set Tile{tile}.DAC{dac} ({DQ}) Nyquist Zone to {nzone}.')
-        for t in ['nyquist_zone_bypassed', 'nyquist_zone_fine', 'nyquist_zone_coarse']:
-            try:
-                obj = self._get_qt_obj(tile, t, dac, DQ, kind='dac')
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(nzone))
-
-    def get_dt_dac_decode_mode(self, tile, dac, DQ='DT'):
-        # decode_mode has no '_fine' page widget in rfdc_ui.py (only
-        # '_bypassed'/'_coarse' exist) -- page 1 (Fine mixer) falls back to
-        # reading/syncing the 'coarse' widget, the nearest still-existing
-        # IQ-mode variant.
-        page = self.get_dt_dac_stack_page(tile, dac, DQ)
-        source = 'decode_mode_bypassed' if page == 0 else 'decode_mode_coarse'
-        target = 'decode_mode_coarse' if page == 0 else 'decode_mode_bypassed'
-        obj = self._get_qt_obj(tile, source, dac, DQ, kind='dac')
-        decmode = obj.currentText()
-        self.logger.debug(f'Tile{tile}.DAC{dac} ({DQ}) Decode Mode is {decmode}.')
-        obj2 = self._get_qt_obj(tile, target, dac, DQ, kind='dac')
-        obj2.setCurrentText(str(decmode))
-        return decmode
-
-    def set_dt_dac_decode_mode(self, tile, dac, decmode, DQ='DT'):
-        self.logger.debug(f'Set Tile{tile}.DAC{dac} ({DQ}) Decode Mode to {decmode}.')
-        for t in ['decode_mode_bypassed', 'decode_mode_coarse']:
-            try:
-                obj = self._get_qt_obj(tile, t, dac, DQ, kind='dac')
-            except AttributeError:
-                self.logger.debug(f'Tile{tile} slice widget for sync target is missing (known rfdc_ui.py gap) -- skipping.')
-                continue
-            obj.setCurrentText(str(decmode))
-
-    def get_dt_dac_stack_page(self, tile, dac, DQ='DT'):
-        obj = self._get_qt_obj(tile, 'stackedwidget', dac, DQ, kind='dac')
-        page = obj.currentIndex()
-        self.logger.debug(f'Tile{tile}.DAC{dac} ({DQ}) stack page is {page}.')
-        return page
-
-    def set_dt_dac_stack_page(self, tile, dac, page, DQ='DT'):
-        self.logger.debug(f'Set Tile{tile}.DAC{dac} ({DQ}) stack page to {page}.')
-        obj = self._get_qt_obj(tile, 'stackedwidget', dac, DQ, kind='dac')
-        obj.setCurrentIndex(page)
+    def _tile_axis(self, tile):
+        """validate_tile_clocking.m: only enabled slices of the device arch"""
+        kind = self._kind(tile)
+        DQ = self.arch[kind]
+        clks = [to_float(self.slices[(kind, tile, DQ, a)]['req_axis_clk'])
+                for a in range(NSLICES[DQ]) if self.slices[(kind, tile, DQ, a)]['enable'] == 'on']
+        if clks:
+            if all(c == clks[0] for c in clks):
+                self.tiles[tile]['axi_stream_clk'] = fmt_num(clks[0])
+            else:
+                self.tiles[tile]['axi_stream_clk'] = INVALID_AXIS
 
     # -------------------------------------------------------------------
-    # Signal functions
+    # rendering state -> widgets
     # -------------------------------------------------------------------
-    # function for ADC enabled checkbox
-    def ADCEnabled_Toggled(self, tile, adc, DQ='DT'):
-        status = self.get_dt_adc_status(tile, adc, DQ)
-        self.logger.info('-------------------------------------------------')
-        self.logger.info(f'Tile{tile}.ADC{adc} ({DQ}) status is {status}.')
-        self.logger.info('-------------------------------------------------')
-        self.set_dt_adc_status(tile, adc, status, DQ)
+    def _page_of(self, kind, s):
+        if kind == 'adc':
+            if s['digital_output'] == 'Real' or s['mixer_type'] == 'Bypassed':
+                return 'real'
+            return 'iq_coarse' if s['mixer_type'] == 'Coarse' else 'iq'
+        # the DAC mixer is never bypassed in the MATLAB mask
+        return 'coarse' if s['mixer_type'] == 'Coarse' else 'fine'
 
-    # get the adc clk out list
-    def _cal_adc_clkout(self, samplerate):
-        clkout = []
-        for i in range(4):
-            clkout.append(samplerate/2**(i+3))
-        return clkout
-    # function for ADC sample rate change
+    def render_slice(self, key):
+        kind, tile, DQ, a = key
+        s = self.slices[key]
+        o = self.opts.get(key)
+        active = (DQ == self.arch[kind])
+        forced = self.forced.get(key, False)
+        for field in FIELD_SUFFIXES[kind]:
+            for w in self._slice_ws(*key, field):
+                if isinstance(w, QCheckBox):
+                    self._set_check(w, s.get('enable') == 'on')
+                elif isinstance(w, QComboBox):
+                    self._set_combo(w, s.get(field, ''), o.get(field) if (active and o) else None)
+                elif isinstance(w, QDoubleSpinBox):
+                    self._set_spin(w, s.get(field, 0))
+                if active:
+                    if field == 'req_axis_clk':
+                        w.setEnabled(False)
+                    elif forced:
+                        w.setEnabled(False)
+                    elif field == 'enable':
+                        w.setEnabled(True)
+                    elif s.get('enable') != 'on':
+                        w.setEnabled(False)
+                    elif field in ('nco_freq', 'nco_phase'):
+                        w.setEnabled(s['mixer_type'] == 'Fine')
+                    else:
+                        w.setEnabled(True)
+        stack = getattr(self.ui, f't{tile}_{DQ}_{kind}{a}_stackedwidget', None)
+        frame = getattr(self.ui, f't{tile}_{DQ}_{kind}{a}_frame_{self._page_of(kind, s)}', None)
+        if stack is not None and frame is not None:
+            idx = stack.indexOf(frame.parentWidget())
+            if idx >= 0:
+                stack.setCurrentIndex(idx)
 
-    def ADCSampleRate_ValueChanged(self, tile):
-        # sample rate affects clk_out and every enabled slice's req_axis_clk,
-        # across both DT (2 slices) and QT (4 slices) architectures.
-        self.logger.info('-------------------------------------------------')
-        self.logger.info(f'ADC Sample Rate changed in Tile: {tile}')
-        self.logger.info('-------------------------------------------------')
-        samplerate = self.get_adc_sample_rate(tile)
-        # change value for clk_out
-        clkout = self._cal_adc_clkout(samplerate)
-        self.set_adc_clkout_list(tile, clkout)
-        req_clk = []
-        for DQ, nslice in (('DT', 2), ('QT', 4)):
-            for adc in range(nslice):
-                decmode = self.get_dt_adc_dec_mode(tile, adc, DQ)
-                spc = self.get_dt_adc_samples_per_cycle(tile, adc, DQ)
-                tmp = samplerate/decmode/spc
-                req_clk.append(tmp)
-                self.set_dt_adc_req_axis_clk(tile, adc, tmp, DQ)
-        # check if every enabled slice's required axis clock still agrees
-        if len(set(req_clk)) <= 1:
-            self.set_adc_req_axis_clk(tile, req_clk[0] if req_clk else 0)
-        else:
-            self.set_adc_req_axis_clk(tile, '*Axis Clocking Invalid*')
+    def render_tile(self, tile):
+        kind = self._kind(tile)
+        t = self.tiles[tile]
+        self._set_check(getattr(self.ui, f'Tile{tile}_enable'), t['enable'] == 'on')
+        self._set_check(self._tile_w(tile, 'enable_mts'), t['enable_mts'] == 'on')
+        self._set_check(self._tile_w(tile, 'enable_pll'), t['enable_pll'] == 'on')
+        self._set_spin(self._tile_w(tile, 'sample_rate'), t['sample_rate'])
+        self._set_combo(self._tile_w(tile, 'clk_out'), t['clk_out'], self.clkout_opts.get(tile) or None)
+        self._set_combo(self._tile_w(tile, 'ref_clk'), t['ref_clk'], self.ref_opts.get(tile) or None)
+        axi = t['axi_stream_clk']
+        self._set_spin(self._tile_w(tile, 'axi_stream_clk'), 0 if axi == INVALID_AXIS else axi)
+        hk, sk = ('has_adc_clk', 'adc_clk_src') if kind == 'adc' else ('has_dac_clk', 'dac_clk_src')
+        self._set_check(self._tile_w(tile, hk), t[hk] == 'on')
+        self._set_combo(self._tile_w(tile, sk), t[sk])
+        self._set_combo(self._tile_w(tile, 'clk_dist'), t['clk_dist'])
+        if kind == 'dac':
+            self._set_spin(self._tile_w(tile, 'output_power'), t['output_power'])
+        for DQ in ('DT', 'QT'):
+            for a in range(NSLICES[DQ]):
+                self.render_slice((kind, tile, DQ, a))
 
-    # function for ADC digital output value change
-    def ADCDigitalOutput_ValueChanged(self, tile, adc, DQ='DT'):
-        self.logger.info('-------------------------------------------------')
-        self.logger.info(f'ADC Digital Output changed in Tile: {tile}, ADC: {adc} ({DQ})')
-        self.logger.info('-------------------------------------------------')
-        digiout = self.get_dt_adc_digital_output(tile, adc, DQ)
-        if digiout == 'Real':
-            self.set_dt_adc_stack_page(tile, adc, 0, DQ)
-        elif digiout == 'I/Q':
-            self.set_dt_adc_stack_page(tile, adc, 1, DQ)
-            mixertype = self.get_dt_adc_mixer_type(tile, adc, DQ)
-            if mixertype == 'Coarse':
-                self.set_dt_adc_stack_page(tile, adc, 2, DQ)
-
-    # function for ADC DEC mode and samples per AXI4-Stream Cycle value change
-    def ADCDecModeSamplesPerAXIS_ValueChanged(self, tile, adc, DQ='DT'):
-        self.logger.info('-------------------------------------------------')
-        self.logger.info(f'ADC Dec Mode or Samples Per AXI-Stream changed in Tile: {tile}, ADC: {adc} ({DQ})')
-        self.logger.info('-------------------------------------------------')
-        samplerate = self.get_adc_sample_rate(tile)
-        decmode = self.get_dt_adc_dec_mode(tile, adc, DQ)
-        spc = self.get_dt_adc_samples_per_cycle(tile, adc, DQ)
-        req_clk = samplerate/decmode/spc
-        self.set_dt_adc_req_axis_clk(tile, adc, req_clk, DQ)
-        req_axis_clk = []
-        for DQ2, nslice in (('DT', 2), ('QT', 4)):
-            for a in range(nslice):
-                req_axis_clk.append(self.get_dt_adc_req_axis_clk(tile, a, DQ2))
-        if len(set(req_axis_clk)) <= 1:
-            self.set_adc_req_axis_clk(tile, req_axis_clk[0] if req_axis_clk else 0)
-        else:
-            self.set_adc_req_axis_clk(tile, '*Axis Clocking Invalid*')
-
-    # function for ADC Mixer type
-    def ADCMixerType_ValueChanged(self, tile, adc, DQ='DT'):
-        self.logger.info('-------------------------------------------------')
-        self.logger.info(f'ADC Mixer Type changed in Tile: {tile}, ADC: {adc} ({DQ})')
-        self.logger.info('-------------------------------------------------')
-        mixermode = self.get_dt_adc_mixer_type(tile, adc, DQ)
-        if mixermode == 'Fine':
-            self.set_dt_adc_stack_page(tile, adc, 1, DQ)
-        elif mixermode == 'Coarse':
-            self.set_dt_adc_stack_page(tile, adc, 2, DQ)
+    def refresh_tile(self, tile):
+        self.apply_rules(tile)
+        self.render_tile(tile)
 
     # -------------------------------------------------------------------
-    # DAC signal functions -- mirrors the ADC ones above.
+    # load / collect
     # -------------------------------------------------------------------
-    def DACEnabled_Toggled(self, tile, dac, DQ='DT'):
-        status = self.get_dt_dac_status(tile, dac, DQ)
-        self.logger.info('-------------------------------------------------')
-        self.logger.info(f'Tile{tile}.DAC{dac} ({DQ}) status is {status}.')
-        self.logger.info('-------------------------------------------------')
-        self.set_dt_dac_status(tile, dac, status, DQ)
+    def load_config(self):
+        self.logger.info(f'Loading config from {self.target_config}...')
+        with open(self.target_config, 'r', encoding='utf-8') as f:
+            config = json.load(f)
+        self.params = {k: v for k, v in config['parameters'].items()}
+        p = self.params
+        for tile in ADC_TILES + DAC_TILES:
+            keys = ADC_TILE_KEYS if tile in ADC_TILES else DAC_TILE_KEYS
+            t = {k: str(p.get(f't{tile}_{k}', '')) for k in keys}
+            t['enable'] = str(p.get(f'Tile{tile}_enable', 'off'))
+            if 'output_power' in t:
+                t['output_power'] = str(int(round(to_float(t['output_power']))))
+            self.tiles[tile] = t
+        for key in self._all_slice_keys():
+            kind, tile, DQ, a = key
+            prefix = f't{tile}_{DQ}_{kind}{a}_'
+            self.slices[key] = {k[len(prefix):]: str(v) for k, v in p.items() if k.startswith(prefix)}
+        for tile in ADC_TILES + DAC_TILES:
+            self.update_pll(tile, initial=True)
+            self.update_clkout(tile, initial=True)
+            self.apply_rules(tile)
+        self.enable_mts_opt()
+        for tile in ADC_TILES + DAC_TILES:
+            self.render_tile(tile)
 
-    def DACSampleRate_ValueChanged(self, tile):
-        self.logger.info('-------------------------------------------------')
-        self.logger.info(f'DAC Sample Rate changed in Tile: {tile}')
-        self.logger.info('-------------------------------------------------')
-        samplerate = self.get_adc_sample_rate(tile)
-        clkout = self._cal_adc_clkout(samplerate)
-        self.set_adc_clkout_list(tile, clkout)
-        req_clk = []
-        for DQ, nslice in (('DT', 2), ('QT', 4)):
-            for dac in range(nslice):
-                intermode = self.get_dt_dac_inter_mode_text(tile, dac, DQ)
-                spc = self.get_dt_dac_samples_per_cycle(tile, dac, DQ)
-                tmp = samplerate/int(intermode)/spc
-                req_clk.append(tmp)
-                self.set_dt_dac_req_axis_clk(tile, dac, tmp, DQ)
-        if len(set(req_clk)) <= 1:
-            self.set_adc_req_axis_clk(tile, req_clk[0] if req_clk else 0)
-        else:
-            self.set_adc_req_axis_clk(tile, '*Axis Clocking Invalid*')
+    def validate(self):
+        """checks from rfdc_mask.m / update_rfdc_clocking.m / update_pll.m"""
+        errors = []
+        if not any(self.tiles[t]['enable'] == 'on' for t in ADC_TILES + DAC_TILES):
+            errors.append('At least one ADC or DAC tile must be enabled')
+        fs_min, fs_max = self._adc_fs_limits()
+        for tile in ADC_TILES + DAC_TILES:
+            t = self.tiles[tile]
+            if t['enable'] != 'on':
+                continue
+            kind = self._kind(tile)
+            DQ = self.arch[kind]
+            keys = [(kind, tile, DQ, a) for a in range(NSLICES[DQ])]
+            enabled = [k for k in keys if self.slices[k]['enable'] == 'on']
+            if not enabled:
+                errors.append(f'Tile{tile}: at least one {kind.upper()} slice must be enabled on each enabled {kind.upper()} tile')
+            fs = self._fs(tile)
+            if kind == 'adc':
+                if fs > fs_max:
+                    errors.append(f'Tile{tile}: maximum sample rate for this ADC is {fmt_num(fs_max)} Msps')
+                elif fs < fs_min:
+                    errors.append(f'Tile{tile}: minimum sample rate for this ADC is {fmt_num(fs_min)} Msps')
+            elif fs <= 0:
+                errors.append(f'Tile{tile}: invalid sample rate')
+            if t['enable_pll'] == 'on' and not self.ref_opts.get(tile):
+                errors.append(f'Tile{tile}: RFPLL parameters could not be resolved to determine a valid ref. clock freq.')
+            for k in enabled:
+                if not self.opts[k]['sample_per_cycle']:
+                    errors.append(f'Tile{tile} slice {k[3]}: no samples per cycle setting gives an AXI4-Stream clock <= {fmt_num(AXIS_CLK_MAX_MHZ)} MHz')
+            if t['axi_stream_clk'] == INVALID_AXIS:
+                errors.append(f'Tile{tile}: required AXI4-Stream clock differs between enabled slices ({INVALID_AXIS})')
+        for tiles, ref in ((ADC_TILES, 224), (DAC_TILES, 228)):
+            if any(self.tiles[t]['enable'] == 'on' and self.tiles[t]['enable_mts'] == 'on' for t in tiles):
+                if not (self.tiles[ref]['enable'] == 'on' and self.tiles[ref]['enable_mts'] == 'on'):
+                    errors.append(f'Tile {ref} must be enabled with Multi-Tile Synchronization on when using MTS on '
+                                  f'{"ADC" if ref == 224 else "DAC"} tiles')
+        return errors
 
-    def DACAnalogOutput_ValueChanged(self, tile, dac, DQ='DT'):
-        self.logger.info('-------------------------------------------------')
-        self.logger.info(f'DAC Analog Output changed in Tile: {tile}, DAC: {dac} ({DQ})')
-        self.logger.info('-------------------------------------------------')
-        analogout = self.get_dt_dac_analog_output(tile, dac, DQ)
-        if analogout == 'Real':
-            self.set_dt_dac_stack_page(tile, dac, 0, DQ)
-        elif analogout == 'I/Q':
-            self.set_dt_dac_stack_page(tile, dac, 1, DQ)
-            mixertype = self.get_dt_dac_mixer_type(tile, dac, DQ)
-            if mixertype == 'Coarse':
-                self.set_dt_dac_stack_page(tile, dac, 2, DQ)
-
-    def DACInterModeSamplesPerAXIS_ValueChanged(self, tile, dac, DQ='DT'):
-        self.logger.info('-------------------------------------------------')
-        self.logger.info(f'DAC Inter Mode or Samples Per AXI-Stream changed in Tile: {tile}, DAC: {dac} ({DQ})')
-        self.logger.info('-------------------------------------------------')
-        samplerate = self.get_adc_sample_rate(tile)
-        intermode = self.get_dt_dac_inter_mode_text(tile, dac, DQ)
-        spc = self.get_dt_dac_samples_per_cycle(tile, dac, DQ)
-        req_clk = samplerate/int(intermode)/spc
-        self.set_dt_dac_req_axis_clk(tile, dac, req_clk, DQ)
-        req_axis_clk = []
-        for DQ2, nslice in (('DT', 2), ('QT', 4)):
-            for d in range(nslice):
-                req_axis_clk.append(self.get_dt_dac_req_axis_clk(tile, d, DQ2))
-        if len(set(req_axis_clk)) <= 1:
-            self.set_adc_req_axis_clk(tile, req_axis_clk[0] if req_axis_clk else 0)
-        else:
-            self.set_adc_req_axis_clk(tile, '*Axis Clocking Invalid*')
-
-    def DACMixerType_ValueChanged(self, tile, dac, DQ='DT'):
-        self.logger.info('-------------------------------------------------')
-        self.logger.info(f'DAC Mixer Type changed in Tile: {tile}, DAC: {dac} ({DQ})')
-        self.logger.info('-------------------------------------------------')
-        mixermode = self.get_dt_dac_mixer_type(tile, dac, DQ)
-        if mixermode == 'Fine':
-            self.set_dt_dac_stack_page(tile, dac, 1, DQ)
-        elif mixermode == 'Coarse':
-            self.set_dt_dac_stack_page(tile, dac, 2, DQ)
-
-    # function for button OK
-    def ButtonOK_clicked(self):
-        self.logger.info('-------------------------------------------------')
-        self.logger.info('Button OK clicked, collecting info...')
-        self.logger.info('-------------------------------------------------')
-        # TODO: collect info for all of the objs
-        self.collect_config()
-        self.winobj.close()
-
-    # function for buttion Cancel
-    def ButtonCancel_clicked(self):
-        self.logger.info('-------------------------------------------------')
-        self.logger.info('Button Cancel clicked, closing the windows...')
-        self.logger.info('-------------------------------------------------')
-        self.winobj.close()
-    
-    # function for collecting config info
     def collect_config(self):
         try:
             with open(self.target_config, 'r', encoding='utf-8') as f:
                 config = json.load(f)
-        except:
-            config = {}
-            config['parameters'] = {}
-            config['parameters']['name'] = ''
-            config['parameters']['fullpath'] = ''
-            config['parameters']['tag'] = 'xps:rfdc'
-        # "name" is deliberately not read from any widget here -- rfdc has
-        # no editable Block name field (per direct user request), so
-        # whatever value is already in the target file (the JSON
-        # template's own default, seeded once by gen_bconfig) is left
-        # untouched rather than overwritten.
-        for tile in ADC_TILES:
-            # Txxx_enable is a very special one, as the name rule is different
-            config['parameters'][f'Tile{tile}_enable'] = self.get_tile_status(tile)
-            for c in ADC_TILE_ALL_CONFIG:
-                key = c['key']
-                getfunc = c['get']
-                config['parameters'][f't{tile}_{key}'] = str(getattr(self, getfunc)(tile))
-            for adc in range(2):
-                for c in ADC_TILE_SEPARATE_CONFIG:
-                    key = c['key']
-                    getfunc = c['get']
-                    config['parameters'][f't{tile}_DT_adc{adc}_{key}'] = str(getattr(self, getfunc)(tile, adc))
-            for adc in range(4):
-                for c in ADC_TILE_SEPARATE_CONFIG:
-                    key = c['key']
-                    getfunc = c['get']
-                    config['parameters'][f't{tile}_QT_adc{adc}_{key}'] = str(getattr(self, getfunc)(tile, adc, DQ='QT'))
-        for tile in DAC_TILES:
-            config['parameters'][f'Tile{tile}_enable'] = self.get_tile_status(tile)
-            for c in DAC_TILE_ALL_CONFIG:
-                key = c['key']
-                getfunc = c['get']
-                config['parameters'][f't{tile}_{key}'] = str(getattr(self, getfunc)(tile))
-            for dac in range(2):
-                for c in DAC_TILE_SEPARATE_CONFIG:
-                    key = c['key']
-                    getfunc = c['get']
-                    config['parameters'][f't{tile}_DT_dac{dac}_{key}'] = str(getattr(self, getfunc)(tile, dac))
-            for dac in range(4):
-                for c in DAC_TILE_SEPARATE_CONFIG:
-                    key = c['key']
-                    getfunc = c['get']
-                    config['parameters'][f't{tile}_QT_dac{dac}_{key}'] = str(getattr(self, getfunc)(tile, dac, DQ='QT'))
-                # 'datapath_mode' is a real QT-only JSON key with no backing
-                # widget anywhere in rfdc_ui.py -- deliberately left
-                # untouched (whatever value is already in the file on disk
-                # is preserved as-is, since `config` started from json.load).
+        except Exception:
+            config = {'parameters': {'name': '', 'fullpath': '', 'tag': 'xps:rfdc'}}
+        # "name" is deliberately not read from any widget here (rfdc has no
+        # editable Block name field).
+        p = config['parameters']
+        for tile in ADC_TILES + DAC_TILES:
+            t = self.tiles[tile]
+            p[f'Tile{tile}_enable'] = t['enable']
+            for k, v in t.items():
+                if k != 'enable' and f't{tile}_{k}' in self.params:
+                    p[f't{tile}_{k}'] = v
+        for key, s in self.slices.items():
+            kind, tile, DQ, a = key
+            for k, v in s.items():
+                p[f't{tile}_{DQ}_{kind}{a}_{k}'] = v
         with open(self.target_config, 'w', encoding='utf-8') as f:
             json.dump(config, f, ensure_ascii=False, indent=4)
 
-    # function for loading default config info
-    def load_config(self):
-        self.logger.info('-------------------------------------------------')
-        self.logger.info(f'Loading config from {self.target_config}...')
-        self.logger.info('-------------------------------------------------')
-        with open(self.target_config, 'r', encoding='utf-8') as f:
-            config = json.load(f)
-        parameters = config['parameters']
-        # no widget to load "name" into -- see collect_config()'s comment
-        for tile in ADC_TILES:
-            # set Txxx_enable
-            s = parameters[f'Tile{tile}_enable']
-            self.set_title_status(tile, s)
-            # set txxx_clk_out list
-            samplerate = parameters[f't{tile}_sample_rate']
-            samplerate = float(samplerate)
-            clkout = self._cal_adc_clkout(samplerate)
-            self.set_adc_clkout_list(tile, clkout)
-            for c in ADC_TILE_ALL_CONFIG:
-                key = c['key']
-                setfunc = c['set']
-                s = parameters[f't{tile}_{key}']
-                getattr(self, setfunc)(tile, s)
-            for adc in range(2):
-                for c in ADC_TILE_SEPARATE_CONFIG:
-                    key = c['key']
-                    setfunc = c['set']
-                    s = parameters[f't{tile}_DT_adc{adc}_{key}']
-                    getattr(self, setfunc)(tile, adc, s)
-            for adc in range(4):
-                for c in ADC_TILE_SEPARATE_CONFIG:
-                    key = c['key']
-                    setfunc = c['set']
-                    s = parameters[f't{tile}_QT_adc{adc}_{key}']
-                    getattr(self, setfunc)(tile, adc, s, DQ='QT')
-        for tile in DAC_TILES:
-            s = parameters[f'Tile{tile}_enable']
-            self.set_title_status(tile, s)
-            samplerate = parameters[f't{tile}_sample_rate']
-            samplerate = float(samplerate)
-            clkout = self._cal_adc_clkout(samplerate)
-            self.set_adc_clkout_list(tile, clkout)
-            for c in DAC_TILE_ALL_CONFIG:
-                key = c['key']
-                setfunc = c['set']
-                s = parameters[f't{tile}_{key}']
-                getattr(self, setfunc)(tile, s)
-            for dac in range(2):
-                for c in DAC_TILE_SEPARATE_CONFIG:
-                    key = c['key']
-                    setfunc = c['set']
-                    s = parameters[f't{tile}_DT_dac{dac}_{key}']
-                    getattr(self, setfunc)(tile, dac, s)
-            for dac in range(4):
-                for c in DAC_TILE_SEPARATE_CONFIG:
-                    key = c['key']
-                    setfunc = c['set']
-                    s = parameters[f't{tile}_QT_dac{dac}_{key}']
-                    getattr(self, setfunc)(tile, dac, s, DQ='QT')
-                # 'datapath_mode' has no backing widget -- see collect_config.
-        # set the stack page
-        for tile in ADC_TILES:
-            for adc in range(2):
-                digiout = parameters[f't{tile}_DT_adc{adc}_digital_output']
-                mixertype = parameters[f't{tile}_DT_adc{adc}_mixer_type']
-                if digiout == 'Real':
-                    self.set_dt_adc_stack_page(tile, adc, 0)
-                elif mixertype == 'Fine':
-                    self.set_dt_adc_stack_page(tile, adc, 1)
-                elif mixertype == 'Coarse':
-                    self.set_dt_adc_stack_page(tile, adc, 2)
-                else:
-                    self.logger.error(f'Unknow Mixer Type({mixertype}).')
-            for adc in range(4):
-                digiout = parameters[f't{tile}_QT_adc{adc}_digital_output']
-                mixertype = parameters[f't{tile}_QT_adc{adc}_mixer_type']
-                if digiout == 'Real':
-                    self.set_dt_adc_stack_page(tile, adc, 0, DQ='QT')
-                elif mixertype == 'Fine':
-                    self.set_dt_adc_stack_page(tile, adc, 1, DQ='QT')
-                elif mixertype == 'Coarse':
-                    self.set_dt_adc_stack_page(tile, adc, 2, DQ='QT')
-                else:
-                    self.logger.error(f'Unknow Mixer Type({mixertype}).')
-        for tile in DAC_TILES:
-            for dac in range(2):
-                analogout = parameters[f't{tile}_DT_dac{dac}_analog_output']
-                mixertype = parameters[f't{tile}_DT_dac{dac}_mixer_type']
-                if analogout == 'Real':
-                    self.set_dt_dac_stack_page(tile, dac, 0)
-                elif mixertype == 'Fine':
-                    self.set_dt_dac_stack_page(tile, dac, 1)
-                elif mixertype == 'Coarse':
-                    self.set_dt_dac_stack_page(tile, dac, 2)
-                else:
-                    self.logger.error(f'Unknow Mixer Type({mixertype}).')
-            for dac in range(4):
-                analogout = parameters[f't{tile}_QT_dac{dac}_analog_output']
-                mixertype = parameters[f't{tile}_QT_dac{dac}_mixer_type']
-                if analogout == 'Real':
-                    self.set_dt_dac_stack_page(tile, dac, 0, DQ='QT')
-                elif mixertype == 'Fine':
-                    self.set_dt_dac_stack_page(tile, dac, 1, DQ='QT')
-                elif mixertype == 'Coarse':
-                    self.set_dt_dac_stack_page(tile, dac, 2, DQ='QT')
-                else:
-                    self.logger.error(f'Unknow Mixer Type({mixertype}).')
+    # -------------------------------------------------------------------
+    # signal handlers
+    # -------------------------------------------------------------------
+    def on_sample_rate(self, tile):
+        t = self.tiles[tile]
+        t['sample_rate'] = fmt_num(self._tile_w(tile, 'sample_rate').value())
+        if tile in ADC_TILES:
+            fs, (fs_min, fs_max) = self._fs(tile), self._adc_fs_limits()
+            if fs > fs_max:
+                self._status(f'Maximum sample rate for this ADC is {fmt_num(fs_max)} Msps')
+            elif fs < fs_min:
+                self._status(f'Minimum sample rate for this ADC is {fmt_num(fs_min)} Msps')
+        self.update_pll(tile)
+        self.update_clkout(tile)
+        self.refresh_tile(tile)
 
-    # -------------------------------------------------------------------
-    # Setup Signal functions
-    # -------------------------------------------------------------------
-    def _safe_connect(self, tile, name, adc, DQ, signal_name, slot, kind='adc'):
-        """
-        Connect `slot` to the named Qt signal on the widget
-        t{tile}_{DQ}_{kind}{adc}_{name}, but skip silently (logging at
-        debug level) instead of raising if that widget doesn't exist.
-        A handful of tile/slice/page combinations have no backing widget
-        anywhere in rfdc_ui.py at all (confirmed gaps, not something this
-        mask.py can fix without editing that generated file) -- e.g.
-        t225_QT_adc3_enable_iq_coarse. Every getter/setter's *sync-target*
-        loop already tolerates this the same way; setup_signal_functions
-        runs unconditionally for every tile/slice at dialog startup
-        though, so without this same guard here the dialog crashes on
-        open the moment it reaches one of those gaps, regardless of
-        whether the user ever touches that specific tile -- confirmed by
-        direct user report (AttributeError on
-        't225_QT_adc3_enable_iq_coarse' inside setup_signal_functions).
-        """
-        try:
-            obj = self._get_qt_obj(tile, name, adc, DQ, kind=kind)
-        except AttributeError:
-            self.logger.debug(
-                f'Tile{tile} slice widget t{tile}_{DQ}_{kind}{adc}_{name} is missing '
-                f'(known rfdc_ui.py gap) -- skipping signal wiring.'
-            )
+    def on_tile_check(self, tile, key, checked):
+        self.tiles[tile][key] = 'on' if checked else 'off'
+        if key == 'enable_pll':
+            self.update_pll(tile)
+        if key == 'enable' and tile == 224:
+            self.enable_mts_opt()
+        self.render_tile(tile)
+
+    def on_tile_combo(self, tile, key):
+        self.tiles[tile][key] = self._tile_w(tile, key).currentText()
+
+    def on_output_power(self, tile):
+        self.tiles[tile]['output_power'] = str(int(round(self._tile_w(tile, 'output_power').value())))
+
+    def on_slice_changed(self, key, field, w):
+        s = self.slices[key]
+        if isinstance(w, QCheckBox):
+            s['enable'] = 'on' if w.isChecked() else 'off'
+        elif isinstance(w, QComboBox):
+            s[field] = w.currentText()
+        elif isinstance(w, QDoubleSpinBox):
+            s[field] = fmt_num(w.value(), 6)
+        tile = key[1]
+        self.refresh_tile(tile)
+
+    def ButtonOK_clicked(self):
+        errors = self.validate()
+        if errors:
+            for e in errors:
+                self.logger.error(e)
+            QMessageBox.critical(self.winobj, 'RFDC configuration error', '\n'.join(errors))
             return
-        getattr(obj, signal_name).connect(slot)
+        self.collect_config()
+        self.winobj.close()
+
+    def ButtonCancel_clicked(self):
+        self.winobj.close()
 
     def setup_signal_functions(self):
-        """
-        Docstring for setup_signal_functions:
-            Set up signal functions for all of the operations.
-        """
-        # set up signal functions for ADC tiles
-        # set up signal function for sampling rate
-        for t in ADC_TILES:
-            obj = self._get_qt_obj(t, 'sample_rate')
-            obj.editingFinished.connect(lambda tile=t: self.ADCSampleRate_ValueChanged(tile))
-        # set up signal function for adc status/digital output/dec mode/
-        # samples per cycle/mixer type, across both DT (2 slices) and QT
-        # (4 slices) architectures.
-        for DQ, nslice in (('DT', 2), ('QT', 4)):
-            for t in ADC_TILES:
-                for adc in range(nslice):
-                    self._safe_connect(t, 'enable_real', adc, DQ, 'toggled', lambda *args, tile=t, adc=adc, DQ=DQ: self.ADCEnabled_Toggled(tile, adc, DQ))
-                    self._safe_connect(t, 'enable_iq', adc, DQ, 'toggled', lambda *args, tile=t, adc=adc, DQ=DQ: self.ADCEnabled_Toggled(tile, adc, DQ))
-                    self._safe_connect(t, 'enable_iq_coarse', adc, DQ, 'toggled', lambda *args, tile=t, adc=adc, DQ=DQ: self.ADCEnabled_Toggled(tile, adc, DQ))
-            for t in ADC_TILES:
-                for adc in range(nslice):
-                    self._safe_connect(t, 'digital_output_real', adc, DQ, 'activated', lambda *args, tile=t, adc=adc, DQ=DQ: self.ADCDigitalOutput_ValueChanged(tile, adc, DQ))
-                    self._safe_connect(t, 'digital_output_iq', adc, DQ, 'activated', lambda *args, tile=t, adc=adc, DQ=DQ: self.ADCDigitalOutput_ValueChanged(tile, adc, DQ))
-                    self._safe_connect(t, 'digital_output_iq_coarse', adc, DQ, 'activated', lambda *args, tile=t, adc=adc, DQ=DQ: self.ADCDigitalOutput_ValueChanged(tile, adc, DQ))
-            for t in ADC_TILES:
-                for adc in range(nslice):
-                    self._safe_connect(t, 'dec_mode_real', adc, DQ, 'activated', lambda *args, tile=t, adc=adc, DQ=DQ: self.ADCDecModeSamplesPerAXIS_ValueChanged(tile, adc, DQ))
-                    self._safe_connect(t, 'dec_mode_iq', adc, DQ, 'activated', lambda *args, tile=t, adc=adc, DQ=DQ: self.ADCDecModeSamplesPerAXIS_ValueChanged(tile, adc, DQ))
-                    self._safe_connect(t, 'dec_mode_iq_coarse', adc, DQ, 'activated', lambda *args, tile=t, adc=adc, DQ=DQ: self.ADCDecModeSamplesPerAXIS_ValueChanged(tile, adc, DQ))
-            for t in ADC_TILES:
-                for adc in range(nslice):
-                    self._safe_connect(t, 'sample_per_cycle_real', adc, DQ, 'activated', lambda *args, tile=t, adc=adc, DQ=DQ: self.ADCDecModeSamplesPerAXIS_ValueChanged(tile, adc, DQ))
-                    self._safe_connect(t, 'sample_per_cycle_iq', adc, DQ, 'activated', lambda *args, tile=t, adc=adc, DQ=DQ: self.ADCDecModeSamplesPerAXIS_ValueChanged(tile, adc, DQ))
-                    self._safe_connect(t, 'sample_per_cycle_iq_coarse', adc, DQ, 'activated', lambda *args, tile=t, adc=adc, DQ=DQ: self.ADCDecModeSamplesPerAXIS_ValueChanged(tile, adc, DQ))
-            for t in ADC_TILES:
-                for adc in range(nslice):
-                    self._safe_connect(t, 'mixer_type_iq', adc, DQ, 'activated', lambda *args, tile=t, adc=adc, DQ=DQ: self.ADCMixerType_ValueChanged(tile, adc, DQ))
-                    self._safe_connect(t, 'mixer_type_iq_coarse', adc, DQ, 'activated', lambda *args, tile=t, adc=adc, DQ=DQ: self.ADCMixerType_ValueChanged(tile, adc, DQ))
-
-        # set up signal functions for DAC tiles (both DT and QT arch)
-        for t in DAC_TILES:
-            obj = self._get_qt_obj(t, 'sample_rate')
-            obj.editingFinished.connect(lambda tile=t: self.DACSampleRate_ValueChanged(tile))
-        for DQ, nslice in (('DT', 2), ('QT', 4)):
-            for t in DAC_TILES:
-                for dac in range(nslice):
-                    self._safe_connect(t, 'enable_bypassed', dac, DQ, 'toggled', lambda *args, tile=t, dac=dac, DQ=DQ: self.DACEnabled_Toggled(tile, dac, DQ), kind='dac')
-                    self._safe_connect(t, 'enable_fine', dac, DQ, 'toggled', lambda *args, tile=t, dac=dac, DQ=DQ: self.DACEnabled_Toggled(tile, dac, DQ), kind='dac')
-                    self._safe_connect(t, 'enable_coarse', dac, DQ, 'toggled', lambda *args, tile=t, dac=dac, DQ=DQ: self.DACEnabled_Toggled(tile, dac, DQ), kind='dac')
-            for t in DAC_TILES:
-                for dac in range(nslice):
-                    self._safe_connect(t, 'analog_output_bypassed', dac, DQ, 'activated', lambda *args, tile=t, dac=dac, DQ=DQ: self.DACAnalogOutput_ValueChanged(tile, dac, DQ), kind='dac')
-                    self._safe_connect(t, 'analog_output_fine', dac, DQ, 'activated', lambda *args, tile=t, dac=dac, DQ=DQ: self.DACAnalogOutput_ValueChanged(tile, dac, DQ), kind='dac')
-                    self._safe_connect(t, 'analog_output_coarse', dac, DQ, 'activated', lambda *args, tile=t, dac=dac, DQ=DQ: self.DACAnalogOutput_ValueChanged(tile, dac, DQ), kind='dac')
-            for t in DAC_TILES:
-                for dac in range(nslice):
-                    self._safe_connect(t, 'inter_mode_bypassed', dac, DQ, 'activated', lambda *args, tile=t, dac=dac, DQ=DQ: self.DACInterModeSamplesPerAXIS_ValueChanged(tile, dac, DQ), kind='dac')
-                    self._safe_connect(t, 'inter_mode_fine', dac, DQ, 'activated', lambda *args, tile=t, dac=dac, DQ=DQ: self.DACInterModeSamplesPerAXIS_ValueChanged(tile, dac, DQ), kind='dac')
-                    self._safe_connect(t, 'inter_mode_coarse', dac, DQ, 'activated', lambda *args, tile=t, dac=dac, DQ=DQ: self.DACInterModeSamplesPerAXIS_ValueChanged(tile, dac, DQ), kind='dac')
-            for t in DAC_TILES:
-                for dac in range(nslice):
-                    self._safe_connect(t, 'sample_per_cycle_bypassed', dac, DQ, 'activated', lambda *args, tile=t, dac=dac, DQ=DQ: self.DACInterModeSamplesPerAXIS_ValueChanged(tile, dac, DQ), kind='dac')
-                    self._safe_connect(t, 'sample_per_cycle_fine', dac, DQ, 'activated', lambda *args, tile=t, dac=dac, DQ=DQ: self.DACInterModeSamplesPerAXIS_ValueChanged(tile, dac, DQ), kind='dac')
-                    self._safe_connect(t, 'sample_per_cycle_coarse', dac, DQ, 'activated', lambda *args, tile=t, dac=dac, DQ=DQ: self.DACInterModeSamplesPerAXIS_ValueChanged(tile, dac, DQ), kind='dac')
-            for t in DAC_TILES:
-                for dac in range(nslice):
-                    self._safe_connect(t, 'mixer_type_fine', dac, DQ, 'activated', lambda *args, tile=t, dac=dac, DQ=DQ: self.DACMixerType_ValueChanged(tile, dac, DQ), kind='dac')
-                    self._safe_connect(t, 'mixer_type_coarse', dac, DQ, 'activated', lambda *args, tile=t, dac=dac, DQ=DQ: self.DACMixerType_ValueChanged(tile, dac, DQ), kind='dac')
-
-        # set up signal function for button OK
+        for tile in ADC_TILES + DAC_TILES:
+            kind = self._kind(tile)
+            self._tile_w(tile, 'sample_rate').editingFinished.connect(lambda tile=tile: self.on_sample_rate(tile))
+            getattr(self.ui, f'Tile{tile}_enable').toggled.connect(
+                lambda c, tile=tile: self.on_tile_check(tile, 'enable', c))
+            hk, sk = ('has_adc_clk', 'adc_clk_src') if kind == 'adc' else ('has_dac_clk', 'dac_clk_src')
+            for key in ('enable_mts', 'enable_pll', hk):
+                self._tile_w(tile, key).toggled.connect(
+                    lambda c, tile=tile, key=key: self.on_tile_check(tile, key, c))
+            for key in ('clk_out', 'ref_clk', sk, 'clk_dist'):
+                self._tile_w(tile, key).activated.connect(
+                    lambda *args, tile=tile, key=key: self.on_tile_combo(tile, key))
+            if kind == 'dac':
+                self._tile_w(tile, 'output_power').editingFinished.connect(lambda tile=tile: self.on_output_power(tile))
+        for key in self._all_slice_keys():
+            for field in FIELD_SUFFIXES[key[0]]:
+                if field == 'req_axis_clk':
+                    continue
+                for w in self._slice_ws(*key, field):
+                    if isinstance(w, QCheckBox):
+                        w.toggled.connect(lambda *args, key=key, field=field, w=w: self.on_slice_changed(key, field, w))
+                    elif isinstance(w, QComboBox):
+                        w.activated.connect(lambda *args, key=key, field=field, w=w: self.on_slice_changed(key, field, w))
+                    elif isinstance(w, QDoubleSpinBox):
+                        w.editingFinished.connect(lambda key=key, field=field, w=w: self.on_slice_changed(key, field, w))
         self.ui.ButtonOK.clicked.connect(self.ButtonOK_clicked)
-        # set up signal function for button CANCEL
         self.ui.ButtonCANCEL.clicked.connect(self.ButtonCancel_clicked)
 
 
 if __name__ == "__main__":
     parser = ArgumentParser(description="Usage for RFDC Mask.")
     parser.add_argument('--template', type=str, dest='template', default=None, help='template config file.')
-    parser.add_argument('--target', type=str, dest='target', default='rfdc.json',help='target config file.')
+    parser.add_argument('--target', type=str, dest='target', default='rfdc.json', help='target config file.')
     parser.add_argument('-l', '--log', type=str, dest='log', default='.', help='The directory for log files.')
     parser.add_argument('-v', '--verbose', dest='debug', action='store_true', default=False, help='Turn on verbose.')
     opts = parser.parse_args()
