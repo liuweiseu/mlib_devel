@@ -1,5 +1,4 @@
 import os
-import glob
 from .dsp_block import DSPBlock
 
 
@@ -29,19 +28,38 @@ class xeng_descramble(DSPBlock):
 
     def initialize(self):
         casper_dsp_root = os.path.join(self.hdl_root, 'casper_dsp')
-        for relpath in self._all_rtl_relpaths(casper_dsp_root):
+        for relpath in self._rtl_relpaths(casper_dsp_root):
             self.add_source(os.path.join('casper_dsp', relpath))
 
-    @staticmethod
-    def _all_rtl_relpaths(casper_dsp_root):
-        rtl_root = os.path.join(casper_dsp_root, 'rtl')
-        paths = []
-        for pattern in ('**/*.sv', '**/*.v'):
-            for f in sorted(glob.glob(os.path.join(rtl_root, pattern), recursive=True)):
-                if os.sep + 'Templates' + os.sep in f:
-                    continue
-                paths.append(os.path.relpath(f, casper_dsp_root))
-        return paths
+    # casper_dsp RTL files xeng_descramble.sv depends on, leaves first (relative to
+    # hdl_sources/casper_dsp)
+    RTL_FILES = [
+        'rtl/BasicModules/delay.v',
+        'rtl/Delays/dual_port_ram.sv',
+        'rtl/BasicModules/logical.sv',
+        'rtl/BasicModules/register.sv',
+        'rtl/Delays/delay_srl.sv',
+        'rtl/Delays/pipeline.sv',
+        'rtl/BasicModules/constant.sv',
+        'rtl/BasicModules/counter.sv',
+        'rtl/BasicModules/relational.sv',
+        'rtl/Correlator/Internal/read_ctrl.sv',
+        'rtl/Misc/edge_detect.v',
+        'rtl/BasicModules/multiplexer.sv',
+        'rtl/Bus/convert.sv',
+        'rtl/Bus/negate.sv',
+        'rtl/Misc/negedge_delay.sv',
+        'rtl/Correlator/Internal/write_ctrl.sv',
+        'rtl/Correlator/Internal/x_cast.sv',
+        'rtl/Correlator/xeng_descramble.sv',
+    ]
+
+    @classmethod
+    def _rtl_relpaths(cls, casper_dsp_root):
+        missing = [f for f in cls.RTL_FILES if not os.path.isfile(os.path.join(casper_dsp_root, f))]
+        if missing:
+            raise FileNotFoundError('%s: missing casper_dsp sources: %s' % (cls.__name__, ', '.join(missing)))
+        return list(cls.RTL_FILES)
 
     @staticmethod
     def _int(v):
@@ -85,7 +103,7 @@ class xeng_descramble(DSPBlock):
     def generate_compile_order(self):
         casper_dsp_root = os.path.join(self.hdl_root, 'casper_dsp')
         modules = [os.path.join(casper_dsp_root, relpath)
-                   for relpath in self._all_rtl_relpaths(casper_dsp_root)]
+                   for relpath in self._rtl_relpaths(casper_dsp_root)]
         co = {
             'lib': 'xil_defaultlib',
             'modules': modules,

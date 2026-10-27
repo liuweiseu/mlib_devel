@@ -11,4 +11,5 @@ class xeng_descramble_4ant(xeng_descramble):
     xeng_descramble, instantiated directly (no wrapper).
     """
     RTL_MODULE = 'xeng_descramble_4ant'
+    RTL_FILES = xeng_descramble.RTL_FILES + ['rtl/Correlator/xeng_descramble_4ant.sv']
     HAS_NUM_ANTS = False

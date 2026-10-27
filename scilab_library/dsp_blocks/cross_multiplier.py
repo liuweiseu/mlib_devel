@@ -1,5 +1,4 @@
 import os
-import glob
 from .dsp_block import DSPBlock
 
 
@@ -17,23 +16,34 @@ class cross_multiplier(DSPBlock):
     def initialize(self):
         self.create_hdl_dir()
         casper_dsp_root = os.path.join(self.hdl_root, 'casper_dsp')
-        # same dependency convention as fft_wideband_real.py/pfb_fir_real.py:
-        # add every casper_dsp RTL source (excluding rtl/Templates/)
-        for relpath in self._all_rtl_relpaths(casper_dsp_root):
+        for relpath in self._rtl_relpaths(casper_dsp_root):
             self.add_source(os.path.join('casper_dsp', relpath))
         self._generate_wrapper()
         self.add_source(os.path.join(self.hdl_wrapper_dir, self.wrapper_module + '.sv'))
 
-    @staticmethod
-    def _all_rtl_relpaths(casper_dsp_root):
-        rtl_root = os.path.join(casper_dsp_root, 'rtl')
-        paths = []
-        for pattern in ('**/*.sv', '**/*.v'):
-            for f in sorted(glob.glob(os.path.join(rtl_root, pattern), recursive=True)):
-                if os.sep + 'Templates' + os.sep in f:
-                    continue
-                paths.append(os.path.relpath(f, casper_dsp_root))
-        return paths
+    # casper_dsp RTL files cross_multiplier.sv depends on, leaves first (relative to
+    # hdl_sources/casper_dsp)
+    RTL_FILES = [
+        'rtl/Misc/c_to_ri.v',
+        'rtl/BasicModules/delay.v',
+        'rtl/BasicModules/register.sv',
+        'rtl/Delays/delay_srl.sv',
+        'rtl/Delays/pipeline.sv',
+        'rtl/Bus/convert.sv',
+        'rtl/Bus/adder_subtractor.sv',
+        'rtl/Bus/multiplier.sv',
+        'rtl/Multipliers/cmult.sv',
+        'rtl/Misc/convert_of.sv',
+        'rtl/Misc/ri_to_c.v',
+        'rtl/Correlator/cross_multiplier.sv',
+    ]
+
+    @classmethod
+    def _rtl_relpaths(cls, casper_dsp_root):
+        missing = [f for f in cls.RTL_FILES if not os.path.isfile(os.path.join(casper_dsp_root, f))]
+        if missing:
+            raise FileNotFoundError('%s: missing casper_dsp sources: %s' % (cls.__name__, ', '.join(missing)))
+        return list(cls.RTL_FILES)
 
     @staticmethod
     def _int(v):
@@ -142,7 +152,7 @@ class cross_multiplier(DSPBlock):
     def generate_compile_order(self):
         casper_dsp_root = os.path.join(self.hdl_root, 'casper_dsp')
         modules = [os.path.join(casper_dsp_root, relpath)
-                   for relpath in self._all_rtl_relpaths(casper_dsp_root)]
+                   for relpath in self._rtl_relpaths(casper_dsp_root)]
         modules.append(os.path.join(self.hdl_wrapper_dir, self.wrapper_module + '.sv'))
         co = {
             'lib': 'xil_defaultlib',

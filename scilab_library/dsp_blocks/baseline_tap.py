@@ -33,6 +33,8 @@ class baseline_tap(auto_tap):
     OUTPUTS = [('a_del_out', 'a'), ('a_ndel_out', 'a'), ('a_end_out', 'a'), ('acc_out', 'acc'),
                ('valid_out', '1'), ('rst_out', '1'), ('sync_out', '1')]
 
-    RTL_FILES = [f for f in auto_tap.RTL_FILES if not f.endswith('/auto_tap.sv')] + [
+    # auto_tap's files minus auto_tap.sv and sync_delay.sv (used by auto_tap only)
+    RTL_FILES = [f for f in auto_tap.RTL_FILES
+                 if not f.endswith(('/auto_tap.sv', '/sync_delay.sv'))] + [
         'rtl/Correlator/baseline_tap.sv',
     ]
