@@ -46,19 +46,43 @@ function [style] = counter_build_style(name)
     style = 'shape=rectangle;fillColor=#BDCBE4;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
+// input ports: rst and enable always, load and din (n_bits wide) with
+// 'Provide load port', up with 'Up/Down' -- the same list and order as
+// dsp_blocks/counter.py's in_ports()
+function [labels, widths] = counter_in_ports(p)
+    n_bits = strtod(p('n_bits'));
+    labels = ['rst', 'enable'];
+    widths = [1, 1];
+    if p('enable_load') == 'on' then
+        labels = [labels, 'load', 'din'];
+        widths = [widths, 1, n_bits];
+    end
+    if p('count_dir') == 'Up/Down' then
+        labels = [labels, 'up'];
+        widths = [widths, 1];
+    end
+endfunction
+
 function [x] = counter_update_ports(obj, bconfigfn)
-    // fixed port count: only widths/labels change, no set_io() needed
-    // (same approach as swreg_update_ports)
+    // the number of input ports follows the options, so set_io() is needed
+    // (same approach as pfb_fir_real_update_ports)
     x = obj;
     bconfig = fromJSON(bconfigfn, 'file');
     p = bconfig('parameters');
     graphics = x.graphics;
     model = x.model;
-    model.in = [1, 2];
-    model.in2 = [1, 1];
-    model.out = [1];
+    [in_labels, in_widths] = counter_in_ports(p);
+    iports_index = 1:size(in_labels, '*');
+    oports_index = [1];
+    io_in = [iports_index; iports_index];
+    io_out = [oports_index; oports_index];
+    [model, graphics, ok] = set_io(model, graphics, list(io_in', ones(iports_index)), ..
+                                   list(io_out', ones(oports_index)), [], []);
+    model.in = iports_index;
+    model.in2 = in_widths;
+    model.out = oports_index;
     model.out2 = [strtod(p('n_bits'))];
-    graphics.in_label = ['rst', 'enable'];
+    graphics.in_label = in_labels;
     graphics.out_label = ['dout'];
     graphics.style = counter_build_style(p('name'));
     x.graphics = graphics;

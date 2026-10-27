@@ -35,12 +35,23 @@ class counter(DSPBlock):
         inst.add_parameter("ENABLE_LOAD", "%d" % self._enable_val(self.enable_load))
         inst.add_parameter("ENABLE_SYNC_RST", "%d" % self._enable_val(self.enable_sync_rst))
         inst.add_parameter("ENABLE_ENABLE", "%d" % self._enable_val(self.enable_enable))
-        # add ports -- names match counter.sv's port list exactly
-        # we need to check if the port is in parent_ports
+        # add ports -- names match counter.sv's port list exactly, and the
+        # optional ones follow counter.sci's port list (counter_in_ports)
         inst.add_port('clk', 'user_clk', dir='in')
-        inst.add_port('rst', self.fullname+'_rst', parent_port=False, width=1, dir='in')
-        inst.add_port('enable', self.fullname+'_enable', parent_port=False, width=1, dir='in')
+        for name, width in self.in_ports():
+            inst.add_port(name, self.fullname + '_' + name, parent_port=False, width=width, dir='in')
         inst.add_port('dout', self.fullname+'_dout', parent_port=False, width=int(self.n_bits), dir='out')
+
+    def in_ports(self):
+        """(name, width) of the input ports, in Xcos port order: rst and
+        enable always, load/din with 'Provide load port', up with 'Up/Down'
+        (counter.sv's load/din/up otherwise keep their defaults 0/0/1)."""
+        ports = [('rst', 1), ('enable', 1)]
+        if self._enable_val(self.enable_load):
+            ports += [('load', 1), ('din', int(self.n_bits))]
+        if self.COUNT_DIR_MAP[self.count_dir] == 2:
+            ports += [('up', 1)]
+        return ports
 
     def generate_compile_order(self):
         fullpath = self.hdl_root + '/'
