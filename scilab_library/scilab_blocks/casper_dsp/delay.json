@@ -4,14 +4,18 @@
             "name",
             "fullpath",
             "tag",
-            "bitwidth",
-            "delay_val"
+            "latency",
+            "rst",
+            "en",
+            "n_bits"
         ],
         "values": [
-            "power_cal",
+            "delay",
             "",
             "dsp:delay",
             "1",
+            "off",
+            "off",
             "1"
         ]
     }

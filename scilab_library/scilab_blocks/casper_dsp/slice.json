@@ -4,17 +4,25 @@
             "name",
             "fullpath",
             "tag",
-            "input_width",
-            "output_width",
-            "slice_start"
+            "n_bits_in",
+            "nbits",
+            "mode",
+            "bit1",
+            "base1",
+            "bit0",
+            "base0"
         ],
         "values": [
             "slice",
             "",
             "dsp:slice",
-            "32",
+            "8",
             "1",
-            "0"
+            "Upper Bit Location + Width",
+            "0",
+            "MSB of Input",
+            "0",
+            "LSB of Input"
         ]
     }
 }
