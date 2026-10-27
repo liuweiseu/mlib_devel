@@ -473,7 +473,8 @@ class RFDCOperations(object):
             if s['mixer_mode'] == 'I/Q -> Real':
                 o['coarse_freq'] = ['Fs/2', 'Fs/4', '-Fs/4']
             elif s['mixer_mode'] == 'I/Q -> I/Q':
-                o['coarse_freq'] = ['Fs/2', 'Fs/4', '-Fs/4', '0']
+                # validate_analog_data.m: I/Q output with the coarse mixer has no '0'
+                o['coarse_freq'] = ['Fs/2', 'Fs/4', '-Fs/4']
             else:
                 o['coarse_freq'] = ['0']
             self._coerce(s, 'coarse_freq', o['coarse_freq'])
@@ -585,11 +586,15 @@ class RFDCOperations(object):
             config = json.load(f)
         self.params = {k: v for k, v in config['parameters'].items()}
         p = self.params
+        self.bad_power = set()
         for tile in ADC_TILES + DAC_TILES:
             keys = ADC_TILE_KEYS if tile in ADC_TILES else DAC_TILE_KEYS
             t = {k: str(p.get(f't{tile}_{k}', '')) for k in keys}
             t['enable'] = str(p.get(f'Tile{tile}_enable', 'off'))
             if 'output_power' in t:
+                # a popup in the MATLAB mask: anything but a single number is invalid
+                if to_float(t['output_power'], None) is None:
+                    self.bad_power.add(tile)
                 t['output_power'] = str(int(round(to_float(t['output_power']))))
             self.tiles[tile] = t
         for key in self._all_slice_keys():
@@ -628,6 +633,8 @@ class RFDCOperations(object):
                     errors.append(f'Tile{tile}: minimum sample rate for this ADC is {fmt_num(fs_min)} Msps')
             elif fs <= 0:
                 errors.append(f'Tile{tile}: invalid sample rate')
+            if tile in getattr(self, 'bad_power', ()):
+                errors.append(f'Tile{tile}: invalid output power setting')
             if t['enable_pll'] == 'on' and not self.ref_opts.get(tile):
                 errors.append(f'Tile{tile}: RFPLL parameters could not be resolved to determine a valid ref. clock freq.')
             for k in enabled:
@@ -635,11 +642,12 @@ class RFDCOperations(object):
                     errors.append(f'Tile{tile} slice {k[3]}: no samples per cycle setting gives an AXI4-Stream clock <= {fmt_num(AXIS_CLK_MAX_MHZ)} MHz')
             if t['axi_stream_clk'] == INVALID_AXIS:
                 errors.append(f'Tile{tile}: required AXI4-Stream clock differs between enabled slices ({INVALID_AXIS})')
-        for tiles, ref in ((ADC_TILES, 224), (DAC_TILES, 228)):
-            if any(self.tiles[t]['enable'] == 'on' and self.tiles[t]['enable_mts'] == 'on' for t in tiles):
-                if not (self.tiles[ref]['enable'] == 'on' and self.tiles[ref]['enable_mts'] == 'on'):
-                    errors.append(f'Tile {ref} must be enabled with Multi-Tile Synchronization on when using MTS on '
-                                  f'{"ADC" if ref == 224 else "DAC"} tiles')
+        # rfdc_mask.m only rejects MTS turned on for 224 (228) while that tile
+        # itself is disabled
+        for ref in (224, 228):
+            if self.tiles[ref]['enable_mts'] == 'on' and self.tiles[ref]['enable'] != 'on':
+                errors.append(f'Tile {ref} must be enabled with Multi-Tile Synchronization on when using MTS on '
+                              f'{"ADC" if ref == 224 else "DAC"} tiles')
         return errors
 
     def collect_config(self):
@@ -692,6 +700,7 @@ class RFDCOperations(object):
         self.tiles[tile][key] = self._tile_w(tile, key).currentText()
 
     def on_output_power(self, tile):
+        self.bad_power.discard(tile)
         self.tiles[tile]['output_power'] = str(int(round(self._tile_w(tile, 'output_power').value())))
 
     def on_slice_changed(self, key, field, w):
