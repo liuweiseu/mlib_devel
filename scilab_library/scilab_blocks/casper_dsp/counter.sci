@@ -18,8 +18,10 @@ function [x, y, typ] = counter(job, arg1, arg2)
         model.rpar = [];
         exprs = [];
         gr_i = [];
-        model.in = [1, 2];
-        model.in2 = [1, 1];
+        // the template defaults (Free Running, Up, no load / sync reset /
+        // enable port) give a counter with no inputs, see counter_in_ports
+        model.in = [];
+        model.in2 = [];
         model.out = [1];
         model.out2 = [8];
         // model.label doubles as the on-diagram display text (Scicos
@@ -27,7 +29,7 @@ function [x, y, typ] = counter(job, arg1, arg2)
         // get_block_type.sci via file-probe, so this is free to be the name.
         model.label = tag;
         x=standard_define([6 6],model,exprs,gr_i)
-        x.graphics.in_label = ['rst', 'enable'];
+        x.graphics.in_label = [];
         x.graphics.out_label = ['dout'];
         // block name (shown below the fill color) comes from the
         // "name" JSON key -- init_exprs populates exprs from the
@@ -46,19 +48,30 @@ function [style] = counter_build_style(name)
     style = 'shape=rectangle;fillColor=#BDCBE4;strokeColor=black;fontColor=black;fontSize=12;align=center;verticalAlign=top;verticalLabelPosition=bottom;noLabel=0;displayedLabel=' + name + ';whiteSpace=wrap;html=1;spacing=4;';
 endfunction
 
-// input ports: rst and enable always, load and din (n_bits wide) with
-// 'Provide load port', up with 'Up/Down' -- the same list and order as
-// dsp_blocks/counter.py's in_ports()
+// input ports: only those whose option is on, in the Simulink order
+// (up, load, din, rst, en; counter.sv's [ports] note) -- up with 'Up/Down',
+// load and din (n_bits wide) with 'Provide load port', rst with 'Provide
+// sync reset port', enable with 'Gate continue on enable'. A Free Running
+// counter with none of them has no inputs. Same list and order as
+// dsp_blocks/counter.py's in_ports().
 function [labels, widths] = counter_in_ports(p)
     n_bits = strtod(p('n_bits'));
-    labels = ['rst', 'enable'];
-    widths = [1, 1];
+    labels = [];
+    widths = [];
+    if p('count_dir') == 'Up/Down' then
+        labels = [labels, 'up'];
+        widths = [widths, 1];
+    end
     if p('enable_load') == 'on' then
         labels = [labels, 'load', 'din'];
         widths = [widths, 1, n_bits];
     end
-    if p('count_dir') == 'Up/Down' then
-        labels = [labels, 'up'];
+    if p('enable_sync_rst') == 'on' then
+        labels = [labels, 'rst'];
+        widths = [widths, 1];
+    end
+    if p('enable_enable') == 'on' then
+        labels = [labels, 'enable'];
         widths = [widths, 1];
     end
 endfunction
