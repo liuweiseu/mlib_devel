@@ -36,7 +36,7 @@ if __name__ == '__main__':
     xps_blocks = {}
     for block in model_info['xps_blocks']:
         key = model_name + '/' + block['name']
-        block = val_format_conv(block)
+        block = val_format_conv(block, empty_as_none=True)
         xps_blocks[key] = block
         # the xsg block will also be added to jasper.dsp
         if block['tag'] == 'xps:xsg':

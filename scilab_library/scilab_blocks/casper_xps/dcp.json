@@ -12,5 +12,8 @@
             "xps:dcp",
             ""
         ]
-    }
+    },
+    "evaluate": [
+        "dcp_file"
+    ]
 }

@@ -15,7 +15,7 @@
         "values": [
             "asiaa_adc5g",
             "",
-            "xps:asiaa_adc5g",
+            "xps:adc5g",
             "One-channel -- A",
             "ZDOK 0",
             "1:2",
@@ -24,5 +24,9 @@
             "on",
             "off"
         ]
-    }
+    },
+    "evaluate": [
+        "adc_bit_width",
+        "adc_clk_rate"
+    ]
 }

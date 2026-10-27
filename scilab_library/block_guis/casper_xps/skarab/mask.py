@@ -216,7 +216,7 @@ class SkarabOperations(object):
             config['parameters'] = {}
             config['parameters']['name'] = ''
             config['parameters']['fullpath'] = ''
-            config['parameters']['tag'] = 'xps:skarab'
+            config['parameters']['tag'] = 'xps:xsg'
         for k, v in SKARAB_CONFIG.items():
             getfunc = v['get']
             config['parameters'][k] = str(getattr(self, getfunc)())

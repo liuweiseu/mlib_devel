@@ -13,12 +13,16 @@
         "values": [
             "au280",
             "",
-            "xps:au280",
+            "xps:xsg",
             "AU280:xcu280",
             "sys_clk",
             "156.25",
             "1",
             "XST"
         ]
-    }
+    },
+    "evaluate": [
+        "clk_rate",
+        "sample_period"
+    ]
 }

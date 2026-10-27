@@ -231,7 +231,7 @@ class Mx175Operations(object):
             config['parameters'] = {}
             config['parameters']['name'] = ''
             config['parameters']['fullpath'] = ''
-            config['parameters']['tag'] = 'xps:mx175'
+            config['parameters']['tag'] = 'xps:xsg'
         for k, v in MX175_CONFIG.items():
             getfunc = v['get']
             config['parameters'][k] = str(getattr(self, getfunc)())

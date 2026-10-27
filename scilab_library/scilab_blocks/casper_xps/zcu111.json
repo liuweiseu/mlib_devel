@@ -14,7 +14,7 @@
         "values": [
             "zcu111",
             "",
-            "xps:zcu111",
+            "xps:xsg",
             "ZCU111:xczu28dr",
             "adc_clk",
             "250",
@@ -22,5 +22,10 @@
             "1",
             "XST"
         ]
-    }
+    },
+    "evaluate": [
+        "clk_rate",
+        "pl_clk_rate",
+        "sample_period"
+    ]
 }

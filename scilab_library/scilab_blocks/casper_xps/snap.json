@@ -14,7 +14,7 @@
         "values": [
             "snap",
             "",
-            "xps:snap",
+            "xps:xsg",
             "SNAP:xc7k160t",
             "sys_clk",
             "100",
@@ -22,5 +22,9 @@
             "1",
             "XST"
         ]
-    }
+    },
+    "evaluate": [
+        "clk_rate",
+        "sample_period"
+    ]
 }

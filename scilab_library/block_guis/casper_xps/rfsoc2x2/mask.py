@@ -232,7 +232,7 @@ class Rfsoc2x2Operations(object):
             config['parameters'] = {}
             config['parameters']['name'] = ''
             config['parameters']['fullpath'] = ''
-            config['parameters']['tag'] = 'xps:rfsoc2x2'
+            config['parameters']['tag'] = 'xps:xsg'
         for k, v in RFSOC2X2_CONFIG.items():
             getfunc = v['get']
             config['parameters'][k] = str(getattr(self, getfunc)())

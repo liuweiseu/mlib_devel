@@ -20,16 +20,17 @@
       // get_block_type.sci via file-probe, so this is free to be the name.
       model.label = 'swreg';
       model.rpar = [];
-      /* the port width is the total width of the bitfields */
+      /* the port width is the total width of the bitfields
+         (swreg.json default: one 32-bit field, To Processor) */
       model.out = [1];
-      model.out2 = [1];
+      model.out2 = [32];
       model.in = [1];
-      model.in2 = [1];
+      model.in2 = [32];
       exprs = [];
       gr_i = [];
       x=standard_define([12 1.7],model,exprs,gr_i)
-      x.graphics.out_label = ['user_data_out'];
-      x.graphics.in_label = ['sim_in'];
+      x.graphics.out_label = ['sim_out'];
+      x.graphics.in_label = ['user_data_in'];
       /* the parameters (including the default "name") are defined in
          swreg.json -- populate exprs from it before building the style,
          so the very first on-diagram label already shows the template's

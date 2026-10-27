@@ -216,7 +216,7 @@ class RedPitayaOperations(object):
             config['parameters'] = {}
             config['parameters']['name'] = ''
             config['parameters']['fullpath'] = ''
-            config['parameters']['tag'] = 'xps:red_pitaya'
+            config['parameters']['tag'] = 'xps:xsg'
         for k, v in RED_PITAYA_CONFIG.items():
             getfunc = v['get']
             config['parameters'][k] = str(getattr(self, getfunc)())

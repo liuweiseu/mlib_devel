@@ -11,8 +11,12 @@
             "ip",
             "",
             "xps:ip",
-            "lib_path",
-            "ip_name"
+            "",
+            ""
         ]
-    }
+    },
+    "evaluate": [
+        "lib_path",
+        "ip_name"
+    ]
 }

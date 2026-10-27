@@ -14,7 +14,7 @@
         "values": [
             "rfsoc2x2",
             "",
-            "xps:rfsoc2x2",
+            "xps:xsg",
             "rfsoc2x2:xczu28dr",
             "adc_clk",
             "245.76",
@@ -22,5 +22,10 @@
             "1",
             "XST"
         ]
-    }
+    },
+    "evaluate": [
+        "clk_rate",
+        "pl_clk_rate",
+        "sample_period"
+    ]
 }

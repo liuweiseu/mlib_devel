@@ -13,12 +13,16 @@
         "values": [
             "htg_zrf16",
             "",
-            "xps:htg_zrf16",
+            "xps:xsg",
             "htg_zrf16:xczu49dr",
             "sys_clk",
             "100",
             "1",
             "XST"
         ]
-    }
+    },
+    "evaluate": [
+        "clk_rate",
+        "sample_period"
+    ]
 }

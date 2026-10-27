@@ -16,7 +16,7 @@
         "values": [
             "adm_pcie_9h7",
             "",
-            "xps:adm_pcie_9h7",
+            "xps:xsg",
             "ADM_PCIE_9H7:xcvu37p",
             "sys_clk",
             "100",
@@ -26,5 +26,10 @@
             "1",
             "XST"
         ]
-    }
+    },
+    "evaluate": [
+        "clk_rate",
+        "pr_template",
+        "sample_period"
+    ]
 }

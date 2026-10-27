@@ -276,7 +276,7 @@ class OneGbeOperations(object):
             config['parameters'] = {}
             config['parameters']['name'] = ''
             config['parameters']['fullpath'] = ''
-            config['parameters']['tag'] = 'xps:one_gbe'
+            config['parameters']['tag'] = 'xps:onegbe'
         for k, v in ONE_GBE_CONFIG.items():
             getfunc = v['get']
             config['parameters'][k] = str(getattr(self, getfunc)())

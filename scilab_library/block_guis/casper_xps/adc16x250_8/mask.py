@@ -199,7 +199,7 @@ class Adc16x2508Operations(object):
             config['parameters'] = {}
             config['parameters']['name'] = ''
             config['parameters']['fullpath'] = ''
-            config['parameters']['tag'] = 'xps:adc16x250_8'
+            config['parameters']['tag'] = 'xps:adc16'
         for k, v in ADC16X250_8_CONFIG.items():
             getfunc = v['get']
             config['parameters'][k] = str(getattr(self, getfunc)())

@@ -14,7 +14,7 @@
         "values": [
             "snap2",
             "",
-            "xps:snap2",
+            "xps:xsg",
             "SNAP2_v1:xcku115",
             "adc0_clk",
             "250",
@@ -22,5 +22,9 @@
             "1",
             "XST"
         ]
-    }
+    },
+    "evaluate": [
+        "clk_rate",
+        "sample_period"
+    ]
 }

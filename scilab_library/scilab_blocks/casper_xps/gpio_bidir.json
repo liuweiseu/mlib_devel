@@ -16,5 +16,9 @@
             "4",
             "[0, 1, 2, 3]"
         ]
-    }
+    },
+    "evaluate": [
+        "bitwidth",
+        "bit_index"
+    ]
 }

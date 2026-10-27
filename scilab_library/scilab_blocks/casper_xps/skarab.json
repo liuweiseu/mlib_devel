@@ -13,12 +13,16 @@
         "values": [
             "skarab",
             "",
-            "xps:skarab",
+            "xps:xsg",
             "SKARAB:xc7vx690t",
             "adc_clk",
             "230",
             "1",
             "XST"
         ]
-    }
+    },
+    "evaluate": [
+        "clk_rate",
+        "sample_period"
+    ]
 }

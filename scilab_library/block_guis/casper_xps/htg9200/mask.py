@@ -231,7 +231,7 @@ class Htg9200Operations(object):
             config['parameters'] = {}
             config['parameters']['name'] = ''
             config['parameters']['fullpath'] = ''
-            config['parameters']['tag'] = 'xps:htg9200'
+            config['parameters']['tag'] = 'xps:xsg'
         for k, v in HTG9200_CONFIG.items():
             getfunc = v['get']
             config['parameters'][k] = str(getattr(self, getfunc)())

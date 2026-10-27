@@ -16,5 +16,9 @@
             "65535",
             "axi_gpio"
         ]
-    }
+    },
+    "evaluate": [
+        "baseaddr",
+        "memsize"
+    ]
 }

@@ -203,7 +203,7 @@ class ExceptionConstraintOperations(object):
             config['parameters'] = {}
             config['parameters']['name'] = ''
             config['parameters']['fullpath'] = ''
-            config['parameters']['tag'] = 'xps:exception_constraint'
+            config['parameters']['tag'] = 'xps:exception_constr'
         for k, v in EXCEPTION_CONSTRAINT_CONFIG.items():
             getfunc = v['get']
             config['parameters'][k] = str(getattr(self, getfunc)())

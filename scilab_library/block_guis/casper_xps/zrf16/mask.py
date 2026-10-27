@@ -232,7 +232,7 @@ class Zrf16Operations(object):
             config['parameters'] = {}
             config['parameters']['name'] = ''
             config['parameters']['fullpath'] = ''
-            config['parameters']['tag'] = 'xps:zrf16'
+            config['parameters']['tag'] = 'xps:xsg'
         for k, v in ZRF16_CONFIG.items():
             getfunc = v['get']
             config['parameters'][k] = str(getattr(self, getfunc)())

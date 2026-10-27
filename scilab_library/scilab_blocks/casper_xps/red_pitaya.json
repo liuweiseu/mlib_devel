@@ -13,12 +13,16 @@
         "values": [
             "red_pitaya",
             "",
-            "xps:red_pitaya",
+            "xps:xsg",
             "RED_PITAYA_10:xc7z010",
             "sys_clk",
             "125",
             "1",
             "XST"
         ]
-    }
+    },
+    "evaluate": [
+        "clk_rate",
+        "sample_period"
+    ]
 }

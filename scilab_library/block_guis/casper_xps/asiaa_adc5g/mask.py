@@ -260,7 +260,7 @@ class AsiaaAdc5gOperations(object):
             config['parameters'] = {}
             config['parameters']['name'] = ''
             config['parameters']['fullpath'] = ''
-            config['parameters']['tag'] = 'xps:asiaa_adc5g'
+            config['parameters']['tag'] = 'xps:adc5g'
         for k, v in ASIAA_ADC5G_CONFIG.items():
             getfunc = v['get']
             config['parameters'][k] = str(getattr(self, getfunc)())

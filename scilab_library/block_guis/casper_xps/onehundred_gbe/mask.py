@@ -798,6 +798,18 @@ class OnehundredGbeOperations(object):
         self.ui.button_ok.clicked.connect(self.ButtonOK_Clicked)
         self.ui.button_cancel.clicked.connect(self.ButtonCancel_Clicked)
         self.ui.button_apply.clicked.connect(self.ButtonApply_Clicked)
+        # the two "all counters" checkboxes exclude each other, as the
+        # debug_en_all/debug_dis_all callbacks of the Simulink mask do
+        self.ui.debug_en_all.toggled.connect(self.DebugEnAll_Toggled)
+        self.ui.debug_dis_all.toggled.connect(self.DebugDisAll_Toggled)
+
+    def DebugEnAll_Toggled(self, checked):
+        if checked:
+            self.ui.debug_dis_all.setChecked(False)
+
+    def DebugDisAll_Toggled(self, checked):
+        if checked:
+            self.ui.debug_en_all.setChecked(False)
 
     # *******************************************************************
     # load/collect config functions

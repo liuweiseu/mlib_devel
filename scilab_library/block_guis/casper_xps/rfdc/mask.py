@@ -1,5 +1,6 @@
 import sys, os
 import re
+import math
 import logging
 import json
 from argparse import ArgumentParser
@@ -83,10 +84,17 @@ DAC_TILE_KEYS = ['enable_mts', 'sample_rate', 'clk_out', 'enable_pll', 'ref_clk'
 # ---------------------------------------------------------------------------
 # helpers ported from the MATLAB callbacks
 # ---------------------------------------------------------------------------
+def mround(v, nd=0):
+    """MATLAB round(v, nd): halves round away from zero (Python's round()
+    rounds them to even, e.g. 125.0625 -> 125.062 instead of 125.063)."""
+    f = 10 ** nd
+    return math.copysign(math.floor(abs(v) * f + 0.5) / f, v)
+
+
 def fmt_num(v, nd=3):
     """round to `nd` decimals and print without trailing zeros (MATLAB
     num2str/%g style: 2000 -> '2000', 245.76 -> '245.76')."""
-    s = f'{round(float(v), nd):.{nd}f}'.rstrip('0').rstrip('.')
+    s = f'{mround(float(v), nd):.{nd}f}'.rstrip('0').rstrip('.')
     return '0' if s in ('', '-0') else s
 
 
@@ -126,7 +134,7 @@ def calc_refclk(vco, R=1):
     refclk, fbdiv = [], []
     n = 13
     while n < 256:
-        fin = round(vco * (R / n), 3)
+        fin = mround(vco * (R / n), 3)
         if fin <= refclk_max:
             if fin >= refclk_min:
                 refclk.append(fin)
@@ -145,7 +153,7 @@ def calc_clkout(sample_rate_mhz, fs_max):
         div = [d * 2 for d in div]
     out = []
     for d in div:
-        c = round(sample_rate_mhz / d, 3)
+        c = mround(sample_rate_mhz / d, 3)
         if c > 10.0:
             out.append(c)
     return out
@@ -363,7 +371,7 @@ class RFDCOperations(object):
             clk = fs / factor / x
             if quad_iq:
                 clk = 2 * clk
-            if round(clk, 3) <= AXIS_CLK_MAX_MHZ:
+            if mround(clk, 3) <= AXIS_CLK_MAX_MHZ:
                 out.append(str(x))
         return out
 

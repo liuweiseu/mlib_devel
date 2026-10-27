@@ -14,7 +14,7 @@
         "values": [
             "zrf16",
             "",
-            "xps:zrf16",
+            "xps:xsg",
             "ZRF16_49DR:xczu49dr",
             "adc_clk",
             "250",
@@ -22,5 +22,10 @@
             "1",
             "XST"
         ]
-    }
+    },
+    "evaluate": [
+        "clk_rate",
+        "pl_clk_rate",
+        "sample_period"
+    ]
 }

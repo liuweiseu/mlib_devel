@@ -18,5 +18,9 @@
             "off",
             "4"
         ]
-    }
+    },
+    "evaluate": [
+        "adc_clk_rate",
+        "sample_period"
+    ]
 }

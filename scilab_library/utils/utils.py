@@ -53,8 +53,13 @@ def gen_glue_module(link_info,file_dir='./'):
     gen_verilog_module(module_name, in_port, out_port, bitwidth, file_dir)
 
 # try to convert the value to int or float
-def val_format_conv(obj):
+# empty_as_none: an empty value becomes None (null in jasper.per), as an
+# empty field does in MATLAB's gen_block_file.m (used for the xps blocks)
+def val_format_conv(obj, empty_as_none=False):
     for k, v in obj.items():
+        if empty_as_none and v == '':
+            obj[k] = None
+            continue
         try:
             obj[k] = int(v)
         except:

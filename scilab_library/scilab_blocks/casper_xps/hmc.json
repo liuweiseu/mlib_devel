@@ -18,5 +18,9 @@
             "5",
             "on"
         ]
-    }
+    },
+    "evaluate": [
+        "sim_depth",
+        "sim_latency"
+    ]
 }

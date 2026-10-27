@@ -19,9 +19,9 @@ function [x, y, typ] = sbram(job, arg1, arg2)
         exprs = [];
         gr_i = [];
         model.in = [1, 2, 3];
-        model.in2 = [10, 128, 1];
+        model.in2 = [10, 32, 1];
         model.out = [1];
-        model.out2 = [128];
+        model.out2 = [32];
         // model.label doubles as the on-diagram display text (Scicos
         // aliases it with graphics.id); category is derived separately by
         // get_block_type.sci via file-probe, so this is free to be the name.

@@ -231,7 +231,7 @@ class SnapOperations(object):
             config['parameters'] = {}
             config['parameters']['name'] = ''
             config['parameters']['fullpath'] = ''
-            config['parameters']['tag'] = 'xps:snap'
+            config['parameters']['tag'] = 'xps:xsg'
         for k, v in SNAP_CONFIG.items():
             getfunc = v['get']
             config['parameters'][k] = str(getattr(self, getfunc)())

@@ -17,8 +17,8 @@ def gen_design_info(yellow_blocks, proj_name,  fn='design_info.tab'):
             name = v['name']
             tag = v['tag']
             for sk, sv in v.items():
-                # we don't need to wirte fullpath, name and tag
-                if sk == 'fullpath' or sk == 'name' or sk == 'tag':
+                # we don't need to wirte fullpath, name and tag, or an empty value
+                if sk == 'fullpath' or sk == 'name' or sk == 'tag' or sv is None:
                     continue
                 else:
                     if v['tag'] == 'xps:bram' and sk == 'init_vals':

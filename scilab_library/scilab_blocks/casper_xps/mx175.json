@@ -14,7 +14,7 @@
         "values": [
             "mx175",
             "",
-            "xps:mx175",
+            "xps:xsg",
             "MX175:xc7vx690t",
             "sys_clk",
             "100",
@@ -22,5 +22,9 @@
             "1",
             "XST"
         ]
-    }
+    },
+    "evaluate": [
+        "clk_rate",
+        "sample_period"
+    ]
 }

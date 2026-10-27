@@ -16,7 +16,7 @@
         "values": [
             "one_gbe",
             "",
-            "xps:one_gbe",
+            "xps:onegbe",
             "on",
             "off",
             "off",
@@ -26,5 +26,11 @@
             "4321",
             "1"
         ]
-    }
+    },
+    "evaluate": [
+        "local_mac",
+        "local_ip",
+        "local_port",
+        "local_gateway"
+    ]
 }

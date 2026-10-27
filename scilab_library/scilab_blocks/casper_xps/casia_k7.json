@@ -14,7 +14,7 @@
         "values": [
             "casia_k7",
             "",
-            "xps:casia_k7",
+            "xps:xsg",
             "CASIA_K7:xc7k325t",
             "sys_clk",
             "100",
@@ -22,5 +22,9 @@
             "1",
             "XST"
         ]
-    }
+    },
+    "evaluate": [
+        "clk_rate",
+        "sample_period"
+    ]
 }

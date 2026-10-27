@@ -262,7 +262,7 @@ class AdmPcie9h7Operations(object):
             config['parameters'] = {}
             config['parameters']['name'] = ''
             config['parameters']['fullpath'] = ''
-            config['parameters']['tag'] = 'xps:adm_pcie_9h7'
+            config['parameters']['tag'] = 'xps:xsg'
         for k, v in ADM_PCIE_9H7_CONFIG.items():
             getfunc = v['get']
             config['parameters'][k] = str(getattr(self, getfunc)())

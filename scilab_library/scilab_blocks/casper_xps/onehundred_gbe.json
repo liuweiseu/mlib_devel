@@ -100,5 +100,17 @@
             "off",
             "off"
         ]
-    }
+    },
+    "evaluate": [
+        "port",
+        "input_pipeline_delay",
+        "fab_mac",
+        "fab_ip",
+        "fab_udp",
+        "fab_gate",
+        "ttl",
+        "debug_ctr_width",
+        "txerrctr_len",
+        "rxerrctr_len"
+    ]
 }

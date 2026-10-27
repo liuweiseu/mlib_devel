@@ -171,7 +171,7 @@ class Adc16gAsntOperations(object):
             config['parameters'] = {}
             config['parameters']['name'] = ''
             config['parameters']['fullpath'] = ''
-            config['parameters']['tag'] = 'xps:adc_16g_asnt'
+            config['parameters']['tag'] = 'xps:adc_4x16g_asnt'
         for k, v in ADC_16G_ASNT_CONFIG.items():
             getfunc = v['get']
             config['parameters'][k] = str(getattr(self, getfunc)())

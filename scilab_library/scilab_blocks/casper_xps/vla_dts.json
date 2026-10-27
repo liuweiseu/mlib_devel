@@ -18,5 +18,11 @@
             "2",
             "64"
         ]
-    }
+    },
+    "evaluate": [
+        "mux_factor_bits"
+    ],
+    "frontend_only": [
+        "data_width"
+    ]
 }

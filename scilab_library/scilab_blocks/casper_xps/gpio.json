@@ -40,5 +40,12 @@
             "None",
             "off"
         ]
-    }
+    },
+    "evaluate": [
+        "io_group_custom",
+        "bitwidth",
+        "bin_pt",
+        "bit_index",
+        "sample_period"
+    ]
 }

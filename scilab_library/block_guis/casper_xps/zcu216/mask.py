@@ -232,7 +232,7 @@ class Zcu216Operations(object):
             config['parameters'] = {}
             config['parameters']['name'] = ''
             config['parameters']['fullpath'] = ''
-            config['parameters']['tag'] = 'xps:zcu216'
+            config['parameters']['tag'] = 'xps:xsg'
         for k, v in ZCU216_CONFIG.items():
             getfunc = v['get']
             config['parameters'][k] = str(getattr(self, getfunc)())

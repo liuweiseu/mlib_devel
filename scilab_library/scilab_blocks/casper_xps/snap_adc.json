@@ -16,5 +16,8 @@
             "12",
             "8"
         ]
-    }
+    },
+    "evaluate": [
+        "sample_rate"
+    ]
 }
