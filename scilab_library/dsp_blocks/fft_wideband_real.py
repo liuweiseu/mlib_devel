@@ -97,11 +97,22 @@ class fft_wideband_real(DSPBlock):
 
     def _gen_mem_files(self, casper_dsp_root):
         script = os.path.join(casper_dsp_root, 'rtl', 'FFTs', 'scripts', 'gen_fft_mem_files.py')
+        # the stored coefficient words depend on the cosin layout options, so
+        # pass this block's values instead of the script's defaults; the add
+        # latency is 2 with DSP48 adders (gen_twiddle_coeffs.coeff_options)
+        add_latency = 2 if self._enable_val(self.dsp48_adders) else self._int(self.add_latency)
+        latency_sum = self._int(self.mult_latency) + add_latency + self._int(self.conv_latency)
         cmd = [
             sys.executable, script, 'wideband_real',
             '--fft-size', str(self._int(self.FFTSize)),
             '--n-inputs', str(self._int(self.n_inputs)),
             '--coeff-bit-width', str(self._int(self.coeff_bit_width)),
+            '--coeffs-bit-limit', str(self._int(self.coeffs_bit_limit)),
+            '--coeff-sharing', str(self._enable_val(self.coeff_sharing)),
+            '--coeff-decimation', str(self._enable_val(self.coeff_decimation)),
+            '--coeff-generation', str(self._enable_val(self.coeff_generation)),
+            '--latency-sum', str(latency_sum),
+            '--cal-bits', str(self._int(self.cal_bits)),
             '-o', self.mem_dir,
         ]
         if self._enable_val(self.unscramble) == 0:
@@ -187,7 +198,9 @@ class fft_wideband_real(DSPBlock):
         L.append("        .MAX_BITS(%d)," % max_bits)
         L.append("        .HARDCODE_SHIFTS(%d)," % self._enable_val(self.hardcode_shifts))
         L.append("        .SHIFT_SCHEDULE(%d)," % self._parse_shift_schedule(self.shift_schedule))
-        L.append('        .MEM_DIR("%s"),' % self.mem_dir)
+        # the RTL appends the file names directly ({MEM_DIR, "x.mem"}), so the
+        # directory needs its trailing '/'
+        L.append('        .MEM_DIR("%s/"),' % self.mem_dir)
         # declared-but-not-yet-implemented by the HDL backend (see
         # fft_wideband_real.sv's header comment and
         # mlib_devel_notes/fft_wideband_real_hdl_plan.md design decision 3)
