@@ -1,6 +1,5 @@
 import os
 import sys
-import glob
 import subprocess
 from .dsp_block import DSPBlock
 from verilog import VerilogModule
@@ -19,11 +18,7 @@ class fft_wideband_real(DSPBlock):
     def initialize(self):
         self.create_hdl_dir()
         casper_dsp_root = os.path.join(self.hdl_root, 'casper_dsp')
-        # add every casper_dsp RTL source as a dependency (fft_wideband_real
-        # transitively instantiates nearly the whole library -- see
-        # mlib_devel_notes/fft_wideband_real_hdl_plan.md). Excludes
-        # rtl/Templates/, which is example-only, not meant for reuse.
-        for relpath in self._all_rtl_relpaths(casper_dsp_root):
+        for relpath in self._rtl_relpaths(casper_dsp_root):
             self.add_source(os.path.join('casper_dsp', relpath))
         # generate this instance's coefficient/permutation-table .mem files
         self.mem_dir = os.path.abspath(os.path.join(self.hdl_wrapper_dir, 'mem'))
@@ -37,15 +32,57 @@ class fft_wideband_real(DSPBlock):
         self._generate_wrapper()
         self.add_source(os.path.join(self.hdl_wrapper_dir, self.wrapper_module + '.sv'))
 
-    @staticmethod
-    def _all_rtl_relpaths(casper_dsp_root):
-        rtl_root = os.path.join(casper_dsp_root, 'rtl')
-        paths = []
-        for pattern in ('**/*.sv', '**/*.v'):
-            for f in sorted(glob.glob(os.path.join(rtl_root, pattern), recursive=True)):
-                if os.sep + 'Templates' + os.sep in f:
-                    continue
-                paths.append(os.path.relpath(f, casper_dsp_root))
+    # the casper_dsp RTL files fft_wideband_real instantiates, directly or
+    # through its sub-modules (relative to casper_dsp/rtl/); update this list
+    # when the module hierarchy in casper_dsp changes
+    RTL_SOURCES = [
+        'BasicModules/counter.sv',
+        'BasicModules/delay.v',
+        'BasicModules/logical.sv',
+        'BasicModules/multiplexer.sv',
+        'BasicModules/register.sv',
+        'BasicModules/relational.sv',
+        'Bus/adder_subtractor.sv',
+        'Bus/convert.sv',
+        'Bus/multiplier.sv',
+        'Bus/negate.sv',
+        'Bus/scale.sv',
+        'Delays/delay_bram.sv',
+        'Delays/delay_srl.sv',
+        'Delays/dual_port_ram.sv',
+        'Delays/pipeline.sv',
+        'Delays/rom.sv',
+        'Delays/single_port_ram.sv',
+        'Delays/sync_delay.sv',
+        'Misc/convert_of.sv',
+        'Multipliers/complex_multiplier.sv',
+        'Reorder/barrel_switcher.sv',
+        'Reorder/reorder.sv',
+        'Reorder/square_transposer.sv',
+        'FFTs/Twiddle/twiddle_coeff_0.sv',
+        'FFTs/Twiddle/twiddle_coeff_1.sv',
+        'FFTs/Twiddle/twiddle_general.sv',
+        'FFTs/Twiddle/twiddle_pass_through.sv',
+        'FFTs/Twiddle/twiddle_stage_2.sv',
+        'FFTs/Internal/bi_real_unscr_4x.sv',
+        'FFTs/Internal/complex_conj.sv',
+        'FFTs/Internal/hilbert.sv',
+        'FFTs/Internal/mirror_spectrum.sv',
+        'FFTs/butterfly_direct.sv',
+        'FFTs/fft_stage_n.sv',
+        'FFTs/biplex_core.sv',
+        'FFTs/fft_biplex_real_4x.sv',
+        'FFTs/fft_direct.sv',
+        'FFTs/fft_unscrambler.sv',
+        'FFTs/fft_wideband_real.sv',
+    ]
+
+    @classmethod
+    def _rtl_relpaths(cls, casper_dsp_root):
+        paths = [os.path.join('rtl', f) for f in cls.RTL_SOURCES]
+        missing = [f for f in paths if not os.path.isfile(os.path.join(casper_dsp_root, f))]
+        if missing:
+            raise FileNotFoundError('fft_wideband_real: missing casper_dsp sources: %s' % ', '.join(missing))
         return paths
 
     @staticmethod
@@ -264,7 +301,7 @@ class fft_wideband_real(DSPBlock):
     def generate_compile_order(self):
         casper_dsp_root = os.path.join(self.hdl_root, 'casper_dsp')
         modules = [os.path.join(casper_dsp_root, relpath)
-                   for relpath in self._all_rtl_relpaths(casper_dsp_root)]
+                   for relpath in self._rtl_relpaths(casper_dsp_root)]
         modules.append(os.path.join(self.hdl_wrapper_dir, self.wrapper_module + '.sv'))
         co = {
             'lib': 'xil_defaultlib',
