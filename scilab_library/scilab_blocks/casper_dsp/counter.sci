@@ -50,10 +50,10 @@ endfunction
 
 // input ports: only those whose option is on, in the Simulink order
 // (up, load, din, rst, en; counter.sv's [ports] note) -- up with 'Up/Down',
-// load and din (n_bits wide) with 'Provide load port', rst with 'Provide
-// sync reset port', enable with 'Gate continue on enable'. A Free Running
-// counter with none of them has no inputs. Same list and order as
-// dsp_blocks/counter.py's in_ports().
+// load and din (n_bits wide) with 'Provide load port' (Free Running only),
+// rst with 'Provide sync reset port', enable with 'Gate continue on
+// enable'. A Free Running counter with none of them has no inputs. Same
+// list and order as dsp_blocks/counter.py's in_ports().
 function [labels, widths] = counter_in_ports(p)
     n_bits = strtod(p('n_bits'));
     labels = [];
@@ -62,7 +62,8 @@ function [labels, widths] = counter_in_ports(p)
         labels = [labels, 'up'];
         widths = [widths, 1];
     end
-    if p('enable_load') == 'on' then
+    // a Count Limited counter has no load port (as in Simulink)
+    if p('enable_load') == 'on' & p('counter_type') == 'Free Running' then
         labels = [labels, 'load', 'din'];
         widths = [widths, 1, n_bits];
     end

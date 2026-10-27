@@ -16,6 +16,11 @@ class counter(DSPBlock):
         # checkbox status is saved as 'on'/'off' (see mask.py's _convert_status)
         return 1 if str(status).strip().lower() in ('on', '1', 'true') else 0
 
+    def _load_val(self):
+        # a Count Limited counter has no load port (as in Simulink; the
+        # dialog disables the option), so ignore a stored 'on'
+        return self._enable_val(self.enable_load) if self.counter_type == 'Free Running' else 0
+
     def modify_top(self,top):
         # let's populate the parent ports first
         self._populate_parent_ports(top)
@@ -32,7 +37,7 @@ class counter(DSPBlock):
         inst.add_parameter("INIT_VAL", "%d" % int(self.init_val))
         inst.add_parameter("STEP", "%d" % int(self.step))
         inst.add_parameter("BIN_P", "%d" % int(self.bin_pt))
-        inst.add_parameter("ENABLE_LOAD", "%d" % self._enable_val(self.enable_load))
+        inst.add_parameter("ENABLE_LOAD", "%d" % self._load_val())
         inst.add_parameter("ENABLE_SYNC_RST", "%d" % self._enable_val(self.enable_sync_rst))
         inst.add_parameter("ENABLE_ENABLE", "%d" % self._enable_val(self.enable_enable))
         # add ports -- names match counter.sv's port list exactly, and the
@@ -56,7 +61,7 @@ class counter(DSPBlock):
         ports = []
         if self.COUNT_DIR_MAP[self.count_dir] == 2:
             ports += [('up', 1)]
-        if self._enable_val(self.enable_load):
+        if self._load_val():
             ports += [('load', 1), ('din', int(self.n_bits))]
         if self._enable_val(self.enable_sync_rst):
             ports += [('rst', 1)]

@@ -274,8 +274,13 @@ class CounterOperations(object):
         """
         Count to value only has any effect when counter_type is Count
         Limited -- a free running counter always wraps at 2^n_bits instead.
+        A Count Limited counter has no load port (as in Simulink, see
+        counter.sv's [ports] note), so the option is cleared and disabled.
         """
         self.ui.count_to_val.setEnabled(count_limited)
+        if count_limited:
+            self.ui.enable_load.setChecked(False)
+        self.ui.enable_load.setEnabled(not count_limited)
 
     def CounterType_Changed(self):
         self.logger.info('---------------------------------------------')

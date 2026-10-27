@@ -78,9 +78,7 @@ class Ui_MainWindow(object):
         self.count_dir.addItem("")
         self.count_dir.addItem("")
         self.count_dir.addItem("")
-        self.count_dir.setToolTip("'Up/Down' is not yet implemented in the counter.sv RTL: the "
-                                   "generate block for this direction is empty, so the counter "
-                                   "will never count if this option is selected.")
+        self.count_dir.setToolTip("'Up/Down' adds an 'up' input port: 1 counts up, 0 counts down.")
         self.gridLayout.addWidget(self.count_dir, 4, 1, 1, 2)
         self.label_init_val = QtWidgets.QLabel(parent=self.scrollAreaWidgetContents)
         self.label_init_val.setObjectName("label_init_val")
@@ -113,8 +111,8 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.label_enable_load, 8, 0, 1, 1)
         self.enable_load = QtWidgets.QCheckBox(parent=self.scrollAreaWidgetContents)
         self.enable_load.setObjectName("enable_load")
-        self.enable_load.setToolTip("Not yet wired in the counter.sv RTL: no load port exists on "
-                                     "the module yet, so this parameter is currently inert.")
+        self.enable_load.setToolTip("Adds 'load' and 'din' input ports: load = 1 loads din. "
+                                     "Free Running counters only.")
         self.gridLayout.addWidget(self.enable_load, 8, 1, 1, 2)
         self.label_enable_sync_rst = QtWidgets.QLabel(parent=self.scrollAreaWidgetContents)
         self.label_enable_sync_rst.setObjectName("label_enable_sync_rst")
