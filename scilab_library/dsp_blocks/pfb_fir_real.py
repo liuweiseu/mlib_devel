@@ -182,7 +182,9 @@ class pfb_fir_real(DSPBlock):
         L.append("        .ADDER_N_BITS_OUT(%d)," % self._derived['ADDER_N_BITS_OUT'])
         L.append("        .ADDER_BIN_PT_OUT(%d)," % self._derived['ADDER_BIN_PT_OUT'])
         L.append("        .SCALE_FACTOR(%d)," % self._derived['SCALE_FACTOR'])
-        L.append('        .COEFF_DIR("%s")' % self.coeff_dir)
+        # the RTL appends the file names directly ({COEFF_DIR, "pfb_coeff_n0_t0.mem"}),
+        # so the directory needs its trailing '/'
+        L.append('        .COEFF_DIR("%s/")' % self.coeff_dir)
         L.append("    ) u_pfb (")
         L.append("        .clk(clk),")
         L.append("        .sync(sync),")
@@ -195,7 +197,26 @@ class pfb_fir_real(DSPBlock):
         with open(os.path.join(self.hdl_wrapper_dir, self.wrapper_module + '.sv'), 'w') as f:
             f.write('\n'.join(L) + '\n')
 
+    def _check_out_widths(self):
+        # the Xcos output ports (and so the wires of every link from them) were
+        # sized by pfb_fir_real.sci; with BitWidthOut = 0 the width depends on
+        # the coefficients, so stop here if the diagram disagrees with the HDL
+        # (a diagram saved before the .sci computed the real width)
+        for link in self.link_info:
+            if link['src_blk_name'] != self.unique_name:
+                continue
+            label = link['src_port_name'][len(self.fullname) + 1:]
+            if not label.startswith('pol') or '_out' not in label:
+                continue
+            width = int(float(link['src_port_width']))
+            if width != self.n_bits_out:
+                raise ValueError(
+                    'pfb_fir_real %s: output port %s is %d bits in the diagram but the '
+                    'HDL output is %d bits; reopen the block dialog and press OK to '
+                    'update its ports' % (self.unique_name, label, width, self.n_bits_out))
+
     def modify_top(self, top):
+        self._check_out_widths()
         self._populate_parent_ports(top)
         inst = top.get_instance(entity=self.wrapper_module, name=self.fullname)
         bit_width_in = self._int(self.BitWidthIn)

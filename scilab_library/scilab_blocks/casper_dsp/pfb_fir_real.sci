@@ -86,25 +86,35 @@ function [ports_index, ports_label] = pfb_fir_real_create_oports(pols, n_inputs)
     end
 endfunction
 
-// Output bit-width, for Xcos's own port width display / check_bit_width.sci
-// cross-checking only -- NOT authoritative. The real formula
-// (casper_dsp/rtl/PFBs/pfb_fir_real.sv's N_BITS_OUT) needs BIT_GROWTH, which
-// depends on the actual window+sinc coefficient values
-// (nextpow2(max sub-filter gain)), not just mask parameters -- that can
-// only be computed numerically (by
-// rtl/PFBs/scripts/gen_pfb_coeffs.py --bit-width-in), not reimplemented
-// here. This function assumes BIT_GROWTH=1 (the Verilog parameter's own
-// default) purely so Xcos has *some* width to display; the real HDL
-// generation (dsp_blocks/pfb_fir_real.py's modify_top()) computes and uses
-// the true value. A real design may see a check_bit_width.sci mismatch
-// warning against this approximation -- that is expected, not a bug.
-function [w] = pfb_fir_real_out_width(bit_width_in, bit_width_out, coeff_bit_width)
+// Output bit-width (casper_dsp/rtl/PFBs/pfb_fir_real.sv's N_BITS_OUT).
+// With BitWidthOut = 0 it is BIT_GROWTH + 1 + BitWidthIn + CoeffBitWidth - 2,
+// where BIT_GROWTH = nextpow2(max sub-filter gain) depends on the window and
+// sinc coefficient values (0, 1 or 2 for the usual windows), so it is taken
+// from pfb_fir_real_params() of rtl/PFBs/scripts/gen_pfb_coeffs.py -- the
+// same function dsp_blocks/pfb_fir_real.py uses for the HDL. The ports must
+// have the real width: the links from them are sized from it.
+function [w] = pfb_fir_real_out_width(params)
+    bit_width_out = strtod(params('BitWidthOut'));
     if bit_width_out <> 0 then
         w = bit_width_out;
-    else
-        bit_growth_assumed = 1;
-        adder_bin_pt_out = bit_width_in + coeff_bit_width - 2;
-        w = bit_growth_assumed + 1 + adder_bin_pt_out;
+        return;
+    end
+    scripts = getenv('MLIB_DEVEL_PATH') + '/scilab_library/hdl_sources/casper_dsp/rtl/PFBs/scripts';
+    // no quotes inside the python code: it goes in a single-quoted shell word
+    code = 'import sys; sys.path.insert(0, sys.argv[1]); ' + ..
+           'from gen_pfb_coeffs import pfb_fir_real_params as f; a = sys.argv[3:]; ' + ..
+           'print(f(int(float(a[0])), int(float(a[1])), a[2], float(a[3]), ' + ..
+           'int(float(a[4])), int(float(a[5])))[sys.argv[2]])';
+    args = [scripts, 'ADDER_N_BITS_OUT', params('PFBSize'), params('TotalTaps'), ..
+            params('WindowType'), params('fwidth'), params('BitWidthIn'), params('CoeffBitWidth')];
+    cmd = 'python -B -c ''' + code + '''';
+    for k = 1:size(args, '*')
+        cmd = cmd + ' ''' + strsubst(string(args(k)), '''', '') + '''';
+    end
+    [rep, stat] = unix_g(cmd);
+    w = strtod(rep($));
+    if stat <> 0 | isnan(w) then
+        error('pfb_fir_real: could not compute the output width: ' + strcat(rep, ' '));
     end
 endfunction
 
@@ -118,9 +128,7 @@ function [x]= pfb_fir_real_update_ports(arg1, bconfigfn)
     n_inputs = strtod(params('n_inputs'));
     pols = (params('MakeBiplex') == 'on') + 1;
     bit_width_in = strtod(params('BitWidthIn'));
-    bit_width_out = strtod(params('BitWidthOut'));
-    coeff_bit_width = strtod(params('CoeffBitWidth'));
-    out_width = pfb_fir_real_out_width(bit_width_in, bit_width_out, coeff_bit_width);
+    out_width = pfb_fir_real_out_width(params);
     evtin = [];
     evtout = [];
     [iports_index, iports_label] = pfb_fir_real_create_iports(pols, n_inputs);

@@ -23,17 +23,18 @@ class counter(DSPBlock):
         module = 'counter'
         inst = top.get_instance(entity=module, name=self.fullname)
         # add parameters -- one per counter.sv parameter, in the same order
-        # they're declared there
-        inst.add_parameter("COUNTER_TYPE", "32'd%d" % self.COUNTER_TYPE_MAP[self.counter_type])
-        inst.add_parameter("NBITS", "32'd%d" % int(self.n_bits))
-        inst.add_parameter("COUNT_TO_VAL", "32'd%d" % int(self.count_to_val))
-        inst.add_parameter("COUNT_DIR", "32'd%d" % self.COUNT_DIR_MAP[self.count_dir])
-        inst.add_parameter("INIT_VAL", "32'd%d" % int(self.init_val))
-        inst.add_parameter("STEP", "32'd%d" % int(self.step))
-        inst.add_parameter("BIN_P", "32'd%d" % int(self.bin_pt))
-        inst.add_parameter("ENABLE_LOAD", "32'd%d" % self._enable_val(self.enable_load))
-        inst.add_parameter("ENABLE_SYNC_RST", "32'd%d" % self._enable_val(self.enable_sync_rst))
-        inst.add_parameter("ENABLE_ENABLE", "32'd%d" % self._enable_val(self.enable_enable))
+        # they're declared there; plain decimals, as the RTL parameters are
+        # int and may be negative (a sized 32'd-1 is a syntax error)
+        inst.add_parameter("COUNTER_TYPE", "%d" % self.COUNTER_TYPE_MAP[self.counter_type])
+        inst.add_parameter("NBITS", "%d" % int(self.n_bits))
+        inst.add_parameter("COUNT_TO_VAL", "%d" % int(self.count_to_val))
+        inst.add_parameter("COUNT_DIR", "%d" % self.COUNT_DIR_MAP[self.count_dir])
+        inst.add_parameter("INIT_VAL", "%d" % int(self.init_val))
+        inst.add_parameter("STEP", "%d" % int(self.step))
+        inst.add_parameter("BIN_P", "%d" % int(self.bin_pt))
+        inst.add_parameter("ENABLE_LOAD", "%d" % self._enable_val(self.enable_load))
+        inst.add_parameter("ENABLE_SYNC_RST", "%d" % self._enable_val(self.enable_sync_rst))
+        inst.add_parameter("ENABLE_ENABLE", "%d" % self._enable_val(self.enable_enable))
         # add ports -- names match counter.sv's port list exactly
         # we need to check if the port is in parent_ports
         inst.add_port('clk', 'user_clk', dir='in')
