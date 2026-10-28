@@ -39,7 +39,7 @@ class xeng(DSPBlock):
     # hdl_sources/casper_dsp)
     RTL_FILES = [
         'rtl/BasicModules/counter.sv',
-        'rtl/BasicModules/delay.v',
+        'rtl/BasicModules/delay.sv',
         'rtl/Delays/single_port_ram.sv',
         'rtl/Delays/delay_bram.sv',
         'rtl/BasicModules/register.sv',

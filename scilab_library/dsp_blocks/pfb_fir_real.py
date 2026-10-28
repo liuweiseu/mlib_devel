@@ -27,7 +27,7 @@ class pfb_fir_real(DSPBlock):
     # casper_dsp RTL files pfb_fir_real.sv depends on, leaves first (relative to
     # hdl_sources/casper_dsp)
     RTL_FILES = [
-        'rtl/BasicModules/delay.v',
+        'rtl/BasicModules/delay.sv',
         'rtl/BasicModules/register.sv',
         'rtl/Delays/delay_srl.sv',
         'rtl/Delays/pipeline.sv',

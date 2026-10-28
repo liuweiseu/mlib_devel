@@ -51,7 +51,7 @@ class auto_tap(DSPBlock):
     RTL_FILES = [
         'rtl/BasicModules/constant.sv',
         'rtl/BasicModules/counter.sv',
-        'rtl/BasicModules/delay.v',
+        'rtl/BasicModules/delay.sv',
         'rtl/BasicModules/multiplexer.sv',
         'rtl/BasicModules/register.sv',
         'rtl/BasicModules/relational.sv',

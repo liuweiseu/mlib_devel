@@ -25,7 +25,7 @@ class cross_multiplier(DSPBlock):
     # hdl_sources/casper_dsp)
     RTL_FILES = [
         'rtl/Misc/c_to_ri.v',
-        'rtl/BasicModules/delay.v',
+        'rtl/BasicModules/delay.sv',
         'rtl/BasicModules/register.sv',
         'rtl/Delays/delay_srl.sv',
         'rtl/Delays/pipeline.sv',

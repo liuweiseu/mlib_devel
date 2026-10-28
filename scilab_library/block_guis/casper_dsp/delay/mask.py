@@ -142,14 +142,14 @@ class DelayOperations(object):
         Return a list of error messages. The list is empty if the config is valid.
         """
         errors = []
-        # Latency: a non-negative integer (the Simulink mask's rule; delay.v
+        # Latency: a non-negative integer (the Simulink mask's rule; delay.sv
         # builds a LATENCY-stage shift register, LATENCY = 0 is a wire)
         val = str(self.get_latency()).strip()
         if val == '':
             errors.append('Latency must not be empty.')
         elif not re.fullmatch(r'\+?[0-9]+', val):
             errors.append('Latency must be an integer >= 0.')
-        # Data width: delay.v's [BITWIDTH-1:0] ports need BITWIDTH >= 1 (the
+        # Data width: delay.sv's [BITWIDTH-1:0] ports need BITWIDTH >= 1 (the
         # spin box range already enforces it; checked again for safety)
         if int(self.get_n_bits()) < 1:
             errors.append('Data width must be at least 1 bit.')

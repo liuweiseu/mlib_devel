@@ -1,5 +1,5 @@
 // delay: Xcos block definition, PyQt6-mask pattern (Xilinx Delay block on
-// casper_dsp/rtl/BasicModules/delay.v, see dsp_blocks/delay.py).
+// casper_dsp/rtl/BasicModules/delay.sv, see dsp_blocks/delay.py).
 function [x, y, typ] = delay(job, arg1, arg2)
     x=[];y=[];typ=[];
     select job
@@ -49,7 +49,7 @@ endfunction
 
 // input ports: din (n_bits wide), then rst with 'Provide synchronous reset
 // port' and en with 'Provide enable port' (1 bit each), in the Simulink
-// order d, rst, en (delay.v's [ports] note). Same list and order as
+// order d, rst, en (delay.sv's [ports] note). Same list and order as
 // dsp_blocks/delay.py's in_ports().
 function [labels, widths] = delay_in_ports(p)
     n_bits = strtod(p('n_bits'));

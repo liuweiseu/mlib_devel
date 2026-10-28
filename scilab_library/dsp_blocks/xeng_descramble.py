@@ -34,7 +34,7 @@ class xeng_descramble(DSPBlock):
     # casper_dsp RTL files xeng_descramble.sv depends on, leaves first (relative to
     # hdl_sources/casper_dsp)
     RTL_FILES = [
-        'rtl/BasicModules/delay.v',
+        'rtl/BasicModules/delay.sv',
         'rtl/Delays/dual_port_ram.sv',
         'rtl/BasicModules/logical.sv',
         'rtl/BasicModules/register.sv',

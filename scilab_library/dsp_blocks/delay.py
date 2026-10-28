@@ -3,10 +3,10 @@ from .dsp_block import DSPBlock
 from verilog import VerilogModule
 
 class delay(DSPBlock):
-    # Xilinx Delay block on casper_dsp's BasicModules/delay.v (the same RTL
+    # Xilinx Delay block on casper_dsp's BasicModules/delay.sv (the same RTL
     # module "delay" that many casper_dsp modules instantiate internally, so
     # a design that mixes them compiles one single definition of it).
-    SRC = 'casper_dsp/rtl/BasicModules/delay.v'
+    SRC = 'casper_dsp/rtl/BasicModules/delay.sv'
 
     def initialize(self):
         self.add_source(self.SRC)
@@ -26,17 +26,23 @@ class delay(DSPBlock):
         # create a verilog module
         module = 'delay'
         inst = top.get_instance(entity=module, name=self.fullname)
-        # add parameters -- one per delay.v parameter, in declaration order
+        # add parameters -- one per delay.sv parameter, in declaration order
         inst.add_parameter("LATENCY", "%d" % int(float(self.latency)))
         inst.add_parameter("BITWIDTH", "%d" % self._n_bits())
         inst.add_parameter("USE_RST", "%d" % self._enable_val(self.rst))
         inst.add_parameter("USE_ENABLE", "%d" % self._enable_val(self.en))
-        # add ports -- names match delay.v's port list; the optional ones
-        # follow delay.sci's port list (delay_in_ports). rst / en have default
-        # values (0 / 1) in delay.v, so they are left unconnected when absent.
+        # add ports -- names match delay.sv's port list; the optional ones
+        # follow delay.sci's port list (delay_in_ports). rst / en are tied off
+        # when their option is off rather than relying on delay.sv's port defaults.
         inst.add_port('clk', 'user_clk', dir='in')
-        for name, width in self.in_ports():
+        ports = self.in_ports()
+        for name, width in ports:
             inst.add_port(name, self.fullname + '_' + name, parent_port=False, width=width, dir='in')
+        names = [name for name, _ in ports]
+        if 'rst' not in names:
+            inst.add_port('rst', "1'b0", dir='in')
+        if 'en' not in names:
+            inst.add_port('en', "1'b1", dir='in')
         inst.add_port('dout', self.fullname + '_dout', parent_port=False, width=self._n_bits(), dir='out')
 
     def in_ports(self):

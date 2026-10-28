@@ -37,7 +37,7 @@ class fft_wideband_real(DSPBlock):
     # when the module hierarchy in casper_dsp changes
     RTL_SOURCES = [
         'BasicModules/counter.sv',
-        'BasicModules/delay.v',
+        'BasicModules/delay.sv',
         'BasicModules/logical.sv',
         'BasicModules/multiplexer.sv',
         'BasicModules/register.sv',

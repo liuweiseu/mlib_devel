@@ -21,7 +21,7 @@ class adder_subtractor(DSPBlock):
     # (convert -> register / pipeline -> delay_srl -> register; delay)
     SOURCES = [
         'casper_dsp/rtl/BasicModules/register.sv',
-        'casper_dsp/rtl/BasicModules/delay.v',
+        'casper_dsp/rtl/BasicModules/delay.sv',
         'casper_dsp/rtl/Delays/delay_srl.sv',
         'casper_dsp/rtl/Delays/pipeline.sv',
         'casper_dsp/rtl/Bus/convert.sv',
