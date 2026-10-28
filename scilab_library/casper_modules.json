@@ -32,6 +32,7 @@
         "power_cal": { "enabled": true, "category": "Basic Elements" },
         "logical": { "enabled": true, "category": "Basic Elements" },
         "inverter": { "enabled": true, "category": "Basic Elements" },
+        "fifo": { "enabled": true, "category": "Basic Elements" },
         "bus_create": { "enabled": true, "category": "Flow_Control" },
         "bus_expand": { "enabled": true, "category": "Flow_Control" },
         "munge": { "enabled": true, "category": "Flow_Control" },
