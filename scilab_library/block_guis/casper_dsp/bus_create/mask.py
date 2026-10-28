@@ -136,6 +136,10 @@ class BusCreateOperations(object):
                         f'(matching Number of inputs), got {len(widths)}.')
                 if not all(isinstance(w, int) and w > 0 for w in widths):
                     errors.append('Bit width of each input: every value must be a positive integer.')
+                elif len(set(widths)) > 1:
+                    # casper_dsp's bus_create.sv concatenates INPUT_NUM inputs
+                    # of one width NBITS (dsp_blocks/bus_create.py)
+                    errors.append('Bit width of each input: all inputs must have the same width.')
             except (ValueError, TypeError):
                 errors.append(
                     'Bit width of each input: must be a bracketed vector of positive '
