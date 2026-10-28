@@ -1,4 +1,5 @@
 import sys
+import re
 import logging
 import json
 from argparse import ArgumentParser
@@ -9,38 +10,26 @@ from munge_ui import Ui_MainWindow
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from utils.utils import make_rich_logger, gen_bconfig
+# the vector parser and the width rules are shared with dsp_blocks/munge.py;
+# they live in scilab_library/utils (not block_guis/utils, the "utils"
+# package above), so import them from that directory directly
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
+    os.path.abspath(__file__))))), 'utils'))
+from matlab_vec import parse_vector
+from munge_widths import munge_widths
 
 # Mapping between the JSON parameter keys and the get/set methods used to
 # synchronize them with the Qt widgets defined in munge_ui.py.
 # The keys must match scilab_blocks/casper_dsp/munge.json, since the
 # Scilab side (update_exprs) only reads back the keys listed in that template.
-MUNGE_CONFIG = {
-    'name':
-    {
-        'get': 'get_name',
-        'set': 'set_name'
-    },
-    'total_bits':
-    {
-        'get': 'get_total_bits',
-        'set': 'set_total_bits'
-    },
-    'divisions':
-    {
-        'get': 'get_divisions',
-        'set': 'set_divisions'
-    },
-    'size_bits':
-    {
-        'get': 'get_size_bits',
-        'set': 'set_size_bits'
-    },
-    'packing_order':
-    {
-        'get': 'get_packing_order',
-        'set': 'set_packing_order'
-    },
-}
+MUNGE_CONFIG = {key: {'get': 'get_' + key, 'set': 'set_' + key} for key in [
+    'name',
+    'divisions',
+    'div_size',
+    'order',
+    'arith_type_out',
+    'bin_pt_out',
+]}
 
 
 class MainWindow(QMainWindow):
@@ -67,116 +56,118 @@ class MungeOperations(object):
         self.ui = winobj.ui
         self.load_config()
         self.setup_signal_functions()
-
-    def get_name(self):
-        val = self.ui.name.text()
-        self.logger.debug(f'name is {val}')
-        return val
-
-    def set_name(self, val):
-        self.logger.debug(f'Set name to {val}')
-        self.ui.name.setText(str(val))
-
-    def _convert_status(self, status):
-        # checkbox status is saved as 'on'/'off', same convention as the
-        # Simulink mask and the *.json templates (see val_format_conv)
-        if status is True:
-            return 'on'
-        elif status is False:
-            return 'off'
-        elif status in ['on', 1, '1']:
-            return True
-        elif status in ['off', 0, '0']:
-            return False
-        else:
-            self.logger.error(f' Value({status}) not supported')
-            raise ValueError(f'Value({status}) not supported')
+        self.update_status()
 
     # *******************************************************************
     # Low-level APIs
     # *******************************************************************
-    def get_total_bits(self):
-        val = self.ui.total_bits.value()
-        self.logger.debug(f'total_bits is {val}')
-        return str(val)
-
-    def set_total_bits(self, val):
-        self.logger.debug(f'Set total_bits to {val}')
-        self.ui.total_bits.setValue(int(val))
-
-    def get_divisions(self):
-        val = self.ui.divisions.value()
-        self.logger.debug(f'divisions is {val}')
-        return str(val)
-
-    def set_divisions(self, val):
-        self.logger.debug(f'Set divisions to {val}')
-        self.ui.divisions.setValue(int(val))
-
-    def get_size_bits(self):
-        val = self.ui.size_bits.value()
-        self.logger.debug(f'size_bits is {val}')
-        return str(val)
-
-    def set_size_bits(self, val):
-        self.logger.debug(f'Set size_bits to {val}')
-        self.ui.size_bits.setValue(int(val))
-
-    def get_packing_order(self):
-        val = self.ui.packing_order.text()
-        self.logger.debug(f'packing_order is {val}')
+    def _get_text(self, key):
+        val = getattr(self.ui, key).text()
+        self.logger.debug(f'{key} is {val}')
         return val
 
-    def set_packing_order(self, val):
-        self.logger.debug(f'Set packing_order to {val}')
-        self.ui.packing_order.setText(str(val))
+    def _set_text(self, key, val):
+        self.logger.debug(f'Set {key} to {val}')
+        getattr(self.ui, key).setText(str(val))
 
+    def get_name(self):
+        return self._get_text('name')
+
+    def set_name(self, val):
+        self._set_text('name', val)
+
+    def get_divisions(self):
+        return self._get_text('divisions')
+
+    def set_divisions(self, val):
+        self._set_text('divisions', val)
+
+    def get_div_size(self):
+        return self._get_text('div_size')
+
+    def set_div_size(self, val):
+        self._set_text('div_size', val)
+
+    def get_order(self):
+        return self._get_text('order')
+
+    def set_order(self, val):
+        self._set_text('order', val)
+
+    def get_arith_type_out(self):
+        text = self.ui.arith_type_out.currentText()
+        self.logger.debug(f'arith_type_out is {text}')
+        return text
+
+    def set_arith_type_out(self, text):
+        self.logger.debug(f'Set arith_type_out to {text}')
+        if self.ui.arith_type_out.findText(str(text)) < 0:
+            self.logger.error(f'arith_type_out: value {text} not supported')
+            return
+        self.ui.arith_type_out.setCurrentText(str(text))
+
+    def get_bin_pt_out(self):
+        return self._get_text('bin_pt_out')
+
+    def set_bin_pt_out(self, val):
+        self._set_text('bin_pt_out', val)
 
     # *******************************************************************
     # Validation
     # *******************************************************************
+    def _widths(self):
+        """(din width, dout width) of the current values, or a list of error
+        messages. The rules are munge.sv's $fatal checks (munge_widths)."""
+        errors = []
+        val = self.get_divisions().strip()
+        divisions = None
+        if not re.fullmatch(r'\+?[0-9]+', val) or int(val) < 1:
+            errors.append('Number of divisions must be an integer >= 1.')
+        else:
+            divisions = int(val)
+        vectors = {}
+        for key, label in (('div_size', 'Division size (bits)'), ('order', 'Division packing order')):
+            try:
+                vectors[key] = parse_vector(getattr(self, 'get_' + key)())
+            except ValueError as e:
+                errors.append(f'{label}: {e} (use e.g. 16, [8 0 9 1], 16*ones(1,16) or 0:15).')
+        if errors:
+            return errors
+        try:
+            return munge_widths(divisions, vectors['div_size'], vectors['order'])
+        except ValueError as e:
+            # munge_widths names the parameters by key; show the prompts
+            msg = str(e)
+            for key, label in ((r'\bdivisions(?= =)', 'Number of divisions'),
+                               (r'\bdiv_size\b', 'Division size (bits)'),
+                               (r'^order\b', 'Division packing order')):
+                msg = re.sub(key, label, msg)
+            return [msg[0].upper() + msg[1:] + '.']
+
     def validate_config(self):
         """
         Return a list of error messages. The list is empty if the config is valid.
-
-        Ports casper_library/munge_init.m's checks onto this GUI's simplified
-        equal-size-division parameter set (total_bits/divisions/size_bits
-        instead of casper's divisions/div_size vector): divisions must be a
-        positive integer, size_bits must divide evenly into total_bits (this
-        GUI only supports the "divisions of equal size" case munge_init.m
-        takes when div_size has a single element), and every packing_order
-        index must reference a valid division (0 .. divisions-1).
         """
+        widths = self._widths()
+        if isinstance(widths, list):
+            return widths
         errors = []
-        divisions = self.ui.divisions.value()
-        size_bits = self.ui.size_bits.value()
-        total_bits = self.ui.total_bits.value()
-        if divisions < 1:
-            errors.append('Number of Divisions: must be a positive integer.')
-        if total_bits != divisions * size_bits:
-            errors.append(
-                f'Total Bits ({total_bits}) must equal Number of Divisions ({divisions}) '
-                f'times Division Size ({size_bits}) = {divisions * size_bits}.')
-
-        raw = str(self.get_packing_order()).strip()
-        if raw == '':
-            errors.append('Packing Order (division indices, e.g. {3,2,1,0}) must not be empty.')
-        else:
-            try:
-                order = json.loads(raw.replace('{', '[').replace('}', ']'))
-                if not isinstance(order, list) or not order:
-                    raise ValueError('not a vector')
-                if not all(isinstance(i, int) for i in order):
-                    raise ValueError('non-integer element')
-                if any(i < 0 or i > divisions - 1 for i in order):
-                    errors.append(
-                        f'Packing Order: every index must be in range 0..{divisions - 1} '
-                        f'(matching Number of Divisions).')
-            except (ValueError, TypeError):
-                errors.append(
-                    'Packing Order: must be a bracketed vector of division indices, '
-                    'e.g. {3,2,1,0}.')
+        # the output binary point lies within the output word (munge_init.m);
+        # it only sets the output type
+        val = self.get_bin_pt_out().strip()
+        if not re.fullmatch(r'\+?[0-9]+', val):
+            errors.append('Output binary point must be an integer >= 0.')
+        elif int(val) > widths[1]:
+            errors.append(f'Output binary point must be at most the output width {widths[1]}.')
         return errors
+
+    def update_status(self):
+        """Show the port widths the current values give (or why they are invalid)."""
+        widths = self._widths()
+        if isinstance(widths, list):
+            self.ui.widths.setText('invalid: ' + ' '.join(widths))
+        else:
+            self.ui.widths.setText(f'{widths[0]} / {widths[1]} bits')
 
     # *******************************************************************
     # Signal functions
@@ -207,6 +198,8 @@ class MungeOperations(object):
         self.ui.button_ok.clicked.connect(self.ButtonOK_Clicked)
         self.ui.button_cancel.clicked.connect(self.ButtonCancel_Clicked)
         self.ui.button_apply.clicked.connect(self.ButtonApply_Clicked)
+        for key in ('divisions', 'div_size', 'order'):
+            getattr(self.ui, key).textChanged.connect(self.update_status)
 
     # *******************************************************************
     # load/collect config functions
@@ -249,6 +242,9 @@ class MungeOperations(object):
         for k, v in MUNGE_CONFIG.items():
             getfunc = v['get']
             config['parameters'][k] = str(getattr(self, getfunc)())
+        # drop the keys of the old template (total_bits, size_bits, packing_order)
+        for k in ('total_bits', 'size_bits', 'packing_order'):
+            config['parameters'].pop(k, None)
         with open(self.target_config, 'w', encoding='utf-8') as f:
             json.dump(config, f, ensure_ascii=False, indent=4)
         return True
