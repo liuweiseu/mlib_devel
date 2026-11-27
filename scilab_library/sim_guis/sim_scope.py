@@ -61,10 +61,14 @@ class ScopeWindow(QtWidgets.QMainWindow):
         reload_btn.setToolTip('Read the file again, e.g. after running the simulation again')
         reload_btn.clicked.connect(self.reload)
         fit_btn = QtWidgets.QPushButton('View All')
+        fit_btn.setToolTip('Show all the data (Z goes back)')
         fit_btn.clicked.connect(self.view_all)
+        hint = QtWidgets.QLabel('Drag a box to zoom, Z: previous view')
+        hint.setStyleSheet('color: gray')
         top = QtWidgets.QHBoxLayout()
         top.addWidget(QtWidgets.QLabel('File:'))
         top.addWidget(self.file_label, 1)
+        top.addWidget(hint)
         top.addWidget(fit_btn)
         top.addWidget(reload_btn)
 
@@ -99,6 +103,9 @@ class ScopeWindow(QtWidgets.QMainWindow):
         cl.addLayout(top)
         cl.addWidget(split, 1)
         self.setCentralWidget(central)
+        # Z: back to the view before the last box zoom / View All
+        undo = QtGui.QShortcut(QtGui.QKeySequence('Z'), self)
+        undo.activated.connect(self.plot.undo_view)
         self.reload()
 
     def reload(self):
@@ -122,8 +129,7 @@ class ScopeWindow(QtWidgets.QMainWindow):
         self.plot.show_channels(self._visible(), self.panel.overlay())
 
     def view_all(self):
-        for p in self.plot._plots:
-            p.enableAutoRange()
+        self.plot.view_all()
 
     def update_readout(self, pos):
         a, b = pos['A'], pos['B']

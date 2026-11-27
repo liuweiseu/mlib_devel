@@ -4,8 +4,9 @@ step traces, either all on one plot (overlay) or one plot per channel with
 a shared sample axis (split), plus two movable cursors A and B, which
 snap to whole samples.
 
-Mouse: wheel zooms, drag pans, right click -> View All; drag a cursor line
-to move it.
+Mouse: left-drag a box to zoom into it, Z (see sim_scope.py) goes back to
+the view before the last box zoom; wheel zooms, middle-drag pans, right
+click -> View All; drag a cursor line to move it.
 """
 import numpy as np
 import pyqtgraph as pg
@@ -13,6 +14,20 @@ from PyQt6 import QtCore
 
 CURSOR_PENS = {'A': pg.mkPen('#FFD400', width=1, style=QtCore.Qt.PenStyle.DashLine),
                'B': pg.mkPen('#00E5FF', width=1, style=QtCore.Qt.PenStyle.DashLine)}
+
+
+class ZoomViewBox(pg.ViewBox):
+    """ViewBox in rect mode (left-drag draws a box and zooms into it) that
+    announces a box zoom before applying it, so the view can be saved."""
+    box_zoom = QtCore.pyqtSignal()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.setMouseMode(pg.ViewBox.RectMode)
+
+    def showAxRect(self, ax, **kwargs):
+        self.box_zoom.emit()
+        super().showAxRect(ax, **kwargs)
 
 
 class PlotArea(pg.GraphicsLayoutWidget):
@@ -26,12 +41,14 @@ class PlotArea(pg.GraphicsLayoutWidget):
         self._plots = []
         self._lines = []   # (name, InfiniteLine)
         self._syncing = False
+        self._history = [] # views before each box zoom / View All, see push_view
 
     def show_channels(self, channels, overlay):
         """channels: list of (Signal, values, QColor). Redraws everything."""
         self.clear()
         self._plots = []
         self._lines = []
+        self._history = []
         if not channels:
             return
         n_min = min(sig.n[0] for sig, _, _ in channels if len(sig.n))
@@ -68,7 +85,9 @@ class PlotArea(pg.GraphicsLayoutWidget):
         self.cursors_moved.emit(dict(self.cursor_pos))
 
     def _new_plot(self, xlink):
-        plot = self.addPlot()
+        vb = ZoomViewBox()
+        vb.box_zoom.connect(self.push_view)
+        plot = self.addPlot(viewBox=vb)
         plot.showGrid(x=True, y=True, alpha=0.3)
         # show the values as they are, e.g. 0.5, not 500 with a 'x0.001'
         # SI prefix on the axis label
@@ -79,6 +98,25 @@ class PlotArea(pg.GraphicsLayoutWidget):
             plot.setXLink(xlink)
         self._plots.append(plot)
         return plot
+
+    def push_view(self):
+        """Save the current view (x and y range of every plot) for undo_view."""
+        if self._plots:
+            self._history.append([p.getViewBox().viewRange() for p in self._plots])
+
+    def undo_view(self):
+        """Go back to the view saved by the last push_view; False if none."""
+        if not self._history:
+            return False
+        view = self._history.pop()
+        for plot, (xr, yr) in zip(self._plots, view):
+            plot.getViewBox().setRange(xRange=xr, yRange=yr, padding=0)
+        return True
+
+    def view_all(self):
+        self.push_view()
+        for plot in self._plots:
+            plot.enableAutoRange()
 
     @staticmethod
     def _add_trace(plot, sig, vals, color, name):
